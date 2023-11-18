@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{01e40ab5-c2c7-4d85-a486-aba043e6488a}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\GraphicsTypes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)includes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Include\Axodox.Graphics.DirectX12.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.cpp" />
+  </ItemGroup>
+</Project>

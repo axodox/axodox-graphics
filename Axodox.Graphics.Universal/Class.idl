@@ -1,0 +1,9 @@
+namespace Axodox_Graphics_Universal
+{
+    [default_interface]
+    runtimeclass Class
+    {
+        Class();
+        Int32 MyProperty;
+    }
+}
