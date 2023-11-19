@@ -17,6 +17,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\GraphicsTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)includes.h" />
@@ -27,6 +30,9 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.cpp" />

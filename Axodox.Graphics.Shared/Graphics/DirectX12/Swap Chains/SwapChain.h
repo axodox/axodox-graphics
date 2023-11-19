@@ -1,6 +1,7 @@
 #pragma once
 #include "../Commands/CommandQueue.h"
 #include "../Commands/CommandFence.h"
+#include "../Descriptors/RenderTargetView.h"
 
 namespace Axodox::Graphics::DirectX12
 {
@@ -11,13 +12,13 @@ namespace Axodox::Graphics::DirectX12
     IsTearingAllowed //For VRR (Variable Refresh Rate) support
   };
 
-  class SwapChain/* : public GraphicsResource*/
+  class SwapChain
   {
   public:
     void Resize();
     void Present();
 
-    //RenderTarget2D* BackBuffer();
+    RenderTargetView BackBuffer();
 
   protected:
     static const uint32_t _minBufferSize;
@@ -33,8 +34,9 @@ namespace Axodox::Graphics::DirectX12
     void InitializeSwapChain(const winrt::com_ptr<IDXGISwapChain>& swapChain);
 
   private:
-    //std::unordered_map<void*, std::unique_ptr<RenderTarget2D>> _buffers;
-    winrt::com_ptr<IDXGISwapChain> _swapChain;
+    winrt::com_ptr<IDXGISwapChain3> _swapChain;
+    std::vector<RenderTargetView> _targets;
+    RenderTargetDescriptorHeap _rtvHeap;
     SwapChainFlags _flags;
     CommandQueue _queue;
     CommandFence _fence;

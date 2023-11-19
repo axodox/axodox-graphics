@@ -39,22 +39,13 @@ namespace Axodox::Graphics::DirectX12
     _postPresentActions.process_pending_invocations();
   }
 
-  /*RenderTarget2D* SwapChain::BackBuffer()
+  RenderTargetView SwapChain::BackBuffer()
   {
-    com_ptr<ID3D11Texture2D> backBuffer;
-    check_hresult(_swapChain->GetBuffer(0, guid_of<ID3D11Texture2D>(), backBuffer.put_void()));
-
-    auto& buffer = _buffers[backBuffer.get()];
-    if (!buffer)
-    {
-      buffer = make_unique<RenderTarget2D>(_device, backBuffer, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-    }
-
-    return buffer.get();
-  }*/
+    return _targets[_swapChain->GetCurrentBackBufferIndex()];
+  }
 
   SwapChain::SwapChain(const CommandQueue& queue, SwapChainFlags flags) :
-    //GraphicsResource(device),
+    _rtvHeap(queue.Device()),
     _queue(queue),
     _fence(queue.Device()),
     _flags(flags)
@@ -82,13 +73,23 @@ namespace Axodox::Graphics::DirectX12
 
   void SwapChain::InitializeSwapChain(const winrt::com_ptr<IDXGISwapChain>& swapChain)
   {
-    if (_swapChain != swapChain)
-    {
-      _swapChain = swapChain;
-    }
-
     auto swapChain3 = swapChain.as<IDXGISwapChain3>();
+    if (_swapChain != swapChain3)
+    {
+      _swapChain = swapChain3;
 
+      _targets.clear();
+      for (auto i = 0; i < 2; i++)
+      {
+        com_ptr<ID3D12Resource> buffer;
+        swapChain3->GetBuffer(i, guid_of<ID3D12Resource>(), buffer.put_void());
+
+        _targets.push_back(_rtvHeap.CreateRenderTargetView(buffer));
+      }
+
+      _rtvHeap.Build();
+    }
+    
     //Set transform
     auto swapChainTransform = GetTransformation();
     if (!is_default(swapChainTransform))
