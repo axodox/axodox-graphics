@@ -4,7 +4,7 @@
 using namespace std;
 using namespace winrt;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   DescriptorHeap::DescriptorHeap(const GraphicsDevice& device, DescriptorHeapKind type) :
     _device(device),
@@ -19,7 +19,7 @@ namespace Axodox::Graphics::DirectX12
   void DescriptorHeap::Build()
   {
     //Check dirty flag
-    if (_isDirty) return;
+    if (!_isDirty) return;
 
     //Pin & clean descriptor references
     auto items = PinAndClean();

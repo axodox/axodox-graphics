@@ -2,7 +2,7 @@
 #ifdef WINRT_Windows_UI_Core_H
 #include "SwapChain.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   class CoreSwapChain : public SwapChain
   {

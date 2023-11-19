@@ -2,7 +2,7 @@
 #include "Descriptor.h"
 #include "../Devices/GraphicsDevice.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   enum class DescriptorHeapKind
   {

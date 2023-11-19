@@ -20,9 +20,50 @@ namespace Axodox::Collections
     T* operator->() noexcept
     {
       return &_object;
+    };
+
+    operator T& ()
+    {
+      return _object;
     }
 
-    ~ObjectPoolHandle();
+    operator const T& () const
+    {
+      return _object;
+    }
+
+    explicit operator bool() const
+    {
+      return _owner != nullptr;
+    }
+
+    ObjectPoolHandle() :
+      _owner(nullptr),
+      _object()
+    { }
+
+    ObjectPoolHandle(const ObjectPoolHandle&) = delete;
+    ObjectPoolHandle& operator=(const ObjectPoolHandle&) = delete;
+
+    ObjectPoolHandle(ObjectPoolHandle&& other)
+    {
+      *this = std::move(other);
+    }
+
+    ObjectPoolHandle& operator=(ObjectPoolHandle&& other)
+    {
+      Reset();
+      std::swap(_owner, other._owner);
+      std::swap(_object, other._object);
+      return *this;
+    }
+
+    ~ObjectPoolHandle()
+    {
+      Reset();
+    }
+
+    void Reset();
 
   private:
     ObjectPoolHandle(ObjectPool<T>* owner, T&& value) :
@@ -50,7 +91,7 @@ namespace Axodox::Collections
         std::lock_guard lock(_mutex);
         if (_objects.empty())
         {
-          return { this, _factory()};
+          return { this, _factory() };
         }
       }
 
@@ -74,8 +115,8 @@ namespace Axodox::Collections
   };
 
   template<typename T>
-  ObjectPoolHandle<T>::~ObjectPoolHandle()
+  void ObjectPoolHandle<T>::Reset()
   {
-    _owner->Return(std::move(_object));
+    if (_owner) _owner->Return(std::move(_object));
   }
 }

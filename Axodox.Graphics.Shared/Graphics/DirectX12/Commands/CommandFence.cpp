@@ -9,7 +9,7 @@ namespace {
   Axodox::Collections::ObjectPool<winrt::handle> _eventPool{ [] { return handle(CreateEvent({}, false, false, nullptr)); } };
 }
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   CommandFenceMarker::CommandFenceMarker() :
     Owner(nullptr),

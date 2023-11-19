@@ -3,11 +3,12 @@
 #include "../Devices/GraphicsDevice.h"
 
 using namespace Axodox::Infrastructure;
+using namespace std;
 using namespace winrt;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
-  CommandQueue::CommandQueue(const GraphicsDevice& device, CommandQueueKind type) :
+  CommandQueue::CommandQueue(const GraphicsDevice& device, CommandKind type) :
     _type(type)
   {
     D3D12_COMMAND_QUEUE_DESC description;
@@ -22,7 +23,7 @@ namespace Axodox::Graphics::DirectX12
     return GraphicsDevice{ _queue.get() };
   }
 
-  CommandQueueKind CommandQueue::Type() const
+  CommandKind CommandQueue::Type() const
   {
     return _type;
   }
@@ -35,5 +36,11 @@ namespace Axodox::Graphics::DirectX12
   ID3D12CommandQueue* CommandQueue::operator->() const
   {
     return _queue.get();
+  }
+
+  void CommandQueue::Execute(const CommandList& commandList)
+  {
+    ID3D12CommandList* list = commandList._list.get();
+    _queue->ExecuteCommandLists(1, &list);
   }
 }

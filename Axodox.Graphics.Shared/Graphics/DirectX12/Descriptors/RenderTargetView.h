@@ -1,7 +1,7 @@
 #pragma once
 #include "DescriptorHeap.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   struct RenderTargetDescriptor : public Descriptor
   {

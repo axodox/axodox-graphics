@@ -3,7 +3,7 @@
 
 using namespace std;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   RenderTargetDescriptor::RenderTargetDescriptor(const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description) :
     Resource(resource),

@@ -7,7 +7,7 @@ using namespace DirectX;
 using namespace std;
 using namespace winrt;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   CoreSwapChain::CoreSwapChain(const CommandQueue& queue, const CoreWindow& window, SwapChainFlags flags) :
     SwapChain(queue, flags),

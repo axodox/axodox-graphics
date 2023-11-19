@@ -3,7 +3,7 @@
 #include "../Commands/CommandFence.h"
 #include "../Descriptors/RenderTargetView.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   enum class SwapChainFlags
   {

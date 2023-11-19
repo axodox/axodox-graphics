@@ -16,7 +16,10 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandKind.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandAllocator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.h" />
@@ -29,7 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandList.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.cpp" />

@@ -7,7 +7,7 @@ using namespace Axodox::Infrastructure;
 using namespace std;
 using namespace winrt;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   const uint32_t SwapChain::_minBufferSize = 64u;
 

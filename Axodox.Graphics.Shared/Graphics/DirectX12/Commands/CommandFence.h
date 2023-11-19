@@ -3,7 +3,7 @@
 #include "CommandQueue.h"
 #include "Collections/ObjectPool.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   class GraphicsDevice;
 

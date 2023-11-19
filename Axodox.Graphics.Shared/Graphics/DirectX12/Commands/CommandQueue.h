@@ -1,30 +1,26 @@
 #pragma once
-#include "pch.h"
+#include "CommandKind.h"
+#include "CommandList.h"
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   class GraphicsDevice;
-
-  enum class CommandQueueKind
-  {
-    Direct = D3D12_COMMAND_LIST_TYPE_DIRECT,
-    Compute = D3D12_COMMAND_LIST_TYPE_COMPUTE,
-    Copy = D3D12_COMMAND_LIST_TYPE_COPY
-  };
 
   class CommandQueue
   {
   public:
-    explicit CommandQueue(const GraphicsDevice& device, CommandQueueKind type = CommandQueueKind::Direct);
+    explicit CommandQueue(const GraphicsDevice& device, CommandKind type = CommandKind::Direct);
 
     GraphicsDevice Device() const;
-    CommandQueueKind Type() const;
+    CommandKind Type() const;
 
     ID3D12CommandQueue* get() const;
     ID3D12CommandQueue* operator->() const;
 
+    void Execute(const CommandList& commandList);
+
   private:
     winrt::com_ptr<ID3D12CommandQueue> _queue;
-    CommandQueueKind _type;
+    CommandKind _type;
   };
 }

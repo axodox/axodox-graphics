@@ -3,7 +3,7 @@
 
 using namespace winrt;
 
-namespace Axodox::Graphics::DirectX12
+namespace Axodox::Graphics::D3D12
 {
   GraphicsDevice::GraphicsDevice(ID3D12DeviceChild* deviceChild)
   { 
@@ -33,10 +33,5 @@ namespace Axodox::Graphics::DirectX12
   ID3D12DeviceT* GraphicsDevice::operator->() const
   {
     return _device.get();
-  }
-
-  CommandQueue GraphicsDevice::CreateQueue(CommandQueueKind type) const
-  {
-    return CommandQueue{ *this, type };
   }
 }

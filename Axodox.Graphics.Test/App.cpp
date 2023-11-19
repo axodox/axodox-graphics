@@ -11,7 +11,8 @@ using namespace Windows::UI;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Composition;
 
-using namespace Axodox::Graphics::DirectX12;
+using namespace Axodox::Graphics::D3D12;
+using namespace DirectX;
 
 struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 {
@@ -40,13 +41,20 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     CoreDispatcher dispatcher = window.Dispatcher();
     
     GraphicsDevice device{};
-    auto directQueue = device.CreateQueue();
-
+    CommandQueue directQueue{ device };
     CoreSwapChain swapChain{ directQueue, window };
-
+    CommandAllocator allocator(device);
+    
+    auto i = 0;
     while (true)
     {
       dispatcher.ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
+
+      allocator.BeginList();
+      allocator->ClearRenderTargetView(*swapChain.BackBuffer().Handle(), array<float, 4>{ sin(0.1f * i++), 0.f, 0.f, 0.f }.data(), 0, nullptr);
+      auto commandList = allocator.EndList();
+
+      directQueue.Execute(commandList);
       swapChain.Present();
     }
   }
