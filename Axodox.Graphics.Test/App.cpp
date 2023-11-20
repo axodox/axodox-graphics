@@ -73,7 +73,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
       allocator.BeginList();
       allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-      allocator.ClearRenderTargetView(*renderTargetView, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
+      allocator.ClearRenderTargetView(renderTargetView, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
       allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
       auto commandList = allocator.EndList();
 

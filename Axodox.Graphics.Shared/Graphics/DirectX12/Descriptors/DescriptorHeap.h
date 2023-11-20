@@ -22,7 +22,7 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeap(const DescriptorHeap&) = delete;
     DescriptorHeap& operator=(const DescriptorHeap&) = delete;
     
-    virtual ~DescriptorHeap() = default;    
+    virtual ~DescriptorHeap();    
 
     DescriptorHeapKind Type() const;
 
@@ -48,7 +48,7 @@ namespace Axodox::Graphics::D3D12
     std::mutex _mutex;
     winrt::com_ptr<ID3D12DescriptorHeap> _heap;
     std::vector<std::unique_ptr<Descriptor>> _items;
-    std::set<const Descriptor*> _reclaimable;
+    std::set<const Descriptor*> _reclaimables;
     bool _isDirty = false;
 
     void DeleteDescriptor(const Descriptor* descriptor);

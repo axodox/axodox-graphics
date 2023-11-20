@@ -12,6 +12,13 @@ namespace Axodox::Graphics::D3D12
     _type(type)
   { }
 
+  DescriptorHeap::~DescriptorHeap()
+  {
+    Clean();
+
+    if (!_items.empty()) throw logic_error("Descriptor handles must be all released before the descriptor heap is deleted.");
+  }
+
   DescriptorHeapKind DescriptorHeap::Type() const
   {
     return _type;
@@ -56,7 +63,7 @@ namespace Axodox::Graphics::D3D12
   void DescriptorHeap::DeleteDescriptor(const Descriptor* descriptor)
   {
     lock_guard lock(_mutex);
-    _reclaimable.emplace(descriptor);
+    _reclaimables.emplace(descriptor);
     _isDirty = true;
   }
 
@@ -66,13 +73,13 @@ namespace Axodox::Graphics::D3D12
     for (auto i = 0; i < _items.size(); i++)
     {
       auto& item = _items[i];
-      if (_reclaimable.contains(item.get()))
+      if (_reclaimables.contains(item.get()))
       {
         swap(_items[i--], _items.back());
         _items.pop_back();
       }
     }
 
-    _reclaimable.clear();
+    _reclaimables.clear();
   }
 }
