@@ -33,6 +33,19 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
   {
   }
 
+  struct FrameResources
+  {
+    CommandAllocator Allocator;
+    CommandFence Fence;
+    CommandFenceMarker Marker;
+
+    FrameResources(const GraphicsDevice& device) :
+      Allocator(device),
+      Fence(device),
+      Marker()
+    { }
+  };
+
   void Run()
   {
     CoreWindow window = CoreWindow::GetForCurrentThread();
@@ -43,18 +56,29 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     GraphicsDevice device{};
     CommandQueue directQueue{ device };
     CoreSwapChain swapChain{ directQueue, window };
-    CommandAllocator allocator(device);
+
+    array<FrameResources, 2> frames{ device, device };
     
     auto i = 0;
     while (true)
     {
       dispatcher.ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
+      auto renderTarget = swapChain.BackBuffer();
+
+      auto& resources = frames[i++ % 2];
+      auto& allocator = resources.Allocator;
+      if (resources.Marker) resources.Fence.Await(resources.Marker);
+      allocator.Reset();
+
       allocator.BeginList();
-      allocator->ClearRenderTargetView(*swapChain.BackBuffer().Handle(), array<float, 4>{ sin(0.1f * i++), 0.f, 0.f, 0.f }.data(), 0, nullptr);
+      allocator.ResourceTransition(renderTarget.Resource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+      allocator->ClearRenderTargetView(*renderTarget.Handle(), array<float, 4>{ sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f }.data(), 0, nullptr);
+      allocator.ResourceTransition(renderTarget.Resource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
       auto commandList = allocator.EndList();
 
       directQueue.Execute(commandList);
+      resources.Marker = resources.Fence.EnqueueSignal(directQueue);
       swapChain.Present();
     }
   }

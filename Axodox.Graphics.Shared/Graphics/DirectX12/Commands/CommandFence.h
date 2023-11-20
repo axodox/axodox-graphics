@@ -29,7 +29,7 @@ namespace Axodox::Graphics::D3D12
   class CommandFence
   {
   public:
-    explicit CommandFence(const GraphicsDevice& device);
+    CommandFence(const GraphicsDevice& device);
 
     CommandFence(const CommandFence&) = delete;
     CommandFence& operator=(const CommandFence&) = delete;

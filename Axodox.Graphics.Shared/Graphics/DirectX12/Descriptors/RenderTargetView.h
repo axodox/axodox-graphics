@@ -12,7 +12,13 @@ namespace Axodox::Graphics::D3D12
     virtual void Realize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination);
   };
 
-  using RenderTargetView = DescriptorView<RenderTargetDescriptor>;
+  class RenderTargetView : public DescriptorView<RenderTargetDescriptor>
+  {
+  public:
+    using DescriptorView<RenderTargetDescriptor>::DescriptorView;
+
+    ID3D12Resource* Resource() const;
+  };
 
   class RenderTargetDescriptorHeap : public DescriptorHeap
   {

@@ -23,4 +23,9 @@ namespace Axodox::Graphics::D3D12
   {
     return CreateDescriptor<RenderTargetView>(resource, description);
   }
+
+  ID3D12Resource* RenderTargetView::Resource() const
+  {
+    return _descriptor->Resource.get();
+  }
 }

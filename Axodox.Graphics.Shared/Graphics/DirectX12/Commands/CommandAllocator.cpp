@@ -53,4 +53,24 @@ namespace Axodox::Graphics::D3D12
   {
     return _type;
   }
+
+  void CommandAllocator::ResourceTransition(ID3D12Resource* resource, D3D12_RESOURCE_STATES from, D3D12_RESOURCE_STATES to)
+  {
+    D3D12_RESOURCE_BARRIER barrier{
+      .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+      .Transition = { 
+        .pResource = resource,
+        .Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES,
+        .StateBefore = from,
+        .StateAfter = to
+      }
+    };
+
+    (*this)->ResourceBarrier(1, &barrier);
+  }
+
+  void CommandAllocator::Reset()
+  {
+    _allocator->Reset();
+  }
 }

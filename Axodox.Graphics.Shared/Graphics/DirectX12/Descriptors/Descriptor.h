@@ -27,7 +27,7 @@ namespace Axodox::Graphics::D3D12
       return _descriptor->Handle;
     }
 
-  private:
-    std::shared_ptr<Descriptor> _descriptor;
+  protected:
+    std::shared_ptr<descriptor_t> _descriptor;
   };
 }
