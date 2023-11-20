@@ -32,8 +32,8 @@ namespace Axodox::Graphics::D3D12
     check_hresult(device->CreateFence(
       0,
       D3D12_FENCE_FLAG_NONE,
-      guid_of<ID3D12Fence>(),
-      _fence.put_void()));
+      IID_PPV_ARGS(_fence.put())
+    ));
   }
 
   CommandFenceMarker CommandFence::CreateMarker()
@@ -84,6 +84,11 @@ namespace Axodox::Graphics::D3D12
     check_hresult(_fence->SetEventOnCompletion(marker.Value, event->get()));
 
     return WaitForSingleObject(event->get(), timeout.count()) == WAIT_OBJECT_0;
+  }
+
+  void CommandFence::Sync(const CommandQueue& queue)
+  {
+    Await(EnqueueSignal(queue));
   }
 
   void CommandFence::CheckMarker(CommandFenceMarker marker) const

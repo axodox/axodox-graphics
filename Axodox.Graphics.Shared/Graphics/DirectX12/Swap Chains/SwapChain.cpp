@@ -13,9 +13,9 @@ namespace Axodox::Graphics::D3D12
 
   void SwapChain::Resize()
   {
-    if (_marker) _fence.Await(_marker);
+    _fence.Sync(_queue);
+    _targets.clear();
 
-    //_buffers.clear();
     auto size = GetSize();
     check_hresult(_swapChain->ResizeBuffers(2, size.x, size.y, DXGI_FORMAT_UNKNOWN, has_flag(_flags, SwapChainFlags::IsTearingAllowed) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0));
 
@@ -36,11 +36,11 @@ namespace Axodox::Graphics::D3D12
     }
 
     _marker = _fence.EnqueueSignal(_queue);
-    _postPresentActions.process_pending_invocations();
   }
 
-  RenderTargetView SwapChain::BackBuffer()
+  RenderTargetView SwapChain::RenderTargetView()
   {
+    _postPresentActions.process_pending_invocations();
     return _targets[_swapChain->GetCurrentBackBufferIndex()];
   }
 
@@ -73,12 +73,16 @@ namespace Axodox::Graphics::D3D12
 
   void SwapChain::InitializeSwapChain(const winrt::com_ptr<IDXGISwapChain>& swapChain)
   {
+    //Store swap chain
     auto swapChain3 = swapChain.as<IDXGISwapChain3>();
     if (_swapChain != swapChain3)
     {
       _swapChain = swapChain3;
+    }
 
-      _targets.clear();
+    //Update targets
+    if (_targets.empty())
+    {
       for (auto i = 0; i < 2; i++)
       {
         com_ptr<ID3D12Resource> buffer;

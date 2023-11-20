@@ -3,6 +3,7 @@
 #include "CommandKind.h"
 #include "CommandList.h"
 #include "../Devices/GraphicsDevice.h"
+#include "../Descriptors/RenderTargetView.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -24,6 +25,7 @@ namespace Axodox::Graphics::D3D12
     CommandKind Type() const;
 
     void ResourceTransition(ID3D12Resource* resource, D3D12_RESOURCE_STATES from, D3D12_RESOURCE_STATES to);
+    void ClearRenderTargetView(const RenderTargetView& target, const DirectX::XMFLOAT4& value = { 0.f, 0.f, 0.f, 0.f });
 
     void Reset();
 

@@ -69,6 +69,11 @@ namespace Axodox::Graphics::D3D12
     (*this)->ResourceBarrier(1, &barrier);
   }
 
+  void CommandAllocator::ClearRenderTargetView(const RenderTargetView& target, const DirectX::XMFLOAT4& value)
+  {
+    (*this)->ClearRenderTargetView(*target.Handle(), reinterpret_cast<const float*>(&value), 0, nullptr);
+  }
+
   void CommandAllocator::Reset()
   {
     _allocator->Reset();

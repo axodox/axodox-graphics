@@ -48,6 +48,8 @@ namespace Axodox::Graphics::D3D12
     void Signal(CommandFenceMarker marker);
     bool Await(CommandFenceMarker marker, CommandFenceTimeout timeout = CommandFenceTimeout(INFINITE));
 
+    void Sync(const CommandQueue& queue);
+
   private:
     winrt::com_ptr<ID3D12Fence> _fence;
     uint64_t _value;
