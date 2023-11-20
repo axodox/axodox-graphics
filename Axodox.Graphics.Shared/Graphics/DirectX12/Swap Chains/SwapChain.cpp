@@ -15,6 +15,7 @@ namespace Axodox::Graphics::D3D12
   {
     _fence.Sync(_queue);
     _targets.clear();
+    _rtvHeap.Clean();
 
     auto size = GetSize();
     check_hresult(_swapChain->ResizeBuffers(2, size.x, size.y, DXGI_FORMAT_UNKNOWN, has_flag(_flags, SwapChainFlags::IsTearingAllowed) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0));
@@ -38,10 +39,10 @@ namespace Axodox::Graphics::D3D12
     _marker = _fence.EnqueueSignal(_queue);
   }
 
-  RenderTargetView SwapChain::RenderTargetView()
+  const RenderTargetView* SwapChain::RenderTargetView()
   {
     _postPresentActions.process_pending_invocations();
-    return _targets[_swapChain->GetCurrentBackBufferIndex()];
+    return _targets[_swapChain->GetCurrentBackBufferIndex()].get();
   }
 
   SwapChain::SwapChain(const CommandQueue& queue, SwapChainFlags flags) :

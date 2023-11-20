@@ -14,6 +14,8 @@ namespace Axodox::Graphics::D3D12
 
   class DescriptorHeap
   {
+    friend struct DescriptorDeleter;
+
   public:
     DescriptorHeap(const GraphicsDevice& device, DescriptorHeapKind type);
     
@@ -25,25 +27,30 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeapKind Type() const;
 
     void Build();
+    void Clean();
 
   protected:
-    void AddDescriptor(const std::shared_ptr<Descriptor>& descriptor);
-
     template<typename T, typename... TArgs>
-    T CreateDescriptor(TArgs&&... args)
+    descriptor_ptr<T> CreateDescriptor(TArgs&&... args)
     {
-      auto descriptor = std::make_shared<typename T::descriptor_t>(std::forward<TArgs>(args)...);
-      AddDescriptor(descriptor);
-      return T(std::move(descriptor));
+      auto descriptor = std::make_unique<T>(this, std::forward<TArgs>(args)...);
+      auto handle = descriptor_ptr<T>(descriptor.get());
+
+      std::lock_guard lock(_mutex);
+      _items.push_back(move(descriptor));
+      _isDirty = true;
+      return handle;
     }
 
   private:
     GraphicsDevice _device;
     DescriptorHeapKind _type;
+    std::mutex _mutex;
     winrt::com_ptr<ID3D12DescriptorHeap> _heap;
-    std::vector<std::weak_ptr<Descriptor>> _items;
+    std::vector<std::unique_ptr<Descriptor>> _items;
+    std::set<const Descriptor*> _reclaimable;
     bool _isDirty = false;
 
-    std::vector<std::shared_ptr<Descriptor>> PinAndClean();
+    void DeleteDescriptor(const Descriptor* descriptor);
   };
 }

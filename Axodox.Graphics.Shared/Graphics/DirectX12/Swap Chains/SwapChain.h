@@ -18,7 +18,7 @@ namespace Axodox::Graphics::D3D12
     void Resize();
     void Present();
 
-    RenderTargetView RenderTargetView();
+    const RenderTargetView* RenderTargetView();
 
   protected:
     static const uint32_t _minBufferSize;
@@ -35,7 +35,7 @@ namespace Axodox::Graphics::D3D12
 
   private:
     winrt::com_ptr<IDXGISwapChain3> _swapChain;
-    std::vector<D3D12::RenderTargetView> _targets;
+    std::vector<descriptor_ptr<D3D12::RenderTargetView>> _targets;
     RenderTargetDescriptorHeap _rtvHeap;
     SwapChainFlags _flags;
     CommandQueue _queue;

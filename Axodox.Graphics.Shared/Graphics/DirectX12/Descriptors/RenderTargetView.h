@@ -3,21 +3,19 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct RenderTargetDescriptor : public Descriptor
-  {
-    winrt::com_ptr<ID3D12Resource> Resource;
-    std::unique_ptr<D3D12_RENDER_TARGET_VIEW_DESC> Description;
-
-    RenderTargetDescriptor(const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description = nullptr);
-    virtual void Realize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination);
-  };
-
-  class RenderTargetView : public DescriptorView<RenderTargetDescriptor>
+  class RenderTargetView : public Descriptor
   {
   public:
-    using DescriptorView<RenderTargetDescriptor>::DescriptorView;
+    RenderTargetView(DescriptorHeap* owner, const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description = nullptr);
 
     ID3D12Resource* Resource() const;
+
+  protected:
+    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;
+
+  private:
+    winrt::com_ptr<ID3D12Resource> _resource;
+    std::unique_ptr<D3D12_RENDER_TARGET_VIEW_DESC> _description;
   };
 
   class RenderTargetDescriptorHeap : public DescriptorHeap
@@ -25,6 +23,6 @@ namespace Axodox::Graphics::D3D12
   public:
     RenderTargetDescriptorHeap(const GraphicsDevice& device);
 
-    RenderTargetView CreateRenderTargetView(const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description = nullptr);
+    descriptor_ptr<RenderTargetView> CreateRenderTargetView(const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description = nullptr);
   };
 }

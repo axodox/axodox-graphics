@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "DescriptorHeap.h"
 
+using namespace Axodox::Infrastructure;
 using namespace std;
 using namespace winrt;
 
@@ -21,26 +22,30 @@ namespace Axodox::Graphics::D3D12
     //Check dirty flag
     if (!_isDirty) return;
 
-    //Pin & clean descriptor references
-    auto items = PinAndClean();
+    //Clean descriptor references
+    Clean();
 
-    //Create descriptor heap
+    //Create descriptor heap    
     D3D12_DESCRIPTOR_HEAP_DESC description{
       .Type = D3D12_DESCRIPTOR_HEAP_TYPE(_type),
-      .NumDescriptors = uint32_t(items.size()),
+      .NumDescriptors = uint32_t(_items.size()),
       .Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
       .NodeMask = 0u
     };
 
-    check_hresult(_device->CreateDescriptorHeap(&description, guid_of<ID3D12DescriptorHeap>(), _heap.put_void()));
+    if (!_heap || !are_equal(_heap->GetDesc(), description))
+    {
+      check_hresult(_device->CreateDescriptorHeap(&description, guid_of<ID3D12DescriptorHeap>(), _heap.put_void()));
+    }
 
     //Realize descriptors
     auto increment = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE(_type));
     auto handle = _heap->GetCPUDescriptorHandleForHeapStart();
-    for (auto& item : items)
+
+    lock_guard lock(_mutex);
+    for (auto& item : _items)
     {
       item->Realize(_device.get(), handle);
-      item->Handle = handle;
       handle.ptr += increment;
     }
 
@@ -48,28 +53,26 @@ namespace Axodox::Graphics::D3D12
     _isDirty = false;
   }
 
-  void DescriptorHeap::AddDescriptor(const std::shared_ptr<Descriptor>& descriptor)
+  void DescriptorHeap::DeleteDescriptor(const Descriptor* descriptor)
   {
+    lock_guard lock(_mutex);
+    _reclaimable.emplace(descriptor);
     _isDirty = true;
-    _items.push_back(descriptor);
   }
 
-  std::vector<std::shared_ptr<Descriptor>> DescriptorHeap::PinAndClean()
+  void DescriptorHeap::Clean()
   {
-    vector<std::shared_ptr<Descriptor>> items;
+    lock_guard lock(_mutex);
     for (auto i = 0; i < _items.size(); i++)
     {
-      auto locked = _items[i].lock();
-      if (locked)
-      {
-        items.push_back(locked);
-      }
-      else
+      auto& item = _items[i];
+      if (_reclaimable.contains(item.get()))
       {
         swap(_items[i--], _items.back());
         _items.pop_back();
       }
     }
-    return items;
+
+    _reclaimable.clear();
   }
 }

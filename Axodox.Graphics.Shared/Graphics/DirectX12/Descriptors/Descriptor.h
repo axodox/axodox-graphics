@@ -3,31 +3,37 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct Descriptor
+  class DescriptorHeap;
+
+  class Descriptor
   {
+    friend struct DescriptorDeleter;
+
+  public:
+    Descriptor(DescriptorHeap* owner);
+
+    Descriptor(const Descriptor&) = delete;
+    Descriptor& operator=(const Descriptor&) = delete;
+
     virtual ~Descriptor() = default;
 
-    virtual void Realize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) = 0;
+    void Realize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination);
+    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> Handle() const;
+    explicit operator bool() const;
 
-    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> Handle;
+  protected:
+    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) = 0;
+    
+  private:
+    DescriptorHeap* _owner;
+    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> _handle;
+  };
+
+  struct DescriptorDeleter
+  {
+    void operator()(Descriptor* descriptor);
   };
 
   template<typename T>
-  class DescriptorView
-  {
-  public:
-    using descriptor_t = T;
-
-    DescriptorView(std::shared_ptr<T>&& descriptor) :
-      _descriptor(descriptor)
-    { }
-
-    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> Handle() const
-    {
-      return _descriptor->Handle;
-    }
-
-  protected:
-    std::shared_ptr<descriptor_t> _descriptor;
-  };
+  using descriptor_ptr = std::unique_ptr<T, DescriptorDeleter>;
 }

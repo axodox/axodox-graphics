@@ -52,35 +52,33 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     window.Activate();
 
     CoreDispatcher dispatcher = window.Dispatcher();
-    
+
     GraphicsDevice device{};
     CommandQueue directQueue{ device };
     CoreSwapChain swapChain{ directQueue, window };
 
     array<FrameResources, 2> frames{ device, device };
-    
+
     auto i = 0;
     while (true)
     {
       dispatcher.ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
 
-      {
-        auto renderTargetView = swapChain.RenderTargetView();
+      auto renderTargetView = swapChain.RenderTargetView();
 
-        auto& resources = frames[i++ % 2];
-        auto& allocator = resources.Allocator;
-        if (resources.Marker) resources.Fence.Await(resources.Marker);
-        allocator.Reset();
+      auto& resources = frames[i++ % 2];
+      auto& allocator = resources.Allocator;
+      if (resources.Marker) resources.Fence.Await(resources.Marker);
+      allocator.Reset();
 
-        allocator.BeginList();
-        allocator.ResourceTransition(renderTargetView.Resource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-        allocator.ClearRenderTargetView(renderTargetView, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
-        allocator.ResourceTransition(renderTargetView.Resource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-        auto commandList = allocator.EndList();
+      allocator.BeginList();
+      allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+      allocator.ClearRenderTargetView(*renderTargetView, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
+      allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+      auto commandList = allocator.EndList();
 
-        directQueue.Execute(commandList);
-        resources.Marker = resources.Fence.EnqueueSignal(directQueue);
-      }
+      directQueue.Execute(commandList);
+      resources.Marker = resources.Fence.EnqueueSignal(directQueue);
 
       swapChain.Present();
     }
@@ -88,7 +86,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
   void SetWindow(CoreWindow const& window)
   {
-    
+
   }
 };
 
