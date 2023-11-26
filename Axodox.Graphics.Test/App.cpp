@@ -72,9 +72,9 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       allocator.Reset();
 
       allocator.BeginList();
-      allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-      allocator.ClearRenderTargetView(renderTargetView, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
-      allocator.ResourceTransition(renderTargetView->Resource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+      allocator.ResourceTransition(renderTargetView->Resource(), ResourceStates::Present, ResourceStates::RenderTarget);
+      renderTargetView->Clear(allocator, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
+      allocator.ResourceTransition(renderTargetView->Resource(), ResourceStates::RenderTarget, ResourceStates::Present);
       auto commandList = allocator.EndList();
 
       directQueue.Execute(commandList);

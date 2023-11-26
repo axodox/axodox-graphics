@@ -54,24 +54,19 @@ namespace Axodox::Graphics::D3D12
     return _type;
   }
 
-  void CommandAllocator::ResourceTransition(ID3D12Resource* resource, D3D12_RESOURCE_STATES from, D3D12_RESOURCE_STATES to)
+  void CommandAllocator::ResourceTransition(ID3D12Resource* resource, ResourceStates from, ResourceStates to)
   {
     D3D12_RESOURCE_BARRIER barrier{
       .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
       .Transition = { 
         .pResource = resource,
         .Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES,
-        .StateBefore = from,
-        .StateAfter = to
+        .StateBefore = D3D12_RESOURCE_STATES(from),
+        .StateAfter = D3D12_RESOURCE_STATES(to)
       }
     };
 
     (*this)->ResourceBarrier(1, &barrier);
-  }
-
-  void CommandAllocator::ClearRenderTargetView(const RenderTargetView* target, const DirectX::XMFLOAT4& value)
-  {
-    (*this)->ClearRenderTargetView(*target->Handle(), reinterpret_cast<const float*>(&value), 0, nullptr);
   }
 
   void CommandAllocator::Reset()

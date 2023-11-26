@@ -1,21 +1,15 @@
 #pragma once
-#include "DescriptorHeap.h"
+#include "SimpleResourceView.h"
+#include "../Commands/CommandAllocator.h"
 
 namespace Axodox::Graphics::D3D12
 {
-  class RenderTargetView : public Descriptor
+  class RenderTargetView : public SimpleResourceView<D3D12_RENDER_TARGET_VIEW_DESC, &ID3D12Device::CreateRenderTargetView>
   {
   public:
-    RenderTargetView(DescriptorHeap* owner, const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_RENDER_TARGET_VIEW_DESC* description = nullptr);
+    using SimpleResourceView::SimpleResourceView;
 
-    ID3D12Resource* Resource() const;
-
-  protected:
-    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;
-
-  private:
-    winrt::com_ptr<ID3D12Resource> _resource;
-    std::unique_ptr<D3D12_RENDER_TARGET_VIEW_DESC> _description;
+    void Clear(CommandAllocator& allocator, const DirectX::XMFLOAT4& value = { 0.f, 0.f, 0.f, 0.f }) const;
   };
 
   class RenderTargetDescriptorHeap : public DescriptorHeap
