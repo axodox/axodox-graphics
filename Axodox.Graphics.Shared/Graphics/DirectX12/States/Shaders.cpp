@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Shaders.h"
 
 namespace Axodox::Graphics::D3D12
@@ -7,16 +8,16 @@ namespace Axodox::Graphics::D3D12
     return { Bytecode.data(), Bytecode.size() };
   }
 
+  ShaderKind ComputeShader::Type() const
+  {
+    return ShaderKind::Compute;
+  }
+
   ShaderKind VertexShader::Type() const
   {
     return ShaderKind::Vertex;
   }
 
-  ShaderKind PixelShader::Type() const
-  {
-    return ShaderKind::Pixel;
-  }
-  
   ShaderKind DomainShader::Type() const
   {
     return ShaderKind::Domain;
@@ -26,9 +27,14 @@ namespace Axodox::Graphics::D3D12
   {
     return ShaderKind::Hull;
   }
-  
+
   ShaderKind GeometryShader::Type() const
   {
     return ShaderKind::Geometry;
-  }  
+  }
+
+  ShaderKind PixelShader::Type() const
+  {
+    return ShaderKind::Pixel;
+  }
 }

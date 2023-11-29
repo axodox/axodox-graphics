@@ -25,19 +25,25 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\ShaderResourceView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\SimpleResourceView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Enumerations.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\BlendState.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\DepthStencilState.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\PipelineState.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RasterizerState.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootParameters.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\GraphicsTypes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignature.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\SampleState.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\Shaders.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StaticSampler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)includes.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\Axodox.Graphics.DirectX12.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Threading\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.cpp" />
@@ -51,10 +57,14 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\ShaderResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\SimpleResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\BlendState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\DepthStencilState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\PipelineState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RasterizerState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootParameters.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignature.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\SampleState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\Shaders.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StaticSampler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.cpp" />

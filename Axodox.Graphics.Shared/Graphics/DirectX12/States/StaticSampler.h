@@ -20,19 +20,6 @@ namespace Axodox::Graphics::D3D12
     MirrorOnce = D3D12_TEXTURE_ADDRESS_MODE_MIRROR_ONCE
   };
 
-  enum class ComparisonFunction
-  {
-    Unknown,
-    Never = D3D12_COMPARISON_FUNC_NEVER,
-    Less = D3D12_COMPARISON_FUNC_LESS,
-    Equal = D3D12_COMPARISON_FUNC_EQUAL,
-    LessOrEqual = D3D12_COMPARISON_FUNC_LESS_EQUAL,
-    Greater = D3D12_COMPARISON_FUNC_GREATER,
-    NotEqual = D3D12_COMPARISON_FUNC_NOT_EQUAL,
-    GreaterOrEqual = D3D12_COMPARISON_FUNC_GREATER_EQUAL,
-    Always = D3D12_COMPARISON_FUNC_ALWAYS
-  };
-
   enum class StaticBorderColor
   {
     TransparentBlack = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK,

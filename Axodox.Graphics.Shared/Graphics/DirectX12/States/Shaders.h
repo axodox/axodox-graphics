@@ -5,11 +5,12 @@ namespace Axodox::Graphics::D3D12
 {
   enum class ShaderKind
   {
+    Compute,
     Vertex,
-    Pixel,
     Domain,
     Hull,
-    Geometry
+    Geometry,
+    Pixel
   };
 
   struct Shader
@@ -22,12 +23,12 @@ namespace Axodox::Graphics::D3D12
     virtual ~Shader() = default;
   };
 
-  struct VertexShader : public Shader
+  struct ComputeShader : public Shader
   {
     virtual ShaderKind Type() const override;
   };
 
-  struct PixelShader : public Shader
+  struct VertexShader : public Shader
   {
     virtual ShaderKind Type() const override;
   };
@@ -36,7 +37,7 @@ namespace Axodox::Graphics::D3D12
   {
     virtual ShaderKind Type() const override;
   };
-  
+
   struct HullShader : public Shader
   {
     virtual ShaderKind Type() const override;
@@ -46,4 +47,9 @@ namespace Axodox::Graphics::D3D12
   {
     virtual ShaderKind Type() const override;
   };
+
+  struct PixelShader : public Shader
+  {
+    virtual ShaderKind Type() const override;
+  };  
 }

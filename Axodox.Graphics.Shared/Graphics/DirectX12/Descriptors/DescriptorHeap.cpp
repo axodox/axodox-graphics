@@ -16,7 +16,7 @@ namespace Axodox::Graphics::D3D12
   {
     Clean();
 
-    if (!_items.empty()) throw logic_error("Descriptor handles must be all released before the descriptor heap is deleted.");
+    assert(_items.empty());
   }
 
   DescriptorHeapKind DescriptorHeap::Type() const
