@@ -22,7 +22,7 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeap(const DescriptorHeap&) = delete;
     DescriptorHeap& operator=(const DescriptorHeap&) = delete;
     
-    virtual ~DescriptorHeap();    
+    virtual ~DescriptorHeap();
 
     DescriptorHeapKind Type() const;
 

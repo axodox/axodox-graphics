@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GraphicsDevice.h"
 
+using namespace Axodox::Infrastructure;
 using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
@@ -33,5 +34,25 @@ namespace Axodox::Graphics::D3D12
   ID3D12DeviceT* GraphicsDevice::operator->() const
   {
     return _device.get();
+  }
+
+  CapabilityFlags GraphicsDevice::Capabilities()
+  {
+    if (_flags == CapabilityFlags::Unknown)
+    {
+      _flags = CapabilityFlags::None;
+
+      D3D12_FEATURE_DATA_ARCHITECTURE1 architecture;
+      check_hresult(_device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE1, &architecture, sizeof(D3D12_FEATURE_DATA_ARCHITECTURE1)));
+
+      set_flag(_flags, CapabilityFlags::IsUniformMemoryAccess, architecture.UMA);
+    }
+
+    return _flags;
+  }
+
+  MemoryPool GraphicsDevice::VideoMemoryPool()
+  {
+    return has_flag(Capabilities(), CapabilityFlags::IsUniformMemoryAccess) ? MemoryPool::SystemMemory : MemoryPool::VideoMemory;
   }
 }

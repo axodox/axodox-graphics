@@ -3,6 +3,20 @@
 
 namespace Axodox::Graphics::D3D12
 {
+  enum class CapabilityFlags
+  {
+    None = 0,
+    IsUniformMemoryAccess = 1,
+    Unknown = -1
+  };
+
+  enum class MemoryPool
+  {
+    Unknown = D3D12_MEMORY_POOL_UNKNOWN,
+    SystemMemory = D3D12_MEMORY_POOL_L0,
+    VideoMemory = D3D12_MEMORY_POOL_L1
+  };
+
   class GraphicsDevice
   {
   public:
@@ -12,7 +26,12 @@ namespace Axodox::Graphics::D3D12
     ID3D12DeviceT* get() const;
     ID3D12DeviceT* operator->() const;
 
+    CapabilityFlags Capabilities();
+
+    MemoryPool VideoMemoryPool();
+
   private:
     winrt::com_ptr<ID3D12DeviceT> _device;
+    CapabilityFlags _flags = CapabilityFlags::Unknown;
   };
 }

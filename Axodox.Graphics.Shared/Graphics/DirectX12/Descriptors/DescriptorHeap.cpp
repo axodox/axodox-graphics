@@ -70,6 +70,7 @@ namespace Axodox::Graphics::D3D12
   void DescriptorHeap::Clean()
   {
     lock_guard lock(_mutex);
+
     for (auto i = 0; i < _items.size(); i++)
     {
       auto& item = _items[i];
