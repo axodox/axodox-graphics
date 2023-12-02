@@ -24,6 +24,12 @@ namespace Axodox::Graphics::D3D12
 
   protected:
     GraphicsDevice _device;
+
+    template<typename T>
+    T* GetResourceData(Resource* resource)
+    {
+      return resource->_data.get_or_create<T>();
+    }
     
     virtual void AllocateResources(ResourceSpan resources) = 0;
 

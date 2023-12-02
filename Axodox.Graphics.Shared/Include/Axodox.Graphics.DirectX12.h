@@ -1,6 +1,7 @@
 #pragma once
 #include "../includes.h"
 
+#include "Graphics/DirectX12/Enumerations.h"
 #include "Graphics/DirectX12/GraphicsTypes.h"
 #include "Graphics/DirectX12/Devices/GraphicsDevice.h"
 #include "Graphics/DirectX12/Commands/CommandQueue.h"

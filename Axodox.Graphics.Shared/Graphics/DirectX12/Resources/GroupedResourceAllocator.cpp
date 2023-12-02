@@ -9,7 +9,7 @@ namespace Axodox::Graphics::D3D12
   void GroupedResourceAllocator::AllocateResources(ResourceSpan resources)
   {
     //Get allocation info & flags
-    D3D12_RESOURCE_ALLOCATION_INFO allocationInfo;
+    D3D12_RESOURCE_ALLOCATION_INFO heapAllocationInfo;
     D3D12_HEAP_FLAGS heapFlags;
     {
       bool hasBuffers = false;
@@ -37,11 +37,11 @@ namespace Axodox::Graphics::D3D12
             hasTextures = true;
           }
         }
-        
-        descriptions.push_back(description);        
+
+        descriptions.push_back(description);
       }
 
-      allocationInfo = _device->GetResourceAllocationInfo(0, uint32_t(descriptions.size()), descriptions.data());
+      heapAllocationInfo = _device->GetResourceAllocationInfo(0, uint32_t(descriptions.size()), descriptions.data());
 
       heapFlags = D3D12_HEAP_FLAG_CREATE_NOT_ZEROED;
       if (!hasBuffers) heapFlags |= D3D12_HEAP_FLAG_DENY_BUFFERS;
@@ -54,9 +54,9 @@ namespace Axodox::Graphics::D3D12
     if (_heap)
     {
       auto description = _heap->GetDesc();
-      isCreatingNewHeap = 
-        description.Alignment % allocationInfo.Alignment != 0 ||
-        description.SizeInBytes < allocationInfo.SizeInBytes ||
+      isCreatingNewHeap =
+        description.Alignment % heapAllocationInfo.Alignment != 0 ||
+        description.SizeInBytes < heapAllocationInfo.SizeInBytes ||
         description.Flags != heapFlags;
     }
     else
@@ -68,7 +68,7 @@ namespace Axodox::Graphics::D3D12
     if (isCreatingNewHeap)
     {
       D3D12_HEAP_DESC description{
-        .SizeInBytes = allocationInfo.SizeInBytes,
+        .SizeInBytes = heapAllocationInfo.SizeInBytes,
         .Properties = {
           .Type = D3D12_HEAP_TYPE_DEFAULT,
           .CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
@@ -76,11 +76,37 @@ namespace Axodox::Graphics::D3D12
           .CreationNodeMask = 0,
           .VisibleNodeMask = 0
         },
-        .Alignment = allocationInfo.Alignment,
+        .Alignment = heapAllocationInfo.Alignment,
         .Flags = heapFlags
       };
 
       check_hresult(_device->CreateHeap(&description, IID_PPV_ARGS(_heap.put())));
+    }
+
+    //Suballocate resources
+    uint64_t offset = 0;
+    for (auto& resource : resources)
+    {
+      //Get description
+      auto& description = resource->Description();
+
+      //Apply memory alignment
+      auto allocationInfo = _device->GetResourceAllocationInfo(0, 1, &description);
+
+      auto alignmentRemainder = offset % allocationInfo.Alignment;
+      if (alignmentRemainder != 0) offset += allocationInfo.Alignment - alignmentRemainder;
+
+      //Create resource
+      check_hresult(_device->CreatePlacedResource(
+        _heap.get(),
+        offset,
+        &description,
+        D3D12_RESOURCE_STATE_COMMON,
+        nullptr,
+        IID_PPV_ARGS(resource->put())));
+
+      //Increment offset by size
+      offset += allocationInfo.SizeInBytes;
     }
   }
 }

@@ -21,15 +21,7 @@ namespace Axodox::Graphics::D3D12
 
   resource_ptr ResourceAllocator::AddResource(const D3D12_RESOURCE_DESC& description)
   {
-    auto allocationInfo = _device->GetResourceAllocationInfo(0, 1, &description);
-
-    auto resource = make_unique<Resource>(
-      this, 
-      description, 
-      allocationInfo.SizeInBytes, 
-      allocationInfo.Alignment
-    );
-
+    auto resource = make_unique<Resource>(this, description);
     auto result = resource_ptr(resource.get());
 
     lock_guard lock(_mutex);
@@ -55,6 +47,7 @@ namespace Axodox::Graphics::D3D12
     Clean();
 
     //Allocate resources
+    lock_guard lock(_mutex);
     AllocateResources(_resources);
   }
 

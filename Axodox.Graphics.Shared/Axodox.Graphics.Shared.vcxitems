@@ -14,6 +14,7 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandKind.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\SimpleResourceView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Enumerations.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Resource.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.h" />
@@ -62,6 +64,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\SimpleResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.cpp" />
