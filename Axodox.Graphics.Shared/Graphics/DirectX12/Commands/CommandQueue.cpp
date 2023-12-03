@@ -38,9 +38,25 @@ namespace Axodox::Graphics::D3D12
     return _queue.get();
   }
 
-  void CommandQueue::Execute(const CommandList& commandList)
+  void CommandQueue::Execute(CommandList& commandList)
   {
     ID3D12CommandList* list = commandList._list.get();
+
+    //Await all awaiters
+    for (auto& awaiter : commandList._awaiters)
+    {
+      awaiter.Await(*this);
+    }
+    commandList._awaiters.clear();
+
+    //Execute command list
     _queue->ExecuteCommandLists(1, &list);
+
+    //Signal all signalers
+    for (auto& awaiter : commandList._signalers)
+    {
+      awaiter.Signal(*this);
+    }
+    commandList._signalers.clear();
   }
 }

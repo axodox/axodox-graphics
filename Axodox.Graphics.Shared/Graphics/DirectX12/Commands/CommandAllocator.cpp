@@ -54,6 +54,18 @@ namespace Axodox::Graphics::D3D12
     return _type;
   }
 
+  void CommandAllocator::AddAwaiter(CommandFenceMarker marker)
+  {
+    if (!_recorder) throw logic_error("There is no active command list!");
+    _recorder->_awaiters.push_back(marker);
+  }
+
+  void CommandAllocator::AddSignaler(CommandFenceMarker marker)
+  {
+    if (!_recorder) throw logic_error("There is no active command list!");
+    _recorder->_signalers.push_back(marker);
+  }
+
   void CommandAllocator::ResourceTransition(ID3D12Resource* resource, ResourceStates from, ResourceStates to)
   {
     D3D12_RESOURCE_BARRIER barrier{

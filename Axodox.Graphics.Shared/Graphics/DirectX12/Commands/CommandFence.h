@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "CommandQueue.h"
+#include "CommandFenceMarker.h"
 #include "Collections/ObjectPool.h"
 
 namespace Axodox::Graphics::D3D12
@@ -8,24 +9,7 @@ namespace Axodox::Graphics::D3D12
   class GraphicsDevice;
 
   using CommandFenceTimeout = std::chrono::duration<uint32_t, std::milli>;
-
-  class CommandFence;
-  class CommandFenceMarker
-  {
-  public:
-    CommandFenceMarker();
-
-    explicit operator bool() const;
-
-  private:
-    friend class CommandFence;
-
-    CommandFenceMarker(CommandFence* owner, uint64_t value);
-
-    CommandFence* Owner;
-    uint64_t Value;
-  };  
-
+  
   class CommandFence
   {
   public:
@@ -49,6 +33,10 @@ namespace Axodox::Graphics::D3D12
     bool Await(CommandFenceMarker marker, CommandFenceTimeout timeout = CommandFenceTimeout(INFINITE));
 
     void Sync(const CommandQueue& queue);
+
+    Threading::async_action AwaitAsync(CommandFenceMarker marker, CommandFenceTimeout timeout = CommandFenceTimeout(INFINITE));
+
+    ID3D12Fence* get();
 
   private:
     winrt::com_ptr<ID3D12Fence> _fence;

@@ -24,6 +24,9 @@ namespace Axodox::Graphics::D3D12
 
     CommandKind Type() const;
 
+    void AddAwaiter(CommandFenceMarker marker);
+    void AddSignaler(CommandFenceMarker marker);
+
     void ResourceTransition(ID3D12Resource* resource, ResourceStates from, ResourceStates to);
 
     void Reset();

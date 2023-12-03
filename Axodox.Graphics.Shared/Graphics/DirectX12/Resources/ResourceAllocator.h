@@ -20,7 +20,7 @@ namespace Axodox::Graphics::D3D12
     void Build();
     void Clean();
 
-    virtual ~ResourceAllocator() = default;
+    virtual ~ResourceAllocator();
 
   protected:
     GraphicsDevice _device;

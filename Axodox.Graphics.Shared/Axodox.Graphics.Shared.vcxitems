@@ -14,6 +14,8 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
@@ -49,10 +51,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\Axodox.Graphics.DirectX12.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\BufferAllocator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Threading\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandList.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandAllocator.cpp" />
@@ -68,6 +72,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\TextureDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\BlendState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\DepthStencilState.cpp" />
@@ -80,5 +85,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StaticSampler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\CoreSwapChain.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Swap Chains\SwapChain.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Infrastructure\BufferAllocator.cpp" />
   </ItemGroup>
 </Project>

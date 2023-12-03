@@ -81,7 +81,7 @@ namespace Axodox::Collections
     friend class ObjectPoolHandle<T>;
 
   public:
-    ObjectPool(const std::function<T()>& factory = [] { return T{}; }) :
+    explicit ObjectPool(const std::function<T()>& factory = [] { return T{}; }) :
       _factory(factory)
     { }
 

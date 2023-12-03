@@ -67,4 +67,11 @@ namespace Axodox::Graphics::D3D12
 
     _reclaimables.clear();
   }
+
+  ResourceAllocator::~ResourceAllocator()
+  {
+    Clean();
+
+    assert(_resources.empty());
+  }
 }

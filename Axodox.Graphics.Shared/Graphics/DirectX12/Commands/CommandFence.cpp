@@ -11,16 +11,6 @@ namespace {
 
 namespace Axodox::Graphics::D3D12
 {
-  CommandFenceMarker::CommandFenceMarker() :
-    Owner(nullptr),
-    Value(0)
-  { }
-
-  CommandFenceMarker::CommandFenceMarker(CommandFence* owner, uint64_t value) :
-    Owner(owner),
-    Value(value)
-  { }
-
   CommandFenceMarker::operator bool() const
   {
     return Owner != nullptr;
@@ -89,6 +79,22 @@ namespace Axodox::Graphics::D3D12
   void CommandFence::Sync(const CommandQueue& queue)
   {
     Await(EnqueueSignal(queue));
+  }
+
+  inline Threading::async_action CommandFence::AwaitAsync(CommandFenceMarker marker, CommandFenceTimeout timeout)
+  {
+    auto isComplete = _fence->GetCompletedValue() >= marker.Value;
+    if (isComplete || timeout == CommandFenceTimeout{ 0 }) co_return;
+
+    auto event = _eventPool.Borrow();
+    check_hresult(_fence->SetEventOnCompletion(marker.Value, event->get()));
+
+    co_await resume_on_signal(event->get(), timeout);
+  }
+
+  ID3D12Fence* CommandFence::get()
+  {
+    return _fence.get();
   }
 
   void CommandFence::CheckMarker(CommandFenceMarker marker) const

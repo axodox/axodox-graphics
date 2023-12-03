@@ -17,7 +17,7 @@ namespace Axodox::Graphics::D3D12
     ID3D12CommandQueue* get() const;
     ID3D12CommandQueue* operator->() const;
 
-    void Execute(const CommandList& commandList);
+    void Execute(CommandList& commandList);
 
   private:
     winrt::com_ptr<ID3D12CommandQueue> _queue;

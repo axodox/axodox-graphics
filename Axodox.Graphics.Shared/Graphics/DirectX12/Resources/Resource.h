@@ -9,6 +9,7 @@ namespace Axodox::Graphics::D3D12
   class Resource
   {
     friend class ResourceAllocator;
+    friend class ResourceUploader;
     friend struct ResourceDeleter;
 
   public:
