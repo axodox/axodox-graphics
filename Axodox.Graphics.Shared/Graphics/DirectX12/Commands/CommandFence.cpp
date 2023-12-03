@@ -81,7 +81,7 @@ namespace Axodox::Graphics::D3D12
     Await(EnqueueSignal(queue));
   }
 
-  inline Threading::async_action CommandFence::AwaitAsync(CommandFenceMarker marker, CommandFenceTimeout timeout)
+  Threading::async_action CommandFence::AwaitAsync(CommandFenceMarker marker, CommandFenceTimeout timeout)
   {
     auto isComplete = _fence->GetCompletedValue() >= marker.Value;
     if (isComplete || timeout == CommandFenceTimeout{ 0 }) co_return;

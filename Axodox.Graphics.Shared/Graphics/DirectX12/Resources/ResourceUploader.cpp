@@ -38,9 +38,6 @@ namespace Axodox::Graphics::D3D12
 
     //Select location in system memory
     auto allocationInfo = _device->GetResourceAllocationInfo(0, 0, &description);
-    if (allocationInfo.SizeInBytes > _allocator.Size()) throw logic_error("Resource does not fit in upload buffer.");
-
-    //Wait for space to be available
     auto allocation = AllocateBuffer(allocationInfo.SizeInBytes, allocationInfo.Alignment);
 
     //Create upload task
@@ -84,30 +81,39 @@ namespace Axodox::Graphics::D3D12
     return _fence.Await(marker, timeout);
   }
 
-  winrt::fire_and_forget ResourceUploader::UploadResourcesAsync(CommandAllocator& allocator, uint64_t maxSize)
+  Threading::async_action ResourceUploader::UploadResourcesAsync(CommandAllocator& allocator, uint64_t maxSize)
   {
-    //Schedule tasks until we run out of them, or reach the specified limit
+    //Schedule copy tasks
     CommandFenceMarker lastMarker;
     vector<UploadTask> tasksInFlight;
     {
       lock_guard lock(_mutex);
       tasksInFlight.reserve(_uploadTasks.size());
 
+      //We take tasks until we run out of them or exceed the specified copy size limit
       uint64_t uploadedSize = 0;
       while ((maxSize == 0 || uploadedSize < maxSize) && !_uploadTasks.empty())
       {
-        //Pop a task
+        //Pop a task from the queue
         UploadTask task = move(_uploadTasks.front());
         _uploadTasks.pop();
 
         //Increase uploaded size
         uploadedSize += task.AllocatedSegment.Size;
 
+        //Transition to copy states - assume common state after resource creation and direct / compute engine use
         allocator.ResourceTransition(task.SourceResource.get(), ResourceStates::Common, ResourceStates::CopySource);
         allocator.ResourceTransition(task.TargetResource.get(), ResourceStates::Common, ResourceStates::CopyDest);
+
+        //Copy resource
         allocator->CopyResource(task.SourceResource.get(), task.TargetResource.get());
+
+        //Set common state for later direct / compute engine use
+        allocator.ResourceTransition(task.SourceResource.get(), ResourceStates::CopySource, ResourceStates::Common);
+        allocator.ResourceTransition(task.TargetResource.get(), ResourceStates::CopyDest, ResourceStates::Common);
         lastMarker = task.Marker;
 
+        //Move task to flight list
         tasksInFlight.push_back(move(task));
       }
     }
@@ -117,7 +123,7 @@ namespace Axodox::Graphics::D3D12
 
     //Otherwise add signaler and wait for it
     allocator.AddSignaler(lastMarker);
-    co_await _fence.Await(lastMarker);
+    co_await _fence.AwaitAsync(lastMarker);
 
     //Release resources    
     lock_guard lock(_mutex);
@@ -129,11 +135,20 @@ namespace Axodox::Graphics::D3D12
 
   BufferSegment ResourceUploader::AllocateBuffer(uint64_t size, uint64_t alignment)
   {
-    lock_guard lock(_mutex);
-
     BufferSegment result{};
-    while (result = _allocator.TryAllocate(size, alignment))
+
+    for (;;)
     {
+      //Try allocating a buffer segment
+      {
+        lock_guard lock(_mutex);
+        result = _allocator.TryAllocate(size, alignment);
+      }
+
+      //If the allocation succeeded we are done
+      if (result) break;
+
+      //Otherwise we wait for more space to become available
       _uploadEvent.wait();
     }
 

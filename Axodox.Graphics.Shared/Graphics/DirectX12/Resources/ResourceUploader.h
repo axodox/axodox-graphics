@@ -22,7 +22,7 @@ namespace Axodox::Graphics::D3D12
     CommandFenceMarker EnqueueUploadTask(Resource* resource, TextureData* texture);
     bool AwaitUploadTask(CommandFenceMarker marker, CommandFenceTimeout timeout = CommandFenceTimeout(INFINITE));
 
-    winrt::fire_and_forget UploadResourcesAsync(CommandAllocator& allocator, uint64_t maxSize = 0);
+    Threading::async_action UploadResourcesAsync(CommandAllocator& allocator, uint64_t maxSize = 0);
 
   private:
     GraphicsDevice _device;

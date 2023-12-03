@@ -21,6 +21,9 @@ namespace Axodox::Infrastructure
     //If we do not have empty space return
     if (_freeSpace.empty()) return {};
 
+    //We cannot allocate more space than the total buffer size
+    if (size > _size) throw logic_error("Cannot allocate more space than the entire length of the buffer.");
+
     //Otherwise find first empty slot
     BufferSegment* selectedSlot = nullptr;
     uint64_t alignedStart = 0;
