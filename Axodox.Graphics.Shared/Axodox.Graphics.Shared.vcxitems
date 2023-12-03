@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.cpp" />

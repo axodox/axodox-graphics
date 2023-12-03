@@ -69,7 +69,7 @@ namespace Axodox::Graphics::D3D12
 
   private: 
     TextureHeader _header;
-    std::vector<uint8_t> _buffer;
+    std::vector<uint8_t, Collections::aligned_allocator<uint8_t>> _buffer;
     std::vector<TextureLayout> _mipLayouts;
 
     void AllocateBuffer();

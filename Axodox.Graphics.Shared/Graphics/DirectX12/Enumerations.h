@@ -395,4 +395,6 @@ namespace Axodox::Graphics::D3D12
   {
     return mipSlice + arraySlice * mipLevels + planeSlice * mipLevels * arraySize;
   }
+
+  inline const D3D12_RANGE EmptyRange{ 0, 0 };
 }

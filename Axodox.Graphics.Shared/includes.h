@@ -9,5 +9,6 @@
 #include <winrt/Windows.System.Threading.h>
 
 #include <Include/Axodox.Infrastructure.h>
+#include <Include/Axodox.Collections.h>
 #include <Include/Axodox.Storage.h>
 #include <Include/Axodox.Threading.h>

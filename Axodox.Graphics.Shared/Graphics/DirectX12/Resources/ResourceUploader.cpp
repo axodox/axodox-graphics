@@ -53,9 +53,9 @@ namespace Axodox::Graphics::D3D12
     auto header = texture->Header();
     auto sliceCount = max(header.ArraySize, header.Depth);
 
-    for (auto mip = 0; mip < header.MipCount; mip++)
+    for (auto mip = 0u; mip < header.MipCount; mip++)
     {
-      for (auto slice = 0; slice < sliceCount; slice++)
+      for (auto slice = 0u; slice < sliceCount; slice++)
       {
         auto subresourceIndex = GetSubresourceIndex(mip, slice, 0, header.MipCount, sliceCount);
 
@@ -63,8 +63,8 @@ namespace Axodox::Graphics::D3D12
         auto bytes = texture->AsRawSpan(&rowPitch, slice, mip);
         slicePitch = bytes.size();
 
-        check_hresult(task.SourceResource->Map(subresourceIndex, nullptr, nullptr));
-        check_hresult(task.SourceResource->WriteToSubresource(subresourceIndex, nullptr, bytes.data(), rowPitch, slicePitch));
+        check_hresult(task.SourceResource->Map(subresourceIndex, &EmptyRange, nullptr));
+        check_hresult(task.SourceResource->WriteToSubresource(subresourceIndex, nullptr, bytes.data(), uint32_t(rowPitch), uint32_t(slicePitch)));
         task.SourceResource->Unmap(subresourceIndex, nullptr);
       }
     }
