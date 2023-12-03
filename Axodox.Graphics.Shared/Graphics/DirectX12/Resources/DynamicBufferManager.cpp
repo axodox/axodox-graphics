@@ -40,6 +40,9 @@ namespace Axodox::Graphics::D3D12
 
     for (auto& block : _blocks)
     {
+      //Skip blocks with no data
+      if (block.Position == 0) continue;
+
       //Copy to upload buffer
       D3D12_RANGE writtenRange{ 0, block.Position };
 
@@ -64,7 +67,7 @@ namespace Axodox::Graphics::D3D12
     //Allocate new block if needed
     if (_blocks.empty() || _blocks.back().Position + requiredSpace > _blocks.back().Size)
     {
-      auto blockSize = _blocks.empty() ? _defaultBlockSize : _blocks.back().Size << 1;
+      auto blockSize = max(_blocks.empty() ? _defaultBlockSize : _blocks.back().Size << 1, requiredSpace);
       _blocks.push_back(CreateNewBlock(blockSize));
     }
 

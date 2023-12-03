@@ -4,8 +4,6 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  using BufferReference = D3D12_GPU_VIRTUAL_ADDRESS;
-
   class DynamicBufferManager
   {
     struct Block

@@ -133,24 +133,36 @@ namespace Axodox::Graphics::D3D12
       return result;
     }
 
-    void SetGraphics(CommandAllocator& allocator, const ConstantBufferView& constantBufferView)
+    void SetGraphics(CommandAllocator& allocator, BufferReference reference)
     {
-      allocator->SetGraphicsRootConstantBufferView(Index, *constantBufferView.Handle());
+      switch (Type)
+      {
+      case RootDescriptorType::ConstantBuffer:
+        allocator->SetGraphicsRootConstantBufferView(Index, reference);
+        break;
+      case RootDescriptorType::ShaderResource:
+        allocator->SetGraphicsRootShaderResourceView(Index, reference);
+        break;
+      case RootDescriptorType::UnorderedAccess:
+        allocator->SetGraphicsRootUnorderedAccessView(Index, reference);
+        break;
+      }
     }
 
-    void SetCompute(CommandAllocator& allocator, const ConstantBufferView& constantBufferView)
+    void SetCompute(CommandAllocator& allocator, BufferReference reference)
     {
-      allocator->SetComputeRootConstantBufferView(Index, *constantBufferView.Handle());
-    }
-
-    void SetGraphics(CommandAllocator& allocator, const ShaderResourceView& shaderResourceView)
-    {
-      allocator->SetGraphicsRootShaderResourceView(Index, *shaderResourceView.Handle());
-    }
-
-    void SetCompute(CommandAllocator& allocator, const ShaderResourceView& shaderResourceView)
-    {
-      allocator->SetComputeRootShaderResourceView(Index, *shaderResourceView.Handle());
+      switch (Type)
+      {
+      case RootDescriptorType::ConstantBuffer:
+        allocator->SetComputeRootConstantBufferView(Index, reference);
+        break;
+      case RootDescriptorType::ShaderResource:
+        allocator->SetComputeRootShaderResourceView(Index, reference);
+        break;
+      case RootDescriptorType::UnorderedAccess:
+        allocator->SetComputeRootUnorderedAccessView(Index, reference);
+        break;
+      }
     }
   };
 
