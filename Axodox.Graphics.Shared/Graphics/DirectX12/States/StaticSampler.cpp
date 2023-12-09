@@ -16,14 +16,14 @@ namespace Axodox::Graphics::D3D12
     AddressW(modeW)
   { }
 
-  StaticSampler::StaticSampler(RootSignatureBase* owner, InputSlot slot, ShaderVisibility visibility) :
+  StaticSampler::StaticSampler(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility) :
     Slot(slot),
     Visibility(visibility)
   { 
     owner->AddSampler(this);
   }
 
-  StaticSampler::StaticSampler(RootSignatureBase * owner, InputSlot slot, D3D12::Filter filter, TextureAddressMode addressMode, ShaderVisibility visibility) :
+  StaticSampler::StaticSampler(RootSignatureMask* owner, InputSlot slot, D3D12::Filter filter, TextureAddressMode addressMode, ShaderVisibility visibility) :
     Slot(slot),
     Filter(filter),
     AddressMode(addressMode),

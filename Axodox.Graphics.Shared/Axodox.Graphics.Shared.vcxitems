@@ -18,6 +18,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignatureMask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFence.h" />
@@ -85,6 +86,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RasterizerState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootParameters.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignature.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignatureMask.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\SampleState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\Shaders.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StaticSampler.cpp" />

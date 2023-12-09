@@ -3,10 +3,11 @@
 #include "../Commands/CommandAllocator.h"
 #include "../Descriptors/ConstantBufferView.h"
 #include "../Descriptors/ShaderResourceView.h"
+#include "RootSignatureMask.h"
 
 namespace Axodox::Graphics::D3D12
 {
-  class RootSignatureBase;
+  class RootSignatureMask;
 
   struct InputSlot
   {
@@ -46,12 +47,19 @@ namespace Axodox::Graphics::D3D12
 
   struct RootParameter
   {
+  public:
     ShaderVisibility Visibility;
     uint32_t Index;
 
-    RootParameter(RootSignatureBase* owner, ShaderVisibility visibility);
+    RootParameter(RootSignatureMask* owner, ShaderVisibility visibility);
 
     virtual D3D12_ROOT_PARAMETER Serialize() const = 0;
+
+  protected:
+    RootSignatureContext* Context() const;
+
+  private:
+    ptrdiff_t _context;
   };
 
   template <typename T>
@@ -64,7 +72,7 @@ namespace Axodox::Graphics::D3D12
       return uint32_t(size_of(T) / 4 + (size_of(T) % 4 == 0 ? 0 : 1));
     }
 
-    RootConstant(RootSignatureBase* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
+    RootConstant(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility),
       Slot(slot)
     { }
@@ -90,14 +98,20 @@ namespace Axodox::Graphics::D3D12
       return buffer;
     }
 
-    void SetGraphics(CommandAllocator& allocator, T value)
+    void operator=(const T& value)
     {
-      allocator->SetGraphicsRoot32BitConstants(Index, Size(), AsBuffer(value).data(), 0);
-    }
-
-    void SetCompute(CommandAllocator& allocator, T value)
-    {
-      allocator->SetComputeRoot32BitConstants(Index, Size(), AsBuffer(value).data(), 0);
+      auto& allocator = *Context()->Allocator;
+      switch (Context()->Usage)
+      {
+      case RootSignatureUsage::Graphics:
+        allocator->SetGraphicsRoot32BitConstants(Index, Size(), AsBuffer(value).data(), 0);
+        break;
+      case RootSignatureUsage::Compute:
+        allocator->SetComputeRoot32BitConstants(Index, Size(), AsBuffer(value).data(), 0);
+        break;
+      default:
+        throw winrt::hresult_not_implemented();
+      }
     }
   };
 
@@ -113,7 +127,7 @@ namespace Axodox::Graphics::D3D12
   {
     InputSlot Slot;
 
-    RootDescriptor(RootSignatureBase* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
+    RootDescriptor(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility),
       Slot(slot)
     { }
@@ -128,35 +142,43 @@ namespace Axodox::Graphics::D3D12
       return result;
     }
 
-    void SetGraphics(CommandAllocator& allocator, BufferReference reference)
+    void operator=(BufferReference reference)
     {
-      switch (Type)
+      auto& allocator = *Context()->Allocator;
+      switch (Context()->Usage)
       {
-      case RootDescriptorType::ConstantBuffer:
-        allocator->SetGraphicsRootConstantBufferView(Index, reference);
+      case RootSignatureUsage::Graphics:        
+        switch (Type)
+        {
+        case RootDescriptorType::ConstantBuffer:
+          allocator->SetGraphicsRootConstantBufferView(Index, reference);
+          break;
+        case RootDescriptorType::ShaderResource:
+          allocator->SetGraphicsRootShaderResourceView(Index, reference);
+          break;
+        case RootDescriptorType::UnorderedAccess:
+          allocator->SetGraphicsRootUnorderedAccessView(Index, reference);
+          break;
+        }
         break;
-      case RootDescriptorType::ShaderResource:
-        allocator->SetGraphicsRootShaderResourceView(Index, reference);
-        break;
-      case RootDescriptorType::UnorderedAccess:
-        allocator->SetGraphicsRootUnorderedAccessView(Index, reference);
-        break;
-      }
-    }
 
-    void SetCompute(CommandAllocator& allocator, BufferReference reference)
-    {
-      switch (Type)
-      {
-      case RootDescriptorType::ConstantBuffer:
-        allocator->SetComputeRootConstantBufferView(Index, reference);
+      case RootSignatureUsage::Compute:        
+        switch (Type)
+        {
+        case RootDescriptorType::ConstantBuffer:
+          allocator->SetComputeRootConstantBufferView(Index, reference);
+          break;
+        case RootDescriptorType::ShaderResource:
+          allocator->SetComputeRootShaderResourceView(Index, reference);
+          break;
+        case RootDescriptorType::UnorderedAccess:
+          allocator->SetComputeRootUnorderedAccessView(Index, reference);
+          break;
+        }
         break;
-      case RootDescriptorType::ShaderResource:
-        allocator->SetComputeRootShaderResourceView(Index, reference);
-        break;
-      case RootDescriptorType::UnorderedAccess:
-        allocator->SetComputeRootUnorderedAccessView(Index, reference);
-        break;
+
+      default:
+        throw winrt::hresult_not_implemented();
       }
     }
   };
@@ -166,7 +188,7 @@ namespace Axodox::Graphics::D3D12
   {
     std::array<DescriptorRange, Size> Ranges;
 
-    RootDescriptorTable(RootSignatureBase* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :
+    RootDescriptorTable(RootSignatureMask* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility),
       Ranges(ranges)
     { }

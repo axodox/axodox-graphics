@@ -51,8 +51,8 @@ namespace Axodox::Graphics::D3D12
     InputSlot Slot{};
     ShaderVisibility Visibility = ShaderVisibility::All;
 
-    StaticSampler(RootSignatureBase* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All);
-    StaticSampler(RootSignatureBase* owner, InputSlot slot, D3D12::Filter filter, TextureAddressMode addressMode, ShaderVisibility visibility = ShaderVisibility::All);
+    StaticSampler(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All);
+    StaticSampler(RootSignatureMask* owner, InputSlot slot, D3D12::Filter filter, TextureAddressMode addressMode, ShaderVisibility visibility = ShaderVisibility::All);
 
     D3D12_STATIC_SAMPLER_DESC Serialize() const;
   };

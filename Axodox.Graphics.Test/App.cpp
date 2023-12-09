@@ -49,16 +49,16 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     { }
   };
 
-  struct SimpleRootDescription : public RootSignatureBase
+  struct SimpleRootDescription : public RootSignatureMask
   {
-    SimpleRootDescription(const GraphicsDevice& device) :
-      RootSignatureBase(device),
+    RootDescriptor<RootDescriptorType::ConstantBuffer> ConstantBuffer;
+
+    SimpleRootDescription(const RootSignatureContext& context) :
+      RootSignatureMask(context),
       ConstantBuffer(this, { 0 }, ShaderVisibility::Vertex)
     {
       Flags = RootSignatureFlags::AllowInputAssemblerInputLayout;
     }
-
-    RootDescriptor<RootDescriptorType::ConstantBuffer> ConstantBuffer;
   };
 
   struct Constants
@@ -79,12 +79,12 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
     PipelineStateProvider pipelineStateProvider{ device };
 
-    SimpleRootDescription simpleRootDescription{ device };
+    RootSignature<SimpleRootDescription> simpleRootSignature{ device };
     VertexShader simpleVertexShader{ app_folder() / L"SimpleVertexShader.cso" };
     PixelShader simplePixelShader{ app_folder() / L"SimplePixelShader.cso" };
 
     GraphicsPipelineStateDefinition simplePipelineStateDefinition{
-      .RootSignature = &simpleRootDescription,
+      .RootSignature = &simpleRootSignature,
       .VertexShader = &simpleVertexShader,
       .PixelShader = &simplePixelShader,
       .InputLayout = VertexPositionNormal::Layout,
@@ -131,8 +131,8 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
       //Draw objects
       {
-        simpleRootDescription.SetGraphics(allocator);
-        simpleRootDescription.ConstantBuffer.SetGraphics(allocator, resources.DynamicBuffer.AddBuffer(constants));
+        auto mask = simpleRootSignature.Set(allocator, RootSignatureUsage::Graphics);
+        mask.ConstantBuffer = resources.DynamicBuffer.AddBuffer(constants);
       }
 
       //End frame command list

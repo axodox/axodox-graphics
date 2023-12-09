@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "RootSignature.h"
+#include "RootParameters.h"
+#include "StaticSampler.h"
 
 using namespace std;
 using namespace winrt;
@@ -10,57 +12,51 @@ namespace Axodox::Graphics::D3D12
     _device(device)
   { }
 
-  ID3D12RootSignature* RootSignatureBase::get()
+  ID3D12RootSignature* RootSignatureBase::get() const
   {
-    if (!_rootSignature)
+    return _signature.get();
+  }
+
+  void RootSignatureBase::SetSignature(RootSignatureMask* mask, CommandAllocator& allocator, RootSignatureUsage usage) const
+  {
+    auto& context = mask->_context;
+    context.Blueprint = nullptr;
+    context.Allocator = &allocator;
+    context.Usage = usage;
+
+    switch (context.Usage)
     {
-      _rootSignature = Build();
+    case RootSignatureUsage::Graphics:
+      (*context.Allocator)->SetGraphicsRootSignature(_signature.get());
+      break;
+    case RootSignatureUsage::Compute:
+      (*context.Allocator)->SetComputeRootSignature(_signature.get());
+      break;
+    default:
+      throw hresult_not_implemented();
     }
-
-    return _rootSignature.get();
   }
 
-  void RootSignatureBase::SetGraphics(CommandAllocator& allocator)
-  {
-    allocator->SetGraphicsRootSignature(get());
-  }
-
-  void RootSignatureBase::SetCompute(CommandAllocator& allocator)
-  {
-    allocator->SetComputeRootSignature(get());
-  }
-
-  void RootSignatureBase::AddParameter(RootParameter* parameter)
-  {
-    parameter->Index = uint32_t(_parameterOffsets.size());
-    _parameterOffsets.push_back(intptr_t(parameter) - intptr_t(this));
-  }
-
-  void RootSignatureBase::AddSampler(const StaticSampler* sampler)
-  {
-    _samplerOffsets.push_back(intptr_t(sampler) - intptr_t(this));
-  }
-
-  winrt::com_ptr<ID3D12RootSignature> RootSignatureBase::Build() const
+  winrt::com_ptr<ID3D12RootSignature> RootSignatureBase::BuildSignature(const RootSignatureMask* signature) const
   {
     //Serialize root signature
     com_ptr<ID3DBlob> serializedRootSignature;
     {
+      auto blueprint = signature->_context.Blueprint;
+
       //Collect parameters
       vector<D3D12_ROOT_PARAMETER> parameters;
-      parameters.reserve(_parameterOffsets.size());
-      for (auto parameterOffset : _parameterOffsets)
+      parameters.reserve(blueprint->Parameters.size());
+      for (auto parameter : blueprint->Parameters)
       {
-        auto parameter = reinterpret_cast<const RootParameter*>(intptr_t(this) + parameterOffset);
         parameters.push_back(parameter->Serialize());
       }
 
       //Collect samplers
       vector<D3D12_STATIC_SAMPLER_DESC> samplers;
-      samplers.reserve(_samplerOffsets.size());
-      for (auto samplerOffset : _samplerOffsets)
+      samplers.reserve(blueprint->Samplers.size());
+      for (auto sampler : blueprint->Samplers)
       {
-        auto sampler = reinterpret_cast<const StaticSampler*>(intptr_t(this) + samplerOffset);
         samplers.push_back(sampler->Serialize());
       }
 
@@ -70,12 +66,12 @@ namespace Axodox::Graphics::D3D12
         .pParameters = parameters.data(),
         .NumStaticSamplers = uint32_t(samplers.size()),
         .pStaticSamplers = samplers.data(),
-        .Flags = D3D12_ROOT_SIGNATURE_FLAGS(Flags)
+        .Flags = D3D12_ROOT_SIGNATURE_FLAGS(signature->Flags)
       };
 
       //Serialize description
       com_ptr<ID3DBlob> error;
-      auto hresult = D3D12SerializeRootSignature(&description, D3D_ROOT_SIGNATURE_VERSION_1_0, serializedRootSignature.put(), error.put());      
+      auto hresult = D3D12SerializeRootSignature(&description, D3D_ROOT_SIGNATURE_VERSION_1_0, serializedRootSignature.put(), error.put());
       if (FAILED(hresult))
       {
         throw runtime_error(error ? reinterpret_cast<const char*>(error->GetBufferPointer()) : "Failed to serialize root signature!");
