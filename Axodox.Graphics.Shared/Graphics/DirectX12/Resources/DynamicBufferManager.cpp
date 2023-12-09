@@ -13,7 +13,7 @@ namespace Axodox::Graphics::D3D12
     _defaultBlockSize(defaultBlockSize ? defaultBlockSize : 1024 * 1024)
   { }
 
-  BufferReference DynamicBufferManager::AddBuffer(std::span<uint8_t*> buffer)
+  BufferReference DynamicBufferManager::AddBuffer(std::span<const uint8_t> buffer)
   {
     lock_guard lock(_mutex);
 
@@ -46,16 +46,17 @@ namespace Axodox::Graphics::D3D12
       //Copy to upload buffer
       D3D12_RANGE writtenRange{ 0, block.Position };
 
-      check_hresult(block.UploadBuffer->Map(0, &EmptyRange, nullptr));
-      check_hresult(block.UploadBuffer->WriteToSubresource(0, nullptr, block.WriteBuffer.data(), uint32_t(block.Size), uint32_t(block.Size)));
+      void* mappedBuffer = nullptr;
+      check_hresult(block.UploadBuffer->Map(0, &EmptyRange, &mappedBuffer));
+      memcpy(mappedBuffer, block.WriteBuffer.data(), uint32_t(block.Size));
       block.UploadBuffer->Unmap(0, &writtenRange);
 
       //Copy to default buffer
-      allocator.ResourceTransition(block.UploadBuffer.get(), ResourceStates::Common, ResourceStates::CopySource);
-      allocator.ResourceTransition(block.DefaultBuffer.get(), ResourceStates::AllShaderResource, ResourceStates::CopyDest);
+      allocator.ResourceTransition(block.UploadBuffer, ResourceStates::Common, ResourceStates::CopySource);
+      allocator.ResourceTransition(block.DefaultBuffer, ResourceStates::AllShaderResource, ResourceStates::CopyDest);
       allocator->CopyResource(block.DefaultBuffer.get(), block.UploadBuffer.get());
-      allocator.ResourceTransition(block.UploadBuffer.get(), ResourceStates::CopySource, ResourceStates::Common);
-      allocator.ResourceTransition(block.DefaultBuffer.get(), ResourceStates::CopyDest, ResourceStates::AllShaderResource);
+      allocator.ResourceTransition(block.UploadBuffer, ResourceStates::CopySource, ResourceStates::Common);
+      allocator.ResourceTransition(block.DefaultBuffer, ResourceStates::CopyDest, ResourceStates::AllShaderResource);
 
       //Reset block
       block.Position = 0;
@@ -121,7 +122,7 @@ namespace Axodox::Graphics::D3D12
       &heapProperties,
       D3D12_HEAP_FLAG_CREATE_NOT_ZEROED,
       &resourceDescription,
-      D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE,
+      D3D12_RESOURCE_STATE_COMMON,
       nullptr,
       IID_PPV_ARGS(block.DefaultBuffer.put())));
 

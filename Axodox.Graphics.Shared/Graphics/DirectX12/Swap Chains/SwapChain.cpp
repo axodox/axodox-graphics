@@ -39,6 +39,11 @@ namespace Axodox::Graphics::D3D12
     _marker = _fence.EnqueueSignal(_queue);
   }
 
+  DirectX::XMUINT2 SwapChain::Resolution() const
+  {
+    return _resolution;
+  }
+
   const RenderTargetView* SwapChain::RenderTargetView()
   {
     _postPresentActions.process_pending_invocations();
@@ -91,6 +96,9 @@ namespace Axodox::Graphics::D3D12
 
         _targets.push_back(_rtvHeap.CreateRenderTargetView(buffer));
       }
+
+      auto description = _targets[0]->Resource()->GetDesc();
+      _resolution = { uint32_t(description.Width), uint32_t(description.Height) };
 
       _rtvHeap.Build();
     }

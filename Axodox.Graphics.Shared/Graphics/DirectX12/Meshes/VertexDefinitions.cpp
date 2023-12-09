@@ -50,10 +50,10 @@ namespace
 
 namespace Axodox::Graphics::D3D12
 {
-  const VertexDefinition VertexPosition::Definition = VertexPositionDefinition;
-  const VertexDefinition VertexPositionColor::Definition = VertexPositionColorDefinition;
-  const VertexDefinition VertexPositionTexture::Definition = VertexPositionTextureDefinition;
-  const VertexDefinition VertexPositionNormal::Definition = VertexPositionNormalDefinition;
-  const VertexDefinition VertexPositionNormalColor::Definition = VertexPositionNormalColorDefinition;
-  const VertexDefinition VertexPositionNormalTexture::Definition = VertexPositionNormalTextureDefinition;
+  const VertexDefinition VertexPosition::Layout = VertexPositionDefinition;
+  const VertexDefinition VertexPositionColor::Layout = VertexPositionColorDefinition;
+  const VertexDefinition VertexPositionTexture::Layout = VertexPositionTextureDefinition;
+  const VertexDefinition VertexPositionNormal::Layout = VertexPositionNormalDefinition;
+  const VertexDefinition VertexPositionNormalColor::Layout = VertexPositionNormalColorDefinition;
+  const VertexDefinition VertexPositionNormalTexture::Layout = VertexPositionNormalTextureDefinition;
 }

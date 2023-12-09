@@ -1,6 +1,7 @@
 #pragma once
 #include "../Devices/GraphicsDevice.h"
 #include "../Commands/CommandAllocator.h"
+#include "../../../Infrastructure/BitwiseOperations.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -17,7 +18,13 @@ namespace Axodox::Graphics::D3D12
   public:
     DynamicBufferManager(const GraphicsDevice& device, uint64_t defaultBlockSize = 0);
 
-    BufferReference AddBuffer(std::span<uint8_t*> data);
+    [[nodiscard]] BufferReference AddBuffer(std::span<const uint8_t> buffer);
+
+    template<typename T>
+    [[nodiscard]] BufferReference AddBuffer(const T& value)
+    {
+      return AddBuffer(Infrastructure::to_span(value));
+    }
 
     void UploadResources(CommandAllocator& allocator);
 

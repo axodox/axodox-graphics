@@ -9,7 +9,7 @@ namespace Axodox::Graphics::D3D12
   {
     DirectX::XMFLOAT3 Position;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 
   struct VertexPositionColor
@@ -17,7 +17,7 @@ namespace Axodox::Graphics::D3D12
     DirectX::XMFLOAT3 Position;
     DirectX::PackedVector::XMUBYTEN4 Color;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 
   struct VertexPositionTexture
@@ -25,7 +25,7 @@ namespace Axodox::Graphics::D3D12
     DirectX::XMFLOAT3 Position;
     DirectX::PackedVector::XMUSHORTN2 Texture;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 
   struct VertexPositionNormal
@@ -33,7 +33,7 @@ namespace Axodox::Graphics::D3D12
     DirectX::XMFLOAT3 Position;
     DirectX::PackedVector::XMBYTEN4 Normal;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 
   struct VertexPositionNormalColor
@@ -42,7 +42,7 @@ namespace Axodox::Graphics::D3D12
     DirectX::PackedVector::XMBYTEN4 Normal;
     DirectX::PackedVector::XMUBYTEN4 Color;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 
   struct VertexPositionNormalTexture
@@ -51,6 +51,6 @@ namespace Axodox::Graphics::D3D12
     DirectX::PackedVector::XMBYTEN4 Normal;
     DirectX::PackedVector::XMUSHORTN2 Texture;
 
-    static const VertexDefinition Definition;
+    static const VertexDefinition Layout;
   };
 }

@@ -1,8 +1,19 @@
 #include "pch.h"
 #include "Shaders.h"
 
+using namespace Axodox::Storage;
+using namespace std;
+
 namespace Axodox::Graphics::D3D12
 {
+  Shader::Shader(std::vector<uint8_t>&& bytecode) :
+    Bytecode(move(bytecode))
+  { }
+
+  Shader::Shader(const std::filesystem::path& path) :
+    Bytecode(try_read_file(path))
+  { }
+
   Shader::operator D3D12_SHADER_BYTECODE() const
   {
     return { Bytecode.data(), Bytecode.size() };

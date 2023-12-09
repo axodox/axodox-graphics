@@ -4,10 +4,12 @@
 #include "CommandList.h"
 #include "../Devices/GraphicsDevice.h"
 #include "../Descriptors/RenderTargetView.h"
+#include "../Resources/ResourceReference.h"
 
 namespace Axodox::Graphics::D3D12
 {
   class GraphicsDevice;
+  class PipelineState;
 
   class CommandAllocator
   {
@@ -19,7 +21,7 @@ namespace Axodox::Graphics::D3D12
 
     ID3D12GraphicsCommandListT* operator->();
 
-    void BeginList();
+    void BeginList(PipelineState* pipelineState = nullptr);
     [[nodiscard]] Collections::ObjectPoolHandle<CommandList> EndList();
 
     CommandKind Type() const;
@@ -27,7 +29,7 @@ namespace Axodox::Graphics::D3D12
     void AddAwaiter(CommandFenceMarker marker);
     void AddSignaler(CommandFenceMarker marker);
 
-    void ResourceTransition(ID3D12Resource* resource, ResourceStates from, ResourceStates to);
+    void ResourceTransition(ResourceReference resource, ResourceStates from, ResourceStates to);
 
     void Reset();
 

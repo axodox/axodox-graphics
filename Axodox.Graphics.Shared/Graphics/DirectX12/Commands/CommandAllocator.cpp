@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CommandAllocator.h"
+#include "../States/PipelineState.h"
 
 using namespace std;
 using namespace winrt;
@@ -19,7 +20,7 @@ namespace Axodox::Graphics::D3D12
     return _recorder->_list.get();
   }
 
-  void CommandAllocator::BeginList()
+  void CommandAllocator::BeginList(PipelineState* pipelineState)
   {
     if (_recorder) throw logic_error("Cannot start a command list before finishing the last one!");
 
@@ -30,7 +31,7 @@ namespace Axodox::Graphics::D3D12
         0u,
         D3D12_COMMAND_LIST_TYPE(_type),
         _allocator.get(),
-        nullptr,
+        pipelineState ? pipelineState->get() : nullptr,
         IID_PPV_ARGS(_recorder->_list.put())
       ));
     }
@@ -66,12 +67,12 @@ namespace Axodox::Graphics::D3D12
     _recorder->_signalers.push_back(marker);
   }
 
-  void CommandAllocator::ResourceTransition(ID3D12Resource* resource, ResourceStates from, ResourceStates to)
+  void CommandAllocator::ResourceTransition(ResourceReference resource, ResourceStates from, ResourceStates to)
   {
     D3D12_RESOURCE_BARRIER barrier{
       .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
       .Transition = { 
-        .pResource = resource,
+        .pResource = resource.Pointer,
         .Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES,
         .StateBefore = D3D12_RESOURCE_STATES(from),
         .StateAfter = D3D12_RESOURCE_STATES(to)

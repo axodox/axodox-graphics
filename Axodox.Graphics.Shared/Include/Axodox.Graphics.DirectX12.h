@@ -13,3 +13,5 @@
 #include "Graphics/DirectX12/States/RootParameters.h"
 #include "Graphics/DirectX12/States/StaticSampler.h"
 #include "Graphics/DirectX12/States/RootSignature.h"
+#include "Graphics/DirectX12/States/PipelineState.h"
+#include "Graphics/DirectX12/Resources/DynamicBufferManager.h"

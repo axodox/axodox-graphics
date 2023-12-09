@@ -74,7 +74,12 @@ namespace Axodox::Graphics::D3D12
       };
 
       //Serialize description
-      check_hresult(D3D12SerializeRootSignature(&description, D3D_ROOT_SIGNATURE_VERSION_1_1, serializedRootSignature.put(), nullptr));
+      com_ptr<ID3DBlob> error;
+      auto hresult = D3D12SerializeRootSignature(&description, D3D_ROOT_SIGNATURE_VERSION_1_0, serializedRootSignature.put(), error.put());      
+      if (FAILED(hresult))
+      {
+        throw runtime_error(error ? reinterpret_cast<const char*>(error->GetBufferPointer()) : "Failed to serialize root signature!");
+      }
     }
 
     //Create root signature

@@ -97,11 +97,6 @@ namespace Axodox::Graphics::D3D12
 
     void SetCompute(CommandAllocator& allocator, T value)
     {
-      std::array<std::byte, Size()> buffer;
-
-      buffer.fill(0);
-      memcpy(buffer.data(), &value, sizeof(T));
-
       allocator->SetComputeRoot32BitConstants(Index, Size(), AsBuffer(value).data(), 0);
     }
   };

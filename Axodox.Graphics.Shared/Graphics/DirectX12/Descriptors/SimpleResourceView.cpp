@@ -17,6 +17,12 @@ namespace Axodox::Graphics::D3D12
   }
 
   template<typename DescriptionType, CreateDescriptorViewFunc<DescriptionType> CreateView>
+  SimpleResourceView<DescriptionType, CreateView>::operator ResourceReference() const
+  {
+    return _resource.get();
+  }
+
+  template<typename DescriptionType, CreateDescriptorViewFunc<DescriptionType> CreateView>
   void SimpleResourceView<DescriptionType, CreateView>::OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination)
   {
     (device->*CreateView)(_resource.get(), _description.get(), destination);

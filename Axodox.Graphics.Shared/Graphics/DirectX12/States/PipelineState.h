@@ -25,7 +25,7 @@ namespace Axodox::Graphics::D3D12
     SampleState SampleState = {};
 
     VertexDefinition InputLayout = {};
-    PrimitiveTopology InputTopology = PrimitiveTopology::TriangleList;
+    PrimitiveTopologyType TopologyType = PrimitiveTopologyType::Triangle;
 
     std::initializer_list<Format> RenderTargetFormats;
     Format DepthStencilFormat = Format::Unknown;

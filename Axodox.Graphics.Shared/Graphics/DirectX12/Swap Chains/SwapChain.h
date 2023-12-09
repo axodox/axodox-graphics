@@ -18,6 +18,8 @@ namespace Axodox::Graphics::D3D12
     void Resize();
     void Present();
 
+    DirectX::XMUINT2 Resolution() const;
+
     const RenderTargetView* RenderTargetView();
 
   protected:
@@ -41,5 +43,6 @@ namespace Axodox::Graphics::D3D12
     CommandQueue _queue;
     CommandFence _fence;
     CommandFenceMarker _marker;
+    DirectX::XMUINT2 _resolution;
   };
 }

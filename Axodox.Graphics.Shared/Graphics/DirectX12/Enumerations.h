@@ -159,6 +159,15 @@ namespace Axodox::Graphics::D3D12
     PatchList4 = D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST
   };
 
+  enum class PrimitiveTopologyType
+  {
+    Undefined = D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED,
+    Point = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
+    Line = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
+    Triangle = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+    Patch = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH
+  };
+
   enum class ResourceStates
   {
     Common = D3D12_RESOURCE_STATE_COMMON,

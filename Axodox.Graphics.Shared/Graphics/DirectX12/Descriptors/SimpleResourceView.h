@@ -1,5 +1,6 @@
 #pragma once
 #include "DescriptorHeap.h"
+#include "../Resources/ResourceReference.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -13,6 +14,8 @@ namespace Axodox::Graphics::D3D12
     SimpleResourceView(DescriptorHeap* owner, const winrt::com_ptr<ID3D12Resource>& resource, const DescriptionType* description = nullptr);
 
     ID3D12Resource* Resource() const;
+
+    operator ResourceReference() const;
 
   protected:
     virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;
