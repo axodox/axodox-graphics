@@ -13,8 +13,8 @@ namespace Axodox::Graphics::D3D12
     void Draw(CommandAllocator& allocator, uint32_t instanceCount = 1);
 
   private:
-    resource_ptr _vertexBuffer;
-    resource_ptr _indexBuffer;
+    resource_ptr<Buffer> _vertexBuffer;
+    resource_ptr<Buffer> _indexBuffer;
 
     Infrastructure::event_subscription _verticesAllocatedSubscription, _indicesAllocatedSubscription;
 

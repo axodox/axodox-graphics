@@ -1,7 +1,7 @@
 #pragma once
 #include "Resource.h"
-#include "TextureDefinition.h"
-#include "BufferDefinition.h"
+#include "Texture.h"
+#include "Buffer.h"
 #include "../Devices/GraphicsDevice.h"
 
 namespace Axodox::Graphics::D3D12
@@ -15,8 +15,8 @@ namespace Axodox::Graphics::D3D12
   public:
     ResourceAllocator(const GraphicsDevice& device);
 
-    [[nodiscard]] resource_ptr CreateTexture(const TextureDefinition& definition);
-    [[nodiscard]] resource_ptr CreateBuffer(const BufferDefinition& definition);
+    [[nodiscard]] resource_ptr<Texture> CreateTexture(const TextureDefinition& definition);
+    [[nodiscard]] resource_ptr<Buffer> CreateBuffer(const BufferDefinition& definition);
 
     void Build();
     void Clean();
@@ -34,7 +34,7 @@ namespace Axodox::Graphics::D3D12
     std::set<const Resource*> _reclaimables;
     bool _isDirty = false;
 
-    resource_ptr AddResource(const D3D12_RESOURCE_DESC& description);
+    void AddResource(std::unique_ptr<Resource>&& resource);
     void DeleteResource(const Resource* resource);
   };
 }

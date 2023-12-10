@@ -37,6 +37,11 @@ namespace Axodox::Graphics::D3D12
     Flags(flags)
   { }
 
+  BufferDefinition::BufferDefinition(const D3D12_RESOURCE_DESC& description) :
+    Length(description.Width),
+    Flags(BufferFlags(description.Flags))
+  { }
+
   BufferData::BufferData() :
     _itemSize(0)
   { }

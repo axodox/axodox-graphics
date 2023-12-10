@@ -3,6 +3,30 @@
 
 namespace Axodox::Graphics::D3D12
 {
+  DepthStencilState::DepthStencilState() :
+    WriteDepth(false),
+    Comparison(ComparisonFunction::Always)
+  { }
+
+  DepthStencilState::DepthStencilState(DepthStencilMode mode)
+  {
+    switch (mode)
+    {
+    case DepthStencilMode::IgnoreDepth:
+      WriteDepth = false;
+      Comparison = ComparisonFunction::Always;
+      break;
+    case DepthStencilMode::ReadDepth:
+      WriteDepth = false;
+      Comparison = ComparisonFunction::Less;
+      break;
+    case DepthStencilMode::WriteDepth:
+      WriteDepth = true;
+      Comparison = ComparisonFunction::Less;
+      break;
+    }
+  }
+
   DepthStencilState::operator D3D12_DEPTH_STENCIL_DESC() const
   {
     D3D12_DEPTH_STENCIL_DESC result{

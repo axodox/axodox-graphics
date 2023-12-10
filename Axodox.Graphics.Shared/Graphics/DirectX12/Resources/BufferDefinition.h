@@ -24,8 +24,8 @@ namespace Axodox::Graphics::D3D12
     BufferDefinition();
 
     explicit BufferDefinition(uint64_t length, BufferFlags flags = BufferFlags::None);
-
     explicit BufferDefinition(const BufferData& data, BufferFlags flags = BufferFlags::None);
+    BufferDefinition(const D3D12_RESOURCE_DESC& description);
 
     template<typename T>
     explicit BufferDefinition(std::span<const T> span, BufferFlags flags = BufferFlags::None) :

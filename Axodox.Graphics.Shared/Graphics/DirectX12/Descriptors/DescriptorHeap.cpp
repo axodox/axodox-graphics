@@ -32,7 +32,7 @@ namespace Axodox::Graphics::D3D12
     //Clean descriptor references
     Clean();
 
-    //Create descriptor heap    
+    //Create descriptor heap
     D3D12_DESCRIPTOR_HEAP_DESC description{
       .Type = D3D12_DESCRIPTOR_HEAP_TYPE(_type),
       .NumDescriptors = uint32_t(_items.size()),

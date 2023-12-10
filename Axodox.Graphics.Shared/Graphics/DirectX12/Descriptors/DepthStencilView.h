@@ -6,12 +6,12 @@ namespace Axodox::Graphics::D3D12
 {
   class CommandAllocator;
 
-  class RenderTargetView : public SimpleResourceView<D3D12_RENDER_TARGET_VIEW_DESC, &ID3D12Device::CreateRenderTargetView>
+  class DepthStencilView : public SimpleResourceView<D3D12_DEPTH_STENCIL_VIEW_DESC, &ID3D12Device::CreateDepthStencilView>
   {
   public:
     using SimpleResourceView::SimpleResourceView;
 
-    void Clear(CommandAllocator& allocator, const DirectX::XMFLOAT4& value = { 0.f, 0.f, 0.f, 0.f }) const;
+    void Clear(CommandAllocator& allocator, float value = 1.f) const;
     void Set(CommandAllocator& allocator) const;
 
     const TextureDefinition& Definition() const;
@@ -23,11 +23,11 @@ namespace Axodox::Graphics::D3D12
     TextureDefinition _definition;
   };
 
-  class RenderTargetDescriptorHeap : public DescriptorHeap
+  class DepthStencilDescriptorHeap : public DescriptorHeap
   {
   public:
-    RenderTargetDescriptorHeap(const GraphicsDevice& device);
+    DepthStencilDescriptorHeap(const GraphicsDevice& device);
 
-    descriptor_ptr<RenderTargetView> CreateRenderTargetView(Texture* texture);
+    descriptor_ptr<DepthStencilView> CreateDepthStencilView(Texture* texture);
   };
 }

@@ -40,12 +40,17 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     CommandFence Fence;
     CommandFenceMarker Marker;
     DynamicBufferManager DynamicBuffer;
+    DepthStencilDescriptorHeap DepthStencilDescriptorHeap;
+
+    resource_ptr<Texture> DepthBuffer;
+    descriptor_ptr<DepthStencilView> DepthStencilView;
 
     FrameResources(const GraphicsDevice& device) :
       Allocator(device),
       Fence(device),
       Marker(),
-      DynamicBuffer(device)
+      DynamicBuffer(device),
+      DepthStencilDescriptorHeap(device)
     { }
   };
 
@@ -87,15 +92,18 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       .RootSignature = &simpleRootSignature,
       .VertexShader = &simpleVertexShader,
       .PixelShader = &simplePixelShader,
+      .DepthStencilState = DepthStencilMode::WriteDepth,
       .InputLayout = VertexPositionNormal::Layout,
-      .RenderTargetFormats = { Format::B8G8R8A8_UNorm }
+      .RenderTargetFormats = { Format::B8G8R8A8_UNorm },
+      .DepthStencilFormat = Format::D32_Float
     };
     auto simplePipelineState = pipelineStateProvider.CreatePipelineStateAsync(simplePipelineStateDefinition).get();
 
-    GroupedResourceAllocator resourceAllocator{ device };
+    CommittedResourceAllocator commitedResourceAllocator{ device };
+    GroupedResourceAllocator groupedResourceAllocator{ device };
     ResourceUploader resourceUploader{ device };
-    Mesh cubeMesh{ resourceAllocator, resourceUploader, CreateCube() };
-    resourceAllocator.Build();
+    Mesh cubeMesh{ groupedResourceAllocator, resourceUploader, CreateCube() };
+    groupedResourceAllocator.Build();
 
     array<FrameResources, 2> frames{ device, device };
 
@@ -108,7 +116,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       //Get frame resources
       auto& resources = frames[i++ & 0x1u];
       auto renderTargetView = swapChain.RenderTargetView();
-      
+
       //Wait until buffers can be reused
       if (resources.Marker) resources.Fence.Await(resources.Marker);
 
@@ -125,22 +133,33 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         XMStoreFloat4x4(&constants.WorldViewProjection, worldViewProjection);
       }
 
+      //Ensure depth buffer
+      if (!resources.DepthBuffer || !TextureDefinition::AreSizeCompatible(resources.DepthBuffer->Definition(), renderTargetView->Definition()))
+      {
+        auto depthDefinition = renderTargetView->Definition().MakeSizeCompatible(Format::D32_Float, TextureFlags::DepthStencil);
+        resources.DepthBuffer = commitedResourceAllocator.CreateTexture(depthDefinition);
+        commitedResourceAllocator.Build();
+
+        resources.DepthStencilView = resources.DepthStencilDescriptorHeap.CreateDepthStencilView(resources.DepthBuffer.get());
+        resources.DepthStencilDescriptorHeap.Build();
+      }
+
       //Begin frame command list
       auto& allocator = resources.Allocator;
       {
         allocator.Reset();
-        allocator.BeginList();        
+        allocator.BeginList();
         allocator.ResourceTransition(*renderTargetView, ResourceStates::Present, ResourceStates::RenderTarget);
         renderTargetView->Clear(allocator, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
+        resources.DepthStencilView->Clear(allocator);
       }
 
       //Draw objects
       {
         auto mask = simpleRootSignature.Set(allocator, RootSignatureUsage::Graphics);
         mask.ConstantBuffer = resources.DynamicBuffer.AddBuffer(constants);
-        
-        renderTargetView->Set(allocator);
 
+        allocator.SetRenderTargets({ renderTargetView }, resources.DepthStencilView.get());
         simplePipelineState.Apply(allocator);
         cubeMesh.Draw(allocator);
       }
@@ -154,7 +173,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         resources.DynamicBuffer.UploadResources(allocator);
         resourceUploader.UploadResourcesAsync(allocator);
         auto initCommandList = allocator.EndList();
-        
+
         directQueue.Execute(initCommandList);
         directQueue.Execute(drawCommandList);
         resources.Marker = resources.Fence.EnqueueSignal(directQueue);

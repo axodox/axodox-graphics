@@ -9,27 +9,29 @@ namespace Axodox::Graphics::D3D12
     _device(device)
   { }
 
-  resource_ptr ResourceAllocator::CreateTexture(const TextureDefinition& definition)
+  resource_ptr<Texture> ResourceAllocator::CreateTexture(const TextureDefinition& definition)
   {
-    return AddResource(D3D12_RESOURCE_DESC(definition));
+    auto resource = make_unique<Texture>(this, definition);
+    auto result = resource_ptr<Texture>(resource.get());
+    AddResource(move(resource));
+    return result;
   }
 
-  resource_ptr ResourceAllocator::CreateBuffer(const BufferDefinition& definition)
+  resource_ptr<Buffer> ResourceAllocator::CreateBuffer(const BufferDefinition& definition)
   {
     if (!definition.Length) return nullptr;
-    return AddResource(D3D12_RESOURCE_DESC(definition));
+
+    auto resource = make_unique<Buffer>(this, definition);
+    auto result = resource_ptr<Buffer>(resource.get());
+    AddResource(move(resource));
+    return result;
   }
 
-  resource_ptr ResourceAllocator::AddResource(const D3D12_RESOURCE_DESC& description)
+  void ResourceAllocator::AddResource(std::unique_ptr<Resource>&& resource)
   {
-    auto resource = make_unique<Resource>(this, description);
-    auto result = resource_ptr(resource.get());
-
     lock_guard lock(_mutex);
     _resources.push_back(move(resource));
     _isDirty = true;
-
-    return result;
   }
 
   void ResourceAllocator::DeleteResource(const Resource* resource)

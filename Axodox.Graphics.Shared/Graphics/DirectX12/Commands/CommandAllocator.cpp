@@ -103,6 +103,27 @@ namespace Axodox::Graphics::D3D12
     (*this)->ResourceBarrier(uint32_t(barriers.size()), barriers.data());
   }
 
+  void CommandAllocator::SetRenderTargets(std::initializer_list<const RenderTargetView*> renderTargets, const DepthStencilView* depthStencilView)
+  {
+    auto& definition = (*renderTargets.begin())->Definition();
+
+    std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> renderTargetHandles;
+    renderTargetHandles.reserve(renderTargets.size());
+    for (auto renderTarget : renderTargets)
+    {
+      renderTargetHandles.push_back(*renderTarget->Handle());
+    }
+
+    auto depthStencilHandle = depthStencilView ? *depthStencilView->Handle() : D3D12_CPU_DESCRIPTOR_HANDLE(0);
+    (*this)->OMSetRenderTargets(uint32_t(renderTargetHandles.size()), renderTargetHandles.data(), false, &depthStencilHandle);
+
+    D3D12_RECT scissorRect{ 0, 0, int32_t(definition.Width), int32_t(definition.Height) };
+    (*this)->RSSetScissorRects(1, &scissorRect);
+
+    D3D12_VIEWPORT viewport{ 0, 0, float(definition.Width), float(definition.Height), 0.f, 1.f };
+    (*this)->RSSetViewports(1, &viewport);
+  }
+
   void CommandAllocator::Reset()
   {
     _allocator->Reset();

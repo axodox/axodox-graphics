@@ -21,6 +21,7 @@ namespace Axodox::Graphics::D3D12
 
     TextureHeader();
     TextureHeader(Format format, uint32_t width, uint32_t height, uint32_t arraySize);
+    TextureHeader(const D3D12_RESOURCE_DESC& description);
   };
 
   struct TextureDefinition : public TextureHeader
@@ -30,8 +31,13 @@ namespace Axodox::Graphics::D3D12
 
     TextureDefinition();
     TextureDefinition(Format format, uint32_t width, uint32_t height, uint16_t arraySize = 0, TextureFlags flags = TextureFlags::None);
+    TextureDefinition(const D3D12_RESOURCE_DESC& description);
+
+    TextureDefinition MakeSizeCompatible(Format format, TextureFlags flags) const;
 
     explicit operator D3D12_RESOURCE_DESC() const;
+
+    static bool AreSizeCompatible(const TextureDefinition& a, const TextureDefinition& b);
   };
 
   class TextureData : public ResourceData

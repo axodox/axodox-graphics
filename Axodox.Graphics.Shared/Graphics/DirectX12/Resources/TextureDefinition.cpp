@@ -15,6 +15,15 @@ namespace Axodox::Graphics::D3D12
     ArraySize(0)
   { }
 
+  TextureHeader::TextureHeader(const D3D12_RESOURCE_DESC& description) :
+    PixelFormat(Format(description.Format)),
+    Width(uint32_t(description.Width)),
+    Height(description.Dimension >= D3D12_RESOURCE_DIMENSION_TEXTURE2D ? description.Height : 0u),
+    Depth(description.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE3D ? description.DepthOrArraySize : 0u),
+    ArraySize(description.Dimension != D3D12_RESOURCE_DIMENSION_TEXTURE3D ? description.DepthOrArraySize : 0u),
+    MipCount(description.MipLevels)
+  { }
+
   TextureHeader::TextureHeader(Format format, uint32_t width, uint32_t height, uint32_t arraySize) :
     PixelFormat(format),
     Width(width),
@@ -51,7 +60,7 @@ namespace Axodox::Graphics::D3D12
       .Alignment = 0ull,
       .Width = Width,
       .Height = dimension == D3D12_RESOURCE_DIMENSION_TEXTURE1D ? 1u : Height,
-      .DepthOrArraySize = uint16_t(dimension == D3D12_RESOURCE_DIMENSION_TEXTURE3D ? Depth : ArraySize),
+      .DepthOrArraySize = uint16_t(max(1u, dimension == D3D12_RESOURCE_DIMENSION_TEXTURE3D ? Depth : ArraySize)),
       .MipLevels = MipCount,
       .Format = DXGI_FORMAT(PixelFormat),
       .SampleDesc = { SampleCount, SampleQuality },
@@ -59,6 +68,32 @@ namespace Axodox::Graphics::D3D12
       .Flags = D3D12_RESOURCE_FLAGS(Flags)
     };
   }
+
+  TextureDefinition TextureDefinition::MakeSizeCompatible(Format format, TextureFlags flags) const
+  {
+    TextureDefinition result{ *this };
+    result.PixelFormat = format;
+    result.Flags = flags;
+    return result;
+  }
+
+  bool TextureDefinition::AreSizeCompatible(const TextureDefinition& a, const TextureDefinition& b)
+  {
+    return a.Width == b.Width &&
+      a.Height == b.Height &&
+      a.Depth == b.Depth &&
+      a.ArraySize == b.ArraySize &&
+      a.MipCount == b.MipCount &&
+      a.SampleCount == b.SampleCount &&
+      a.SampleQuality == b.SampleQuality;
+  }
+
+  TextureDefinition::TextureDefinition(const D3D12_RESOURCE_DESC& description) :
+    TextureHeader(description),
+    SampleCount(description.SampleDesc.Count),
+    SampleQuality(description.SampleDesc.Quality),
+    Flags(TextureFlags(description.Flags))
+  { }
 
   TextureData::TextureData() :
     _header({})

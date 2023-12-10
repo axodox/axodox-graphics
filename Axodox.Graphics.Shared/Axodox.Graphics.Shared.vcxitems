@@ -15,14 +15,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DepthStencilView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Mesh.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\MeshDescriptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Primitives.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Buffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\BufferDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Texture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignatureMask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
@@ -70,6 +73,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\ConstantBufferView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DepthStencilView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DescriptorHeap.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\RenderTargetView.cpp" />
@@ -80,6 +84,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\MeshDescriptions.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Primitives.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Buffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\BufferDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.cpp" />
@@ -88,6 +93,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Texture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\TextureDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\BlendState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\DepthStencilState.cpp" />

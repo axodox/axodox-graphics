@@ -106,7 +106,7 @@ namespace Axodox::Infrastructure
 
   BufferSegment::operator bool() const noexcept
   {
-    return Size > 0;
+    return Size > 0u;
   }
 
   uint64_t AlignMemoryOffset(uint64_t offset, uint64_t alignment)

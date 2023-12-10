@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RenderTargetView.h"
+#include "../Commands/CommandAllocator.h"
 
 using namespace std;
 
@@ -9,9 +10,9 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeap(device, DescriptorHeapKind::RenderTarget)
   { }
   
-  descriptor_ptr<RenderTargetView> RenderTargetDescriptorHeap::CreateRenderTargetView(const winrt::com_ptr<ID3D12Resource>&resource, const D3D12_RENDER_TARGET_VIEW_DESC * description)
+  descriptor_ptr<RenderTargetView> RenderTargetDescriptorHeap::CreateRenderTargetView(Texture* texture)
   {
-    return CreateDescriptor<RenderTargetView>(resource, description);
+    return CreateDescriptor<RenderTargetView>(texture->get(), static_cast<D3D12_RENDER_TARGET_VIEW_DESC*>(nullptr));
   }
 
   void RenderTargetView::Clear(CommandAllocator& allocator, const DirectX::XMFLOAT4& value) const
@@ -24,17 +25,20 @@ namespace Axodox::Graphics::D3D12
     auto handle = *Handle();
     allocator->OMSetRenderTargets(1, &handle, false, nullptr);
 
-    D3D12_RECT scissorRect{ 0, 0, _width, _height };
+    D3D12_RECT scissorRect{ 0, 0, int32_t(_definition.Width), int32_t(_definition.Height) };
     allocator->RSSetScissorRects(1, &scissorRect);
 
-    D3D12_VIEWPORT viewport{ 0, 0, float(_width), float(_height), 0.f, 1.f };
+    D3D12_VIEWPORT viewport{ 0, 0, float(_definition.Width), float(_definition.Height), 0.f, 1.f };
     allocator->RSSetViewports(1, &viewport);
+  }
+
+  const TextureDefinition& RenderTargetView::Definition() const
+  {
+    return _definition;
   }
 
   void RenderTargetView::OnInit()
   {
-    auto description = _resource->GetDesc();
-    _width = int32_t(description.Width);
-    _height = int32_t(description.Height);
+    _definition = _resource->GetDesc();
   }
 }

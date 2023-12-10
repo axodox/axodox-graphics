@@ -6,20 +6,20 @@ using namespace std;
 
 namespace Axodox::Graphics::D3D12
 {
-  Resource::Resource(ResourceAllocator* owner, const D3D12_RESOURCE_DESC& description) :
+  Resource::Resource(ResourceAllocator* owner) :
     _owner(owner),
-    _description(move(description)),
     Allocated(_events)
   { }
 
-  const D3D12_RESOURCE_DESC& Resource::Description() const
-  {
-    return _description;
-  }
+  Resource::Resource(const winrt::com_ptr<ID3D12Resource>& resource) :
+    _owner(nullptr),
+    _resource(resource),
+    Allocated(_events)
+  { }
 
-  ID3D12Resource* Resource::get() const
+  const winrt::com_ptr<ID3D12Resource>& Resource::get() const
   {
-    return _resource.get();
+    return _resource;
   }
 
   void Resource::set(winrt::com_ptr<ID3D12Resource>&& value)

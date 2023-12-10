@@ -22,13 +22,16 @@ namespace Axodox::Graphics::D3D12
     {
       if(resource->get()) continue;
 
+      auto description = resource->Description();
+
+      auto defaultClearValue = resource->DefaultClearValue();
       com_ptr<ID3D12Resource> allocation;
       check_hresult(_device->CreateCommittedResource(
         &heapProperties,
         D3D12_HEAP_FLAG_NONE,
-        &resource->Description(),
-        D3D12_RESOURCE_STATE_COMMON,
-        nullptr,
+        &description,
+        resource->DefaultState(),
+        defaultClearValue ? &*defaultClearValue : nullptr,
         IID_PPV_ARGS(allocation.put())));
 
       resource->set(move(allocation));

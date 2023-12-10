@@ -4,6 +4,7 @@
 #include "CommandList.h"
 #include "../Devices/GraphicsDevice.h"
 #include "../Descriptors/RenderTargetView.h"
+#include "../Descriptors/DepthStencilView.h"
 #include "../Resources/ResourceReference.h"
 
 namespace Axodox::Graphics::D3D12
@@ -31,6 +32,8 @@ namespace Axodox::Graphics::D3D12
 
     void ResourceTransition(ResourceReference resource, ResourceStates from, ResourceStates to);
     void ResourceTransitions(std::span<ResourceReference> resources, ResourceStates from, ResourceStates to);
+
+    void SetRenderTargets(std::initializer_list<const RenderTargetView*> renderTargets, const DepthStencilView* depthStencilView = nullptr);
 
     void Reset();
 
