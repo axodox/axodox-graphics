@@ -63,6 +63,11 @@ namespace Axodox::Graphics::D3D12
     return _pipelineState.get();
   }
 
+  void PipelineState::Apply(CommandAllocator& allocator)
+  {
+    allocator->SetPipelineState(_pipelineState.get());
+  }
+
   PipelineStateProvider::PipelineStateProvider(const GraphicsDevice& device, const std::filesystem::path& cacheLocation) :
     _device(device),
     _cacheLocation(cacheLocation)

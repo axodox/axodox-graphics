@@ -15,7 +15,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Mesh.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\MeshDescriptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Primitives.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\BufferDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceData.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignatureMask.h" />
@@ -71,7 +76,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\ShaderResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\SimpleResourceView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Devices\GraphicsDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Mesh.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\MeshDescriptions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Primitives.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\VertexDefinitions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\BufferDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.cpp" />

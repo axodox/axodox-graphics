@@ -26,6 +26,8 @@ namespace Axodox::Graphics::D3D12
   void SimpleResourceView<DescriptionType, CreateView>::OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination)
   {
     (device->*CreateView)(_resource.get(), _description.get(), destination);
+
+    OnInit();
   }
 
   template class SimpleResourceView<D3D12_RENDER_TARGET_VIEW_DESC, &ID3D12Device::CreateRenderTargetView>;

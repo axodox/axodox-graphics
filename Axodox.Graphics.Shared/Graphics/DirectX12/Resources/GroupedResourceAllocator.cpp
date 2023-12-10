@@ -97,13 +97,15 @@ namespace Axodox::Graphics::D3D12
       if (alignmentRemainder != 0) offset += allocationInfo.Alignment - alignmentRemainder;
 
       //Create resource
+      com_ptr<ID3D12Resource> allocation;
       check_hresult(_device->CreatePlacedResource(
         _heap.get(),
         offset,
         &description,
         D3D12_RESOURCE_STATE_COMMON,
         nullptr,
-        IID_PPV_ARGS(resource->put())));
+        IID_PPV_ARGS(allocation.put())));
+      resource->set(move(allocation));
 
       //Increment offset by size
       offset += allocationInfo.SizeInBytes;

@@ -1,6 +1,7 @@
 #pragma once
 #include "Resource.h"
 #include "TextureDefinition.h"
+#include "BufferDefinition.h"
 #include "../Devices/GraphicsDevice.h"
 
 namespace Axodox::Graphics::D3D12
@@ -25,12 +26,6 @@ namespace Axodox::Graphics::D3D12
   protected:
     GraphicsDevice _device;
 
-    template<typename T>
-    T* GetResourceData(Resource* resource)
-    {
-      return resource->_data.get_or_create<T>();
-    }
-    
     virtual void AllocateResources(ResourceSpan resources) = 0;
 
   private:

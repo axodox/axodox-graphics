@@ -16,6 +16,7 @@ namespace Axodox::Graphics::D3D12
 
   resource_ptr ResourceAllocator::CreateBuffer(const BufferDefinition& definition)
   {
+    if (!definition.Length) return nullptr;
     return AddResource(D3D12_RESOURCE_DESC(definition));
   }
 

@@ -2,6 +2,7 @@
 #include "TextureDefinition.h"
 
 using namespace std;
+using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
@@ -55,22 +56,6 @@ namespace Axodox::Graphics::D3D12
       .Format = DXGI_FORMAT(PixelFormat),
       .SampleDesc = { SampleCount, SampleQuality },
       .Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN,
-      .Flags = D3D12_RESOURCE_FLAGS(Flags)
-    };
-  }
-
-  BufferDefinition::operator D3D12_RESOURCE_DESC() const
-  {
-    return D3D12_RESOURCE_DESC{
-      .Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
-      .Alignment = 0ull,
-      .Width = Length,
-      .Height = 1u,
-      .DepthOrArraySize = 1u,
-      .MipLevels = 1u,
-      .Format = DXGI_FORMAT_UNKNOWN,
-      .SampleDesc = { 1u, 0u },
-      .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
       .Flags = D3D12_RESOURCE_FLAGS(Flags)
     };
   }
@@ -133,6 +118,26 @@ namespace Axodox::Graphics::D3D12
     }
   }
 
+  void TextureData::CopyToResource(ID3D12Resource* resource) const
+  {
+    auto sliceCount = max(_header.ArraySize, _header.Depth);
+    for (auto mip = 0u; mip < _header.MipCount; mip++)
+    {
+      for (auto slice = 0u; slice < sliceCount; slice++)
+      {
+        auto subresourceIndex = GetSubresourceIndex(mip, slice, 0, _header.MipCount, sliceCount);
+
+        uint64_t rowPitch, slicePitch;
+        auto bytes = AsRawSpan(&rowPitch, slice, mip);
+        slicePitch = bytes.size();
+
+        check_hresult(resource->Map(subresourceIndex, &EmptyRange, nullptr));
+        check_hresult(resource->WriteToSubresource(subresourceIndex, nullptr, bytes.data(), uint32_t(rowPitch), uint32_t(slicePitch)));
+        resource->Unmap(subresourceIndex, nullptr);
+      }
+    }
+  }
+
   const TextureHeader& TextureData::Header() const
   {
     return _header;
@@ -170,5 +175,10 @@ namespace Axodox::Graphics::D3D12
     if (stride) *stride = mipLayout.RowPitch;
 
     return { _buffer.data() + mipLayout.Offset + mipLayout.DepthPitch * slice, mipLayout.DepthPitch };
+  }
+
+  std::span<const uint8_t> TextureData::AsRawSpan(uint64_t* stride, uint32_t slice, uint32_t mip) const
+  {
+    return const_cast<TextureData*>(this)->AsRawSpan(stride, slice, mip);
   }
 }

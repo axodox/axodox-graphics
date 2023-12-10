@@ -48,6 +48,8 @@ namespace Axodox::Graphics::D3D12
 
     ID3D12PipelineState* get() const;
 
+    void Apply(CommandAllocator& allocator);
+
   private:
     winrt::com_ptr<ID3D12PipelineState> _pipelineState;
   };

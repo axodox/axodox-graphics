@@ -10,6 +10,13 @@ namespace Axodox::Graphics::D3D12
     using SimpleResourceView::SimpleResourceView;
 
     void Clear(CommandAllocator& allocator, const DirectX::XMFLOAT4& value = { 0.f, 0.f, 0.f, 0.f }) const;
+    void Set(CommandAllocator& allocator) const;
+
+  protected:
+    virtual void OnInit() override;
+
+  private:
+    int32_t _width, _height;
   };
 
   class RenderTargetDescriptorHeap : public DescriptorHeap

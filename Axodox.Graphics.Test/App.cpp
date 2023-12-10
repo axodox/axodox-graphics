@@ -92,6 +92,11 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     };
     auto simplePipelineState = pipelineStateProvider.CreatePipelineStateAsync(simplePipelineStateDefinition).get();
 
+    GroupedResourceAllocator resourceAllocator{ device };
+    ResourceUploader resourceUploader{ device };
+    Mesh cubeMesh{ resourceAllocator, resourceUploader, CreateCube() };
+    resourceAllocator.Build();
+
     array<FrameResources, 2> frames{ device, device };
 
     auto i = 0u;
@@ -109,10 +114,10 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
       //Update constants
       Constants constants{};
+      auto resolution = swapChain.Resolution();
       {
-        auto resolution = swapChain.Resolution();
         auto projection = XMMatrixPerspectiveFovRH(90.f, float(resolution.x) / float(resolution.y), 0.01f, 10.f);
-        auto view = XMMatrixLookAtRH(XMVectorSet(10.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 1.f));
+        auto view = XMMatrixLookAtRH(XMVectorSet(3.f * cos(i * 0.01f), 3.f * sin(i * 0.01f), 0.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 1.f));
         auto world = XMMatrixIdentity();
 
         auto worldViewProjection = XMMatrixTranspose(world * view * projection);
@@ -124,7 +129,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       auto& allocator = resources.Allocator;
       {
         allocator.Reset();
-        allocator.BeginList();
+        allocator.BeginList();        
         allocator.ResourceTransition(*renderTargetView, ResourceStates::Present, ResourceStates::RenderTarget);
         renderTargetView->Clear(allocator, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
       }
@@ -133,6 +138,11 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       {
         auto mask = simpleRootSignature.Set(allocator, RootSignatureUsage::Graphics);
         mask.ConstantBuffer = resources.DynamicBuffer.AddBuffer(constants);
+        
+        renderTargetView->Set(allocator);
+
+        simplePipelineState.Apply(allocator);
+        cubeMesh.Draw(allocator);
       }
 
       //End frame command list
@@ -142,6 +152,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
         allocator.BeginList();
         resources.DynamicBuffer.UploadResources(allocator);
+        resourceUploader.UploadResourcesAsync(allocator);
         auto initCommandList = allocator.EndList();
         
         directQueue.Execute(initCommandList);
@@ -154,7 +165,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
     }
   }
 
-  void SetWindow(CoreWindow const& window)
+  void SetWindow(CoreWindow const& /*window*/)
   {
 
   }

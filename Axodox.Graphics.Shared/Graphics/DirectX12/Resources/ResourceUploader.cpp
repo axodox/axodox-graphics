@@ -30,14 +30,22 @@ namespace Axodox::Graphics::D3D12
     check_hresult(_device->CreateHeap(&description, IID_PPV_ARGS(_uploadHeap.put())));
   }
 
-  CommandFenceMarker ResourceUploader::EnqueueUploadTask(Resource* resource, TextureData* texture)
+  CommandFenceMarker ResourceUploader::EnqueueUploadTask(Resource* resource, const ResourceData* data)
   {
     //Get description
     auto description = resource->Description();
     description.Flags = D3D12_RESOURCE_FLAG_NONE;
 
     //Select location in system memory
-    auto allocationInfo = _device->GetResourceAllocationInfo(0, 0, &description);
+    D3D12_RESOURCE_ALLOCATION_INFO allocationInfo;
+    if (description.Dimension == D3D12_RESOURCE_DIMENSION_BUFFER)
+    {
+      allocationInfo = { description.Width, 64 * 1024 };
+    }
+    else
+    {
+      allocationInfo = _device->GetResourceAllocationInfo(0, 0, &description);
+    }
     auto allocation = AllocateBuffer(allocationInfo.SizeInBytes, allocationInfo.Alignment);
 
     //Create upload task
@@ -50,24 +58,7 @@ namespace Axodox::Graphics::D3D12
     check_hresult(_device->CreatePlacedResource(_uploadHeap.get(), allocation.Start, &description, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(task.SourceResource.put())));
 
     //Copy data into system memory resource
-    auto header = texture->Header();
-    auto sliceCount = max(header.ArraySize, header.Depth);
-
-    for (auto mip = 0u; mip < header.MipCount; mip++)
-    {
-      for (auto slice = 0u; slice < sliceCount; slice++)
-      {
-        auto subresourceIndex = GetSubresourceIndex(mip, slice, 0, header.MipCount, sliceCount);
-
-        uint64_t rowPitch, slicePitch;
-        auto bytes = texture->AsRawSpan(&rowPitch, slice, mip);
-        slicePitch = bytes.size();
-
-        check_hresult(task.SourceResource->Map(subresourceIndex, &EmptyRange, nullptr));
-        check_hresult(task.SourceResource->WriteToSubresource(subresourceIndex, nullptr, bytes.data(), uint32_t(rowPitch), uint32_t(slicePitch)));
-        task.SourceResource->Unmap(subresourceIndex, nullptr);
-      }
-    }
+    data->CopyToResource(task.SourceResource.get());
 
     //Enqueue upload task and return marker
     lock_guard lock(_mutex);
@@ -104,9 +95,9 @@ namespace Axodox::Graphics::D3D12
         //Transition to copy states - assume common state after resource creation and direct / compute engine use
         allocator.ResourceTransition(task.SourceResource, ResourceStates::Common, ResourceStates::CopySource);
         allocator.ResourceTransition(task.TargetResource, ResourceStates::Common, ResourceStates::CopyDest);
-
+        
         //Copy resource
-        allocator->CopyResource(task.SourceResource.get(), task.TargetResource.get());
+        allocator->CopyResource(task.TargetResource.get(), task.SourceResource.get());
 
         //Set common state for later direct / compute engine use
         allocator.ResourceTransition(task.SourceResource, ResourceStates::CopySource, ResourceStates::Common);
@@ -135,6 +126,8 @@ namespace Axodox::Graphics::D3D12
 
   BufferSegment ResourceUploader::AllocateBuffer(uint64_t size, uint64_t alignment)
   {
+    assert(size > 0ull);
+
     BufferSegment result{};
 
     for (;;)

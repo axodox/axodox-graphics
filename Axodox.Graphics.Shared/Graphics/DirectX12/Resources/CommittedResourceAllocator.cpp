@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CommittedResourceAllocator.h"
 
+using namespace std;
 using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
@@ -19,16 +20,18 @@ namespace Axodox::Graphics::D3D12
     //Create all resources which do not exist
     for (auto& resource : resources)
     {
-      auto data = GetResourceData<ResourceData>(resource.get());
-      if (data->Resource) continue;
+      if(resource->get()) continue;
 
+      com_ptr<ID3D12Resource> allocation;
       check_hresult(_device->CreateCommittedResource(
         &heapProperties,
         D3D12_HEAP_FLAG_NONE,
         &resource->Description(),
         D3D12_RESOURCE_STATE_COMMON,
         nullptr,
-        IID_PPV_ARGS(data->Resource.put())));
+        IID_PPV_ARGS(allocation.put())));
+
+      resource->set(move(allocation));
     }
   }
 }

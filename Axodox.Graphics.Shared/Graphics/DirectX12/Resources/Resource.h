@@ -12,19 +12,23 @@ namespace Axodox::Graphics::D3D12
     friend class ResourceUploader;
     friend struct ResourceDeleter;
 
+    Infrastructure::event_owner _events;
+
   public:
     Resource(ResourceAllocator* owner, const D3D12_RESOURCE_DESC& description);
 
     const D3D12_RESOURCE_DESC& Description() const;
     
     ID3D12Resource* get() const;
-    ID3D12Resource** put();
+    void set(winrt::com_ptr<ID3D12Resource>&& value);
+
+    ID3D12Resource* operator->() const;
+
+    Infrastructure::event_publisher<Resource*> Allocated;
 
   private:
     ResourceAllocator* _owner;
     D3D12_RESOURCE_DESC _description;
-    Infrastructure::any_ptr _data;
-
     winrt::com_ptr<ID3D12Resource> _resource;
   };
 
