@@ -36,7 +36,7 @@ namespace Axodox::Infrastructure
       alignedStart = AlignMemoryOffset(slot.Start, alignment);
       auto remainingSpace = slot.Start + slot.Size - alignedStart;
 
-      //If we have space then select to slot
+      //If we have space then select the slot
       if (remainingSpace >= size)
       {
         selectedSlot = &slot;
@@ -60,7 +60,7 @@ namespace Axodox::Infrastructure
     }
 
     //Keep alignment gap as free space
-    if (alignedStart != selectedSlot->Start)
+    if (alignmentGap > 0u)
     {
       _freeSpace.push_back(BufferSegment(alignedStart - alignmentGap, alignmentGap));
     }
