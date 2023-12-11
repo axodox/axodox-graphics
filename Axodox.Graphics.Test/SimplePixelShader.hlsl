@@ -1,4 +1,13 @@
-float4 main() : SV_TARGET
+Texture2D _texture : register(t0);
+SamplerState _sampler : register(s0);
+
+struct input_t
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+  float4 Screen : SV_POSITION;
+  float2 Texture : TEXCOORD;
+};
+
+float4 main(input_t input) : SV_TARGET
+{
+	return _texture.Sample(_sampler, input.Texture);
 }

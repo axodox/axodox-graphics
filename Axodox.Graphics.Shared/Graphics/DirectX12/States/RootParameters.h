@@ -37,25 +37,24 @@ namespace Axodox::Graphics::D3D12
 
   struct DescriptorRange
   {
-    DescriptorRangeType Type;
-    uint32_t Size;
-    InputSlot Slot;
-    uint32_t Offset;
+    DescriptorRangeType Type = DescriptorRangeType::ShaderResource;
+    InputSlot Slot = { 0u, 0u };
+    uint32_t Size = 1u;
+    uint32_t Offset = 0u;
+
+    operator D3D12_DESCRIPTOR_RANGE() const;
   };
 
-  static_assert(sizeof(D3D12_DESCRIPTOR_RANGE) == sizeof(DescriptorRange));
-
-  struct RootParameter
+  class RootParameter
   {
   public:
-    ShaderVisibility Visibility;
     uint32_t Index;
 
     RootParameter(RootSignatureMask* owner, ShaderVisibility visibility);
-
     virtual D3D12_ROOT_PARAMETER Serialize() const = 0;
 
   protected:
+    ShaderVisibility _visibility;
     RootSignatureContext* Context() const;
 
   private:
@@ -63,39 +62,25 @@ namespace Axodox::Graphics::D3D12
   };
 
   template <typename T>
-  struct RootConstant : public RootParameter
+  class RootConstant : public RootParameter
   {
-    InputSlot Slot;
-
-    static consteval uint32_t Size()
-    {
-      return uint32_t(size_of(T) / 4 + (size_of(T) % 4 == 0 ? 0 : 1));
-    }
-
+  public:
     RootConstant(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility),
-      Slot(slot)
+      _slot(slot)
     { }
 
     virtual D3D12_ROOT_PARAMETER Serialize() const override
     {
-      D3D12_ROOT_PARAMETER result;
-      result.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-      result.Constants.Num32BitValues = Size();
-      result.Constants.ShaderRegister = Slot.Register;
-      result.Constants.RegisterSpace = Slot.Space;
-      result.ShaderVisibility = D3D12_SHADER_VISIBILITY(Visibility);
-      return result;
-    }
-
-    static std::array<std::byte, Size()> AsBuffer(T value)
-    {
-      std::array<std::byte, Size()> buffer;
-
-      buffer.fill(0);
-      memcpy(buffer.data(), &value, sizeof(T));
-
-      return buffer;
+      return D3D12_ROOT_PARAMETER{
+        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS,
+        .Constants = {
+          .Num32BitValues = Size(),
+          .ShaderRegister = _slot.Register,
+          .RegisterSpace = _slot.Space,
+        },
+        .ShaderVisibility = D3D12_SHADER_VISIBILITY(_visibility)
+      };
     }
 
     void operator=(const T& value)
@@ -113,6 +98,24 @@ namespace Axodox::Graphics::D3D12
         throw winrt::hresult_not_implemented();
       }
     }
+
+  private:
+    InputSlot _slot;
+
+    static consteval uint32_t Size()
+    {
+      return uint32_t(size_of(T) / 4 + (size_of(T) % 4 == 0 ? 0 : 1));
+    }
+
+    static std::array<std::byte, Size()> AsBuffer(T value)
+    {
+      std::array<std::byte, Size()> buffer;
+
+      buffer.fill(0);
+      memcpy(buffer.data(), &value, sizeof(T));
+
+      return buffer;
+    }
   };
 
   enum class RootDescriptorType
@@ -123,26 +126,27 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<RootDescriptorType Type>
-  struct RootDescriptor : public RootParameter
+  class RootDescriptor : public RootParameter
   {
-    InputSlot Slot;
-
+  public:
     RootDescriptor(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility),
-      Slot(slot)
+      _slot(slot)
     { }
 
     virtual D3D12_ROOT_PARAMETER Serialize() const override
     {
-      D3D12_ROOT_PARAMETER result;
-      result.ParameterType = D3D12_ROOT_PARAMETER_TYPE(Type);
-      result.Descriptor.ShaderRegister = Slot.Register;
-      result.Descriptor.RegisterSpace = Slot.Space;
-      result.ShaderVisibility = D3D12_SHADER_VISIBILITY(Visibility);
-      return result;
+      return D3D12_ROOT_PARAMETER{
+        .ParameterType = D3D12_ROOT_PARAMETER_TYPE(Type),
+        .Descriptor = {
+          .ShaderRegister = _slot.Register,
+          .RegisterSpace = _slot.Space,
+        },
+        .ShaderVisibility = D3D12_SHADER_VISIBILITY(_visibility)
+      };
     }
 
-    void operator=(BufferReference reference)
+    void operator=(DescriptorReference reference)
     {
       auto& allocator = *Context()->Allocator;
       switch (Context()->Usage)
@@ -181,26 +185,43 @@ namespace Axodox::Graphics::D3D12
         throw winrt::hresult_not_implemented();
       }
     }
+
+  private:
+    InputSlot _slot;
   };
 
   template<uint32_t Size>
-  struct RootDescriptorTable : public RootParameter
+  class RootDescriptorTable : public RootParameter
   {
-    std::array<DescriptorRange, Size> Ranges;
-
+  public:
     RootDescriptorTable(RootSignatureMask* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :
-      RootParameter(owner, visibility),
-      Ranges(ranges)
-    { }
+      RootParameter(owner, visibility)
+    { 
+      for (auto i = 0u; i < Size; i++)
+      {
+        _ranges[i] = ranges[i];
+      }
+    }
 
     virtual D3D12_ROOT_PARAMETER Serialize() const override
     {
-      D3D12_ROOT_PARAMETER result;
-      result.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-      result.DescriptorTable.NumDescriptorRanges = Size;
-      result.DescriptorTable.pDescriptorRanges = Ranges.data();
-      result.ShaderVisibility = D3D12_SHADER_VISIBILITY(Visibility);
-      return result;
+      return D3D12_ROOT_PARAMETER{
+        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        .DescriptorTable = {
+          .NumDescriptorRanges = Size,
+          .pDescriptorRanges = _ranges.data(),
+        },
+        .ShaderVisibility = D3D12_SHADER_VISIBILITY(_visibility)
+      };
     }
+
+    void operator=(DescriptorReference reference)
+    {
+      auto& allocator = *Context()->Allocator;
+      allocator->SetGraphicsRootDescriptorTable(Index, D3D12_GPU_DESCRIPTOR_HANDLE(reference));
+    }
+
+  private:
+    std::array<D3D12_DESCRIPTOR_RANGE, Size> _ranges;
   };
 }

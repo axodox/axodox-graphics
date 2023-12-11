@@ -57,10 +57,14 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
   struct SimpleRootDescription : public RootSignatureMask
   {
     RootDescriptor<RootDescriptorType::ConstantBuffer> ConstantBuffer;
+    RootDescriptorTable<1> Texture;
+    StaticSampler Sampler;
 
     SimpleRootDescription(const RootSignatureContext& context) :
       RootSignatureMask(context),
-      ConstantBuffer(this, { 0 }, ShaderVisibility::Vertex)
+      ConstantBuffer(this, { 0 }, ShaderVisibility::Vertex),
+      Texture(this, { DescriptorRangeType::ShaderResource }, ShaderVisibility::Pixel),
+      Sampler(this, { 0 }, Filter::Linear, TextureAddressMode::Clamp, ShaderVisibility::Pixel)
     {
       Flags = RootSignatureFlags::AllowInputAssemblerInputLayout;
     }
@@ -92,19 +96,30 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       .RootSignature = &simpleRootSignature,
       .VertexShader = &simpleVertexShader,
       .PixelShader = &simplePixelShader,
+      .RasterizerState = RasterizerFlags::CullClockwise,
       .DepthStencilState = DepthStencilMode::WriteDepth,
-      .InputLayout = VertexPositionNormal::Layout,
+      .InputLayout = VertexPositionNormalTexture::Layout,
       .RenderTargetFormats = { Format::B8G8R8A8_UNorm },
       .DepthStencilFormat = Format::D32_Float
     };
     auto simplePipelineState = pipelineStateProvider.CreatePipelineStateAsync(simplePipelineStateDefinition).get();
 
-    CommittedResourceAllocator commitedResourceAllocator{ device };
     GroupedResourceAllocator groupedResourceAllocator{ device };
     ResourceUploader resourceUploader{ device };
-    Mesh cubeMesh{ groupedResourceAllocator, resourceUploader, CreateCube() };
-    groupedResourceAllocator.Build();
+    CommonDescriptorHeap commonDescriptorHeap{ device, 2 };
+    ResourceAllocationContext allocationContext{
+      .ResourceAllocator = &groupedResourceAllocator,
+      .ResourceUploader = &resourceUploader,
+      .DescriptorHeap = &commonDescriptorHeap
+    };
 
+    Mesh cubeMesh{ allocationContext, CreateCube() };
+    ImmutableTexture texture{ allocationContext, app_folder() / L"image.jpeg" };
+
+    groupedResourceAllocator.Build();
+    commonDescriptorHeap.Build();
+
+    CommittedResourceAllocator committedResourceAllocator{ device };
     array<FrameResources, 2> frames{ device, device };
 
     auto i = 0u;
@@ -125,9 +140,8 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       auto resolution = swapChain.Resolution();
       {
         auto projection = XMMatrixPerspectiveFovRH(90.f, float(resolution.x) / float(resolution.y), 0.01f, 10.f);
-        auto view = XMMatrixLookAtRH(XMVectorSet(3.f * cos(i * 0.01f), 3.f * sin(i * 0.01f), 0.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 1.f));
+        auto view = XMMatrixLookAtRH(XMVectorSet(1.5f * cos(i * 0.005f), 1.5f * sin(i * 0.005f), 0.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 1.f));
         auto world = XMMatrixIdentity();
-
         auto worldViewProjection = XMMatrixTranspose(world * view * projection);
 
         XMStoreFloat4x4(&constants.WorldViewProjection, worldViewProjection);
@@ -137,8 +151,8 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       if (!resources.DepthBuffer || !TextureDefinition::AreSizeCompatible(resources.DepthBuffer->Definition(), renderTargetView->Definition()))
       {
         auto depthDefinition = renderTargetView->Definition().MakeSizeCompatible(Format::D32_Float, TextureFlags::DepthStencil);
-        resources.DepthBuffer = commitedResourceAllocator.CreateTexture(depthDefinition);
-        commitedResourceAllocator.Build();
+        resources.DepthBuffer = committedResourceAllocator.CreateTexture(depthDefinition);
+        committedResourceAllocator.Build();
 
         resources.DepthStencilView = resources.DepthStencilDescriptorHeap.CreateDepthStencilView(resources.DepthBuffer.get());
         resources.DepthStencilDescriptorHeap.Build();
@@ -150,6 +164,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         allocator.Reset();
         allocator.BeginList();
         allocator.ResourceTransition(*renderTargetView, ResourceStates::Present, ResourceStates::RenderTarget);
+        commonDescriptorHeap.Set(allocator);
         renderTargetView->Clear(allocator, { sin(0.01f * i++), sin(0.01f * i++ + XM_2PI * 0.33f), sin(0.01f * i++ + XM_2PI * 0.66f), 0.f });
         resources.DepthStencilView->Clear(allocator);
       }
@@ -158,6 +173,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       {
         auto mask = simpleRootSignature.Set(allocator, RootSignatureUsage::Graphics);
         mask.ConstantBuffer = resources.DynamicBuffer.AddBuffer(constants);
+        mask.Texture = texture;
 
         allocator.SetRenderTargets({ renderTargetView }, resources.DepthStencilView.get());
         simplePipelineState.Apply(allocator);

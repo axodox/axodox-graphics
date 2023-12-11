@@ -1,6 +1,5 @@
 #pragma once
-#include "../Resources/ResourceAllocator.h"
-#include "../Resources/ResourceUploader.h"
+#include "../Resources/ResourceAllocationContext.h"
 #include "MeshDescriptions.h"
 
 namespace Axodox::Graphics::D3D12
@@ -8,7 +7,7 @@ namespace Axodox::Graphics::D3D12
   class Mesh
   {
   public:
-    Mesh(ResourceAllocator& allocator, ResourceUploader& uploader, MeshDescription&& description);
+    Mesh(const ResourceAllocationContext& context, MeshDescription&& description);
 
     void Draw(CommandAllocator& allocator, uint32_t instanceCount = 1);
 

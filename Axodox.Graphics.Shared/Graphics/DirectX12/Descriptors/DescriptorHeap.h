@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   enum class DescriptorHeapKind
   {
-    ShaderResource = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+    CommmonResource = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
     SamplerState = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
     RenderTarget = D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
     DepthStencil = D3D12_DESCRIPTOR_HEAP_TYPE_DSV
@@ -30,6 +30,8 @@ namespace Axodox::Graphics::D3D12
     void Clean();
 
   protected:
+    GraphicsDevice _device;
+
     template<typename T, typename... TArgs>
     descriptor_ptr<T> CreateDescriptor(TArgs&&... args)
     {
@@ -42,11 +44,14 @@ namespace Axodox::Graphics::D3D12
       return handle;
     }
 
+    virtual void OnHeapBuilt(ID3D12DescriptorHeap* heap, uint32_t descriptorCount);
+    int64_t GetHandleOffset(D3D12_CPU_DESCRIPTOR_HANDLE handle) const;
+
   private:
-    GraphicsDevice _device;
     DescriptorHeapKind _type;
     std::mutex _mutex;
     winrt::com_ptr<ID3D12DescriptorHeap> _heap;
+    D3D12_CPU_DESCRIPTOR_HANDLE _handleBase;
     std::vector<std::unique_ptr<Descriptor>> _items;
     std::set<const Descriptor*> _reclaimables;
     bool _isDirty = false;

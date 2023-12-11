@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandFenceMarker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\CommonDescriptorHeap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DepthStencilView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\Mesh.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Meshes\MeshDescriptions.h" />
@@ -22,7 +23,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Buffer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\BufferDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ImmutableTexture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocationContext.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Texture.h" />
@@ -72,6 +76,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandList.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Commands\CommandAllocator.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\CommonDescriptorHeap.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\ConstantBufferView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\DepthStencilView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Descriptors\Descriptor.cpp" />
@@ -89,6 +94,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\CommittedResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\DynamicBufferManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\GroupedResourceAllocator.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ImmutableTexture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Resource.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceAllocator.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceReference.cpp" />

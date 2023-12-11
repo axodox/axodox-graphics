@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CommandQueue.h"
 #include "../Devices/GraphicsDevice.h"
+#include "Infrastructure/BitwiseOperations.h"
 
 using namespace Axodox::Infrastructure;
 using namespace std;
@@ -15,7 +16,7 @@ namespace Axodox::Graphics::D3D12
     zero_memory(description);
 
     description.Type = D3D12_COMMAND_LIST_TYPE(type);
-    check_hresult(device->CreateCommandQueue(&description, guid_of<ID3D12CommandQueue>(), _queue.put_void()));
+    check_hresult(device->CreateCommandQueue(&description, IID_PPV_ARGS(_queue.put())));
   }
 
   GraphicsDevice CommandQueue::Device() const

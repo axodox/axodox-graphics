@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct RootParameter;
+  class RootParameter;
   struct StaticSampler;
 
   enum class RootSignatureFlags
@@ -46,7 +46,7 @@ namespace Axodox::Graphics::D3D12
 
   class RootSignatureMask
   {
-    friend struct RootParameter;
+    friend class RootParameter;
     friend struct StaticSampler;
     friend class RootSignatureBase;
 

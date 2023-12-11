@@ -18,15 +18,14 @@ namespace Axodox::Graphics::D3D12
     virtual ~Descriptor() = default;
 
     void Realize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination);
-    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> Handle() const;
+    D3D12_CPU_DESCRIPTOR_HANDLE CpuHandle() const;
     explicit operator bool() const;
 
   protected:
-    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) = 0;
-    
-  private:
     DescriptorHeap* _owner;
-    std::optional<D3D12_CPU_DESCRIPTOR_HANDLE> _handle;
+    D3D12_CPU_DESCRIPTOR_HANDLE _handle;
+
+    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) = 0;
   };
 
   struct DescriptorDeleter

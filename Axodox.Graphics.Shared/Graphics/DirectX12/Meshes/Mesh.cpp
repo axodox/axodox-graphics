@@ -6,25 +6,25 @@ using namespace std;
 
 namespace Axodox::Graphics::D3D12
 {
-  Mesh::Mesh(ResourceAllocator& allocator, ResourceUploader& uploader, MeshDescription&& description) :
-    _vertexBuffer(allocator.CreateBuffer(BufferDefinition(description.Vertices))),
-    _indexBuffer(allocator.CreateBuffer(BufferDefinition(description.Indices))),
+  Mesh::Mesh(const ResourceAllocationContext& context, MeshDescription&& description) :
+    _vertexBuffer(context.ResourceAllocator->CreateBuffer(BufferDefinition(description.Vertices))),
+    _indexBuffer(context.ResourceAllocator->CreateBuffer(BufferDefinition(description.Indices))),
     _topology(D3D12_PRIMITIVE_TOPOLOGY(description.Topology)),
     _vertexCount(description.Vertices.ItemCount()),
     _indexCount(description.Indices.ItemCount())
   {
     if (_vertexBuffer)
     {
-      _verticesAllocatedSubscription = _vertexBuffer->Allocated([this, buffer = move(description.Vertices), &uploader](Resource* resource) {
-        uploader.EnqueueUploadTask(resource, &buffer);
+      _verticesAllocatedSubscription = _vertexBuffer->Allocated([this, buffer = move(description.Vertices), context](Resource* resource) {
+        context.ResourceUploader->EnqueueUploadTask(resource, &buffer);
         _vertexBufferView = { (*resource)->GetGPUVirtualAddress(), buffer.ByteCount(), buffer.ItemSize() };
         });
     }
 
     if (_indexBuffer)
     {
-      _indicesAllocatedSubscription = _indexBuffer->Allocated([this, buffer = move(description.Indices), &uploader](Resource* resource) {
-        uploader.EnqueueUploadTask(resource, &buffer);
+      _indicesAllocatedSubscription = _indexBuffer->Allocated([this, buffer = move(description.Indices), context](Resource* resource) {
+        context.ResourceUploader->EnqueueUploadTask(resource, &buffer);
         _indexBufferView = { (*resource)->GetGPUVirtualAddress(), buffer.ByteCount(), GetIndexFormat(buffer.ItemSize()) };
         });
     }

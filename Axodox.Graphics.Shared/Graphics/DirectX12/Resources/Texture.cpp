@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Texture.h"
+#include "Infrastructure/BitwiseOperations.h"
 
 using namespace Axodox::Infrastructure;
 using namespace std;

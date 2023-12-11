@@ -9,7 +9,8 @@ namespace Axodox::Graphics::D3D12
 {
   DescriptorHeap::DescriptorHeap(const GraphicsDevice& device, DescriptorHeapKind type) :
     _device(device),
-    _type(type)
+    _type(type),
+    _handleBase{ 0 }
   { }
 
   DescriptorHeap::~DescriptorHeap()
@@ -33,16 +34,18 @@ namespace Axodox::Graphics::D3D12
     Clean();
 
     //Create descriptor heap
-    D3D12_DESCRIPTOR_HEAP_DESC description{
-      .Type = D3D12_DESCRIPTOR_HEAP_TYPE(_type),
-      .NumDescriptors = uint32_t(_items.size()),
-      .Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
-      .NodeMask = 0u
-    };
-
-    if (!_heap || !are_equal(_heap->GetDesc(), description))
+    uint32_t descriptorCount = uint32_t(_items.size());
+    if (!_heap || _heap->GetDesc().NumDescriptors < descriptorCount)
     {
-      check_hresult(_device->CreateDescriptorHeap(&description, guid_of<ID3D12DescriptorHeap>(), _heap.put_void()));
+      D3D12_DESCRIPTOR_HEAP_DESC description{
+        .Type = D3D12_DESCRIPTOR_HEAP_TYPE(_type),
+        .NumDescriptors = descriptorCount,
+        .Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
+        .NodeMask = 0u
+      };
+
+      check_hresult(_device->CreateDescriptorHeap(&description, IID_PPV_ARGS(_heap.put())));
+      _handleBase = _heap->GetCPUDescriptorHandleForHeapStart();
     }
 
     //Realize descriptors
@@ -56,8 +59,18 @@ namespace Axodox::Graphics::D3D12
       handle.ptr += increment;
     }
 
+    OnHeapBuilt(_heap.get(), descriptorCount);
+
     //Reset dirty flag
     _isDirty = false;
+  }
+
+  void DescriptorHeap::OnHeapBuilt(ID3D12DescriptorHeap* /*heap*/, uint32_t /*descriptorCount*/)
+  { }
+
+  int64_t DescriptorHeap::GetHandleOffset(D3D12_CPU_DESCRIPTOR_HANDLE handle) const
+  {
+    return handle.ptr - _handleBase.ptr;
   }
 
   void DescriptorHeap::DeleteDescriptor(const Descriptor* descriptor)

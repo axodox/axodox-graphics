@@ -19,7 +19,7 @@ namespace Axodox::Graphics::D3D12
       auto swapChainDescription = CreateDescription();
 
       com_ptr<IDXGIFactory4> dxgiFactory;
-      check_hresult(CreateDXGIFactory2(0, guid_of<IDXGIFactory4>(), dxgiFactory.put_void()));
+      check_hresult(CreateDXGIFactory2(0, IID_PPV_ARGS(dxgiFactory.put())));
 
       check_hresult(dxgiFactory->CreateSwapChainForCoreWindow(
         queue.get(),

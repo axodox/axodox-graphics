@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "GraphicsDevice.h"
+#include "Infrastructure/BitwiseOperations.h"
+
 
 using namespace Axodox::Infrastructure;
 using namespace winrt;
@@ -8,22 +10,21 @@ namespace Axodox::Graphics::D3D12
 {
   GraphicsDevice::GraphicsDevice(ID3D12DeviceChild* deviceChild)
   { 
-    check_hresult(deviceChild->GetDevice(guid_of<ID3D12DeviceT>(), _device.put_void()));
+    check_hresult(deviceChild->GetDevice(IID_PPV_ARGS(_device.put())));
   }
 
   GraphicsDevice::GraphicsDevice(D3D_FEATURE_LEVEL featureLevel)
   {
 #ifdef _DEBUG
     com_ptr<ID3D12Debug> debug;
-    check_hresult(D3D12GetDebugInterface(guid_of<ID3D12Debug>(), debug.put_void()));
+    check_hresult(D3D12GetDebugInterface(IID_PPV_ARGS(debug.put())));
     debug->EnableDebugLayer();
 #endif
 
     check_hresult(D3D12CreateDevice(
       nullptr,
       featureLevel,
-      guid_of<ID3D12DeviceT>(),
-      _device.put_void()));
+      IID_PPV_ARGS(_device.put())));
   }
 
   ID3D12DeviceT* GraphicsDevice::get() const

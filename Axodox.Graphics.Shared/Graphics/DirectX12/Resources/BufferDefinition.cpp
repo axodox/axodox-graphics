@@ -6,22 +6,6 @@ using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
-  BufferDefinition::operator D3D12_RESOURCE_DESC() const
-  {
-    return D3D12_RESOURCE_DESC{
-      .Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
-      .Alignment = 0ull,
-      .Width = Length,
-      .Height = 1u,
-      .DepthOrArraySize = 1u,
-      .MipLevels = 1u,
-      .Format = DXGI_FORMAT_UNKNOWN,
-      .SampleDesc = { 1u, 0u },
-      .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
-      .Flags = D3D12_RESOURCE_FLAGS(Flags)
-    };
-  }
-
   BufferDefinition::BufferDefinition() :
     Length(0),
     Flags(BufferFlags::None)
@@ -41,6 +25,27 @@ namespace Axodox::Graphics::D3D12
     Length(description.Width),
     Flags(BufferFlags(description.Flags))
   { }
+
+  ResourceType BufferDefinition::Type() const
+  {
+    return ResourceType::Buffer;
+  }
+
+  BufferDefinition::operator D3D12_RESOURCE_DESC() const
+  {
+    return D3D12_RESOURCE_DESC{
+      .Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
+      .Alignment = 0ull,
+      .Width = Length,
+      .Height = 1u,
+      .DepthOrArraySize = 1u,
+      .MipLevels = 1u,
+      .Format = DXGI_FORMAT_UNKNOWN,
+      .SampleDesc = { 1u, 0u },
+      .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
+      .Flags = D3D12_RESOURCE_FLAGS(Flags)
+    };
+  }  
 
   BufferData::BufferData() :
     _itemSize(0)

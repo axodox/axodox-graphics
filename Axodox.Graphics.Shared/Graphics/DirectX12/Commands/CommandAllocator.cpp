@@ -11,7 +11,7 @@ namespace Axodox::Graphics::D3D12
     _device(device),
     _type(type)
   { 
-    check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE(type), guid_of<ID3D12CommandAllocator>(), _allocator.put_void()));
+    check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE(type), IID_PPV_ARGS(_allocator.put())));
   }
 
   ID3D12GraphicsCommandListT* CommandAllocator::operator->()
@@ -111,10 +111,10 @@ namespace Axodox::Graphics::D3D12
     renderTargetHandles.reserve(renderTargets.size());
     for (auto renderTarget : renderTargets)
     {
-      renderTargetHandles.push_back(*renderTarget->Handle());
+      renderTargetHandles.push_back(renderTarget->CpuHandle());
     }
 
-    auto depthStencilHandle = depthStencilView ? *depthStencilView->Handle() : D3D12_CPU_DESCRIPTOR_HANDLE(0);
+    auto depthStencilHandle = depthStencilView ? depthStencilView->CpuHandle() : D3D12_CPU_DESCRIPTOR_HANDLE(0);
     (*this)->OMSetRenderTargets(uint32_t(renderTargetHandles.size()), renderTargetHandles.data(), false, &depthStencilHandle);
 
     D3D12_RECT scissorRect{ 0, 0, int32_t(definition.Width), int32_t(definition.Height) };

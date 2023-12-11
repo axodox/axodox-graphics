@@ -1,5 +1,6 @@
 #pragma once
 #include "ResourceData.h"
+#include "ResourceDefinition.h"
 #include "../GraphicsTypes.h"
 
 namespace Axodox::Graphics::D3D12
@@ -24,20 +25,22 @@ namespace Axodox::Graphics::D3D12
     TextureHeader(const D3D12_RESOURCE_DESC& description);
   };
 
-  struct TextureDefinition : public TextureHeader
+  struct TextureDefinition : public ResourceDefinition, public TextureHeader
   {
     uint32_t SampleCount, SampleQuality;
     TextureFlags Flags;
 
     TextureDefinition();
+    TextureDefinition(TextureHeader header);
     TextureDefinition(Format format, uint32_t width, uint32_t height, uint16_t arraySize = 0, TextureFlags flags = TextureFlags::None);
     TextureDefinition(const D3D12_RESOURCE_DESC& description);
 
     TextureDefinition MakeSizeCompatible(Format format, TextureFlags flags) const;
 
-    explicit operator D3D12_RESOURCE_DESC() const;
-
     static bool AreSizeCompatible(const TextureDefinition& a, const TextureDefinition& b);
+
+    virtual ResourceType Type() const override;
+    virtual explicit operator D3D12_RESOURCE_DESC() const override;
   };
 
   class TextureData : public ResourceData
@@ -54,8 +57,8 @@ namespace Axodox::Graphics::D3D12
     TextureData();
     TextureData(Format format, uint32_t width, uint32_t height, uint16_t arraySize = 0);
 
-    TextureData(const TextureData&) = delete;
-    TextureData& operator=(const TextureData&) = delete;
+    TextureData(const TextureData&) = default;
+    TextureData& operator=(const TextureData&) = default;
 
     TextureData(TextureData&& other);
     TextureData& operator=(TextureData&& other);
@@ -64,11 +67,11 @@ namespace Axodox::Graphics::D3D12
 
     explicit operator bool() const;
 
-    std::span<uint8_t> AsRawSpan(uint64_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0);
-    std::span<const uint8_t> AsRawSpan(uint64_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0) const;
+    std::span<uint8_t> AsRawSpan(uint32_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0);
+    std::span<const uint8_t> AsRawSpan(uint32_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0) const;
 
     template<typename T>
-    std::span<T> AsTypedSpan(uint64_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0)
+    std::span<T> AsTypedSpan(uint32_t* stride = nullptr, uint32_t slice = 0, uint32_t mip = 0)
     {
       auto rawSpan = AsRawSpan(stride, slice, mip);
       return { reinterpret_cast<T*>(rawSpan.data()), rawSpan.size() / sizeof(T) };
@@ -77,6 +80,11 @@ namespace Axodox::Graphics::D3D12
     virtual void CopyToResource(ID3D12Resource* resource) const override;
 
     void Reset();
+
+    TextureDefinition Definition() const;
+
+    static TextureData FromBuffer(std::span<const uint8_t> buffer);
+    static TextureData FromFile(const std::filesystem::path& path);
 
   private:
     TextureHeader _header;

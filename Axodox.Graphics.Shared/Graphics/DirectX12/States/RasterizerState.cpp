@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RasterizerState.h"
+#include "Infrastructure/BitwiseOperations.h"
 
 using namespace Axodox::Infrastructure;
 

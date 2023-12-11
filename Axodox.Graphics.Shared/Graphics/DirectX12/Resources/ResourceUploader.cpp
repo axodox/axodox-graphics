@@ -36,16 +36,28 @@ namespace Axodox::Graphics::D3D12
     auto description = resource->Description();
     description.Flags = D3D12_RESOURCE_FLAG_NONE;
 
+    //Textures cannot be placed into upload heaps
+    if (description.Dimension > D3D12_RESOURCE_DIMENSION_BUFFER)
+    {
+      uint64_t length;
+      _device->GetCopyableFootprints(&description, 0u, description.MipLevels * description.DepthOrArraySize, 0ull, nullptr, nullptr, nullptr, &length);
+
+      description = {
+        .Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
+        .Alignment = 0ull,
+        .Width = length,
+        .Height = 1u,
+        .DepthOrArraySize = 1u,
+        .MipLevels = 1u,
+        .Format = DXGI_FORMAT_UNKNOWN,
+        .SampleDesc = { 1u, 0u },
+        .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
+        .Flags = D3D12_RESOURCE_FLAG_NONE
+      };
+    }
+
     //Select location in system memory
-    D3D12_RESOURCE_ALLOCATION_INFO allocationInfo;
-    if (description.Dimension == D3D12_RESOURCE_DIMENSION_BUFFER)
-    {
-      allocationInfo = { description.Width, 64 * 1024 };
-    }
-    else
-    {
-      allocationInfo = _device->GetResourceAllocationInfo(0, 0, &description);
-    }
+    auto allocationInfo = _device->GetResourceAllocationInfo(0, 1, &description);
     auto allocation = AllocateBuffer(allocationInfo.SizeInBytes, allocationInfo.Alignment);
 
     //Create upload task
@@ -97,7 +109,33 @@ namespace Axodox::Graphics::D3D12
         allocator.ResourceTransition(task.TargetResource, ResourceStates::Common, ResourceStates::CopyDest);
         
         //Copy resource
-        allocator->CopyResource(task.TargetResource.get(), task.SourceResource.get());
+        auto description = task.TargetResource->GetDesc();
+        if (description.Dimension > D3D12_RESOURCE_DIMENSION_BUFFER)
+        {
+          vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> layouts(description.DepthOrArraySize * description.MipLevels);
+          _device->GetCopyableFootprints(&description, 0u, uint32_t(layouts.size()), 0ull, layouts.data(), nullptr, nullptr, nullptr);
+
+          for (auto i = 0u; i < layouts.size(); i++)
+          {
+            D3D12_TEXTURE_COPY_LOCATION sourceLocation{
+              .pResource = task.SourceResource.get(),
+              .Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT,
+              .PlacedFootprint = layouts[i]
+            };
+
+            D3D12_TEXTURE_COPY_LOCATION targetLocation{
+              .pResource = task.TargetResource.get(),
+              .Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX,
+              .PlacedFootprint = i
+            };
+
+            allocator->CopyTextureRegion(&targetLocation, 0u, 0u, 0u, &sourceLocation, nullptr);
+          }
+        }
+        else
+        {
+          allocator->CopyResource(task.TargetResource.get(), task.SourceResource.get());
+        }
 
         //Set common state for later direct / compute engine use
         allocator.ResourceTransition(task.SourceResource, ResourceStates::CopySource, ResourceStates::Common);

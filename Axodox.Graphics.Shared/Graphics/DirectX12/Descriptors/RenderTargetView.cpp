@@ -17,13 +17,12 @@ namespace Axodox::Graphics::D3D12
 
   void RenderTargetView::Clear(CommandAllocator& allocator, const DirectX::XMFLOAT4& value) const
   {
-    allocator->ClearRenderTargetView(*Handle(), reinterpret_cast<const float*>(&value), 0, nullptr);
+    allocator->ClearRenderTargetView(_handle, reinterpret_cast<const float*>(&value), 0, nullptr);
   }
 
   void RenderTargetView::Set(CommandAllocator& allocator) const
   {
-    auto handle = *Handle();
-    allocator->OMSetRenderTargets(1, &handle, false, nullptr);
+    allocator->OMSetRenderTargets(1, &_handle, false, nullptr);
 
     D3D12_RECT scissorRect{ 0, 0, int32_t(_definition.Width), int32_t(_definition.Height) };
     allocator->RSSetScissorRects(1, &scissorRect);

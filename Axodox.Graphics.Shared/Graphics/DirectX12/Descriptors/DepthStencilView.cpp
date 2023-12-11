@@ -17,13 +17,12 @@ namespace Axodox::Graphics::D3D12
 
   void DepthStencilView::Clear(CommandAllocator& allocator, float value) const
   {
-    allocator->ClearDepthStencilView(*Handle(), D3D12_CLEAR_FLAG_DEPTH, value, 0, 0, nullptr);
+    allocator->ClearDepthStencilView(_handle, D3D12_CLEAR_FLAG_DEPTH, value, 0, 0, nullptr);
   }
 
   void DepthStencilView::Set(CommandAllocator& allocator) const
   {
-    auto handle = *Handle();
-    allocator->OMSetRenderTargets(0, nullptr, true, &handle);
+    allocator->OMSetRenderTargets(0, nullptr, true, &_handle);
 
     D3D12_RECT scissorRect{ 0, 0, int32_t(_definition.Width), int32_t(_definition.Height) };
     allocator->RSSetScissorRects(1, &scissorRect);

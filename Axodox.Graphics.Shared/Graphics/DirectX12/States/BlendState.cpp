@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "BlendState.h"
+#include "Infrastructure/BitwiseOperations.h"
 
 using namespace Axodox::Graphics::D3D12;
 using namespace Axodox::Infrastructure;

@@ -18,6 +18,7 @@
 #include "Graphics/DirectX12/Resources/CommittedResourceAllocator.h"
 #include "Graphics/DirectX12/Resources/GroupedResourceAllocator.h"
 #include "Graphics/DirectX12/Resources/ResourceUploader.h"
+#include "Graphics/DirectX12/Resources/ImmutableTexture.h"
 #include "Graphics/DirectX12/Meshes/VertexDefinitions.h"
 #include "Graphics/DirectX12/Meshes/MeshDescriptions.h"
 #include "Graphics/DirectX12/Meshes/Primitives.h"
@@ -27,3 +28,5 @@
 #include "Graphics/DirectX12/Descriptors/RenderTargetView.h"
 #include "Graphics/DirectX12/Descriptors/DepthStencilView.h"
 #include "Graphics/DirectX12/Descriptors/ConstantBufferView.h"
+#include "Graphics/DirectX12/Descriptors/ShaderResourceView.h"
+#include "Graphics/DirectX12/Descriptors/CommonDescriptorHeap.h"

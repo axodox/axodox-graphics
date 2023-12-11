@@ -92,7 +92,7 @@ namespace Axodox::Graphics::D3D12
       for (auto i = 0; i < 2; i++)
       {
         com_ptr<ID3D12Resource> buffer;
-        swapChain3->GetBuffer(i, guid_of<ID3D12Resource>(), buffer.put_void());
+        swapChain3->GetBuffer(i, IID_PPV_ARGS(buffer.put()));
 
         Texture texture{ buffer };
         _targets.push_back(_rtvHeap.CreateRenderTargetView(&texture));

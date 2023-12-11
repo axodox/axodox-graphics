@@ -13,7 +13,7 @@ namespace Axodox::Graphics::D3D12
     _defaultBlockSize(defaultBlockSize ? defaultBlockSize : 1024 * 1024)
   { }
 
-  BufferReference DynamicBufferManager::AddBuffer(std::span<const uint8_t> buffer)
+  DescriptorReference DynamicBufferManager::AddBuffer(std::span<const uint8_t> buffer)
   {
     lock_guard lock(_mutex);
 

@@ -18,10 +18,10 @@ namespace Axodox::Graphics::D3D12
   public:
     DynamicBufferManager(const GraphicsDevice& device, uint64_t defaultBlockSize = 0);
 
-    [[nodiscard]] BufferReference AddBuffer(std::span<const uint8_t> buffer);
+    [[nodiscard]] DescriptorReference AddBuffer(std::span<const uint8_t> buffer);
 
     template<typename T>
-    [[nodiscard]] BufferReference AddBuffer(const T& value)
+    [[nodiscard]] DescriptorReference AddBuffer(const T& value)
     {
       return AddBuffer(Infrastructure::to_span(value));
     }

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PipelineState.h"
 #include "Threading/ThreadPool.h"
+#include "Infrastructure/BitwiseOperations.h"
 
 using namespace Axodox::Infrastructure;
 using namespace Axodox::Storage;

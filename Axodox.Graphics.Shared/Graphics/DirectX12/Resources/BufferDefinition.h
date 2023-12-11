@@ -1,5 +1,6 @@
 #pragma once
 #include "ResourceData.h"
+#include "ResourceDefinition.h"
 #include "../GraphicsTypes.h"
 #include "../../../Infrastructure/BitwiseOperations.h"
 
@@ -14,12 +15,10 @@ namespace Axodox::Graphics::D3D12
 
   class BufferData;
 
-  struct BufferDefinition
+  struct BufferDefinition : public ResourceDefinition
   {
     uint64_t Length = 0;
     BufferFlags Flags = BufferFlags::None;
-
-    explicit operator D3D12_RESOURCE_DESC() const;
 
     BufferDefinition();
 
@@ -38,6 +37,9 @@ namespace Axodox::Graphics::D3D12
     {
       return { sizeof(T) * size, flags };
     }
+
+    virtual ResourceType Type() const override;
+    virtual explicit operator D3D12_RESOURCE_DESC() const override;
   };
 
   class BufferData : public ResourceData
