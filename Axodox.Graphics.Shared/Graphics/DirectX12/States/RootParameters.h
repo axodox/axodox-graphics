@@ -151,7 +151,7 @@ namespace Axodox::Graphics::D3D12
       auto& allocator = *Context()->Allocator;
       switch (Context()->Usage)
       {
-      case RootSignatureUsage::Graphics:        
+      case RootSignatureUsage::Graphics:
         switch (Type)
         {
         case RootDescriptorType::ConstantBuffer:
@@ -166,7 +166,7 @@ namespace Axodox::Graphics::D3D12
         }
         break;
 
-      case RootSignatureUsage::Compute:        
+      case RootSignatureUsage::Compute:
         switch (Type)
         {
         case RootDescriptorType::ConstantBuffer:
@@ -196,7 +196,7 @@ namespace Axodox::Graphics::D3D12
   public:
     RootDescriptorTable(RootSignatureMask* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :
       RootParameter(owner, visibility)
-    { 
+    {
       for (auto i = 0u; i < Size; i++)
       {
         _ranges[i] = ranges[i];
@@ -218,7 +218,17 @@ namespace Axodox::Graphics::D3D12
     void operator=(DescriptorReference reference)
     {
       auto& allocator = *Context()->Allocator;
-      allocator->SetGraphicsRootDescriptorTable(Index, D3D12_GPU_DESCRIPTOR_HANDLE(reference));
+      switch (Context()->Usage)
+      {
+      case RootSignatureUsage::Graphics:
+        allocator->SetGraphicsRootDescriptorTable(Index, D3D12_GPU_DESCRIPTOR_HANDLE(reference));
+        break;
+      case RootSignatureUsage::Compute:
+        allocator->SetComputeRootDescriptorTable(Index, D3D12_GPU_DESCRIPTOR_HANDLE(reference));
+        break;
+      default:
+        throw winrt::hresult_not_implemented();
+      }
     }
 
   private:

@@ -9,5 +9,5 @@ struct input_t
 
 float4 main(input_t input) : SV_TARGET
 {
-	return _texture.Sample(_sampler, input.Texture);
+  return _texture.Sample(_sampler, input.Texture);
 }
