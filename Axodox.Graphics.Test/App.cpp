@@ -149,11 +149,11 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
     groupedResourceAllocator.Build();
 
-    auto mutableDescriptorHeap = immutableAllocationContext;
+    auto mutableAllocationContext = immutableAllocationContext;
     CommittedResourceAllocator committedResourceAllocator{ device };
-    mutableDescriptorHeap.ResourceAllocator = &committedResourceAllocator;
+    mutableAllocationContext.ResourceAllocator = &committedResourceAllocator;
 
-    array<FrameResources, 2> frames{ mutableDescriptorHeap, mutableDescriptorHeap };
+    array<FrameResources, 2> frames{ mutableAllocationContext, mutableAllocationContext };
 
     swapChain.Resizing(no_revoke, [&](SwapChain*) {
       for (auto& frame : frames) frame.ScreenResourceView.reset();
