@@ -8,6 +8,7 @@ namespace Axodox::Graphics::D3D12
   {
   public:
     Texture(ResourceAllocator* owner, const TextureDefinition& definition);
+    Texture(ID3D12Resource* resource);
     Texture(const winrt::com_ptr<ID3D12Resource>& resource);
 
     const TextureDefinition& Definition() const;

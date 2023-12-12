@@ -1,6 +1,7 @@
 #pragma once
 #include "DescriptorHeap.h"
 #include "ShaderResourceView.h"
+#include "UnorderedAccessView.h"
 #include "../Resources/Resource.h"
 
 namespace Axodox::Graphics::D3D12
@@ -11,6 +12,7 @@ namespace Axodox::Graphics::D3D12
     CommonDescriptorHeap(const GraphicsDevice& device, uint32_t framesInFlight);
 
     descriptor_ptr<ShaderResourceView> CreateShaderResourceView(Resource* resource);
+    descriptor_ptr<UnorderedAccessView> CreateUnorderedAccessView(Resource* resource);
 
     D3D12_GPU_DESCRIPTOR_HANDLE ResolveGpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
 

@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "Mesh.h"
+#include "ImmutableMesh.h"
 
 using namespace Axodox::Infrastructure;
 using namespace std;
 
 namespace Axodox::Graphics::D3D12
 {
-  Mesh::Mesh(const ResourceAllocationContext& context, MeshDescription&& description) :
+  ImmutableMesh::ImmutableMesh(const ResourceAllocationContext& context, MeshDescription&& description) :
     _vertexBuffer(context.ResourceAllocator->CreateBuffer(BufferDefinition(description.Vertices))),
     _indexBuffer(context.ResourceAllocator->CreateBuffer(BufferDefinition(description.Indices))),
     _topology(D3D12_PRIMITIVE_TOPOLOGY(description.Topology)),
@@ -30,7 +30,7 @@ namespace Axodox::Graphics::D3D12
     }
   }
 
-  void Mesh::Draw(CommandAllocator& allocator, uint32_t instanceCount)
+  void ImmutableMesh::Draw(CommandAllocator& allocator, uint32_t instanceCount)
   {
     if (bool(_vertexBuffer) != bool(_vertexBufferView) || bool(_indexBuffer) != bool(_indexBufferView) || !instanceCount) return;
 
@@ -48,7 +48,7 @@ namespace Axodox::Graphics::D3D12
     }
   }
 
-  DXGI_FORMAT Mesh::GetIndexFormat(uint32_t size)
+  DXGI_FORMAT ImmutableMesh::GetIndexFormat(uint32_t size)
   {
     switch (size)
     {

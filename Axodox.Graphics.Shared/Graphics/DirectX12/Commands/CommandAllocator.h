@@ -32,8 +32,11 @@ namespace Axodox::Graphics::D3D12
 
     void ResourceTransition(ResourceReference resource, ResourceStates from, ResourceStates to);
     void ResourceTransitions(std::span<ResourceReference> resources, ResourceStates from, ResourceStates to);
+    
+    void CopyResource(ResourceReference source, ResourceReference destination);
 
     void SetRenderTargets(std::initializer_list<const RenderTargetView*> renderTargets, const DepthStencilView* depthStencilView = nullptr);
+    void Dispatch(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1);
 
     void Reset();
 

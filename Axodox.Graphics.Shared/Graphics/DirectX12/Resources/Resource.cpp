@@ -3,6 +3,7 @@
 #include "ResourceAllocator.h"
 
 using namespace std;
+using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
@@ -10,6 +11,12 @@ namespace Axodox::Graphics::D3D12
     _owner(owner),
     Allocated(_events)
   { }
+
+  Resource::Resource(ID3D12Resource * resource) :
+    Resource(com_ptr<ID3D12Resource>(resource, take_ownership_from_abi))
+  { 
+    resource->AddRef();
+  }
 
   Resource::Resource(const winrt::com_ptr<ID3D12Resource>& resource) :
     _owner(nullptr),

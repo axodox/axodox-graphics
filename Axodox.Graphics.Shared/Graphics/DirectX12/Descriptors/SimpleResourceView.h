@@ -18,11 +18,11 @@ namespace Axodox::Graphics::D3D12
     operator ResourceReference() const;
 
   protected:
-    virtual void OnInit() {};
-    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;
-
     winrt::com_ptr<ID3D12Resource> _resource;
     std::unique_ptr<DescriptionType> _description;
+
+    virtual void OnInit() {};
+    virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;
   };
   
 }

@@ -12,7 +12,7 @@ namespace Axodox::Graphics::D3D12
 
     _allocatedSubscription = _texture->Allocated([this, context, data = move(textureData)](Resource* resource) {
       context.ResourceUploader->EnqueueUploadTask(resource, &data);
-      _view = context.DescriptorHeap->CreateShaderResourceView(resource);
+      _view = context.CommonDescriptorHeap->CreateShaderResourceView(resource);
       });
   }
 

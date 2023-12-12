@@ -14,6 +14,8 @@ namespace Axodox::Graphics::D3D12
 
   class SwapChain
   {
+    Infrastructure::event_owner _events;
+
   public:
     void Resize();
     void Present();
@@ -21,6 +23,8 @@ namespace Axodox::Graphics::D3D12
     DirectX::XMUINT2 Resolution() const;
 
     const RenderTargetView* RenderTargetView();
+
+    Infrastructure::event_publisher<SwapChain*> Resizing;
 
   protected:
     static const uint32_t _minBufferSize;

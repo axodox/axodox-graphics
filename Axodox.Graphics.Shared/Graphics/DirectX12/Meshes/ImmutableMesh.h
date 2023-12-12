@@ -4,10 +4,10 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class Mesh
+  class ImmutableMesh
   {
   public:
-    Mesh(const ResourceAllocationContext& context, MeshDescription&& description);
+    ImmutableMesh(const ResourceAllocationContext& context, MeshDescription&& description);
 
     void Draw(CommandAllocator& allocator, uint32_t instanceCount = 1);
 

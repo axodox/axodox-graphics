@@ -17,6 +17,8 @@ namespace Axodox::Graphics::D3D12
     _targets.clear();
     _rtvHeap.Clean();
 
+    _events.raise(Resizing, this);
+
     auto size = GetSize();
     check_hresult(_swapChain->ResizeBuffers(2, size.x, size.y, DXGI_FORMAT_UNKNOWN, has_flag(_flags, SwapChainFlags::IsTearingAllowed) ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0));
 
@@ -51,6 +53,7 @@ namespace Axodox::Graphics::D3D12
   }
 
   SwapChain::SwapChain(const CommandQueue& queue, SwapChainFlags flags) :
+    Resizing(_events),
     _rtvHeap(queue.Device()),
     _queue(queue),
     _fence(queue.Device()),

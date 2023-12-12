@@ -12,6 +12,11 @@ namespace Axodox::Graphics::D3D12
     _definition(definition)
   { }
 
+  Texture::Texture(ID3D12Resource * resource) :
+    Resource(resource),
+    _definition(resource->GetDesc())
+  { }
+
   Texture::Texture(const winrt::com_ptr<ID3D12Resource>& resource) :
     Resource(resource),
     _definition(resource->GetDesc())
@@ -36,6 +41,10 @@ namespace Axodox::Graphics::D3D12
     else if(has_flag(_definition.Flags, TextureFlags::DepthStencil))
     {
       return D3D12_RESOURCE_STATE_DEPTH_WRITE;
+    }
+    else if (has_flag(_definition.Flags, TextureFlags::UnorderedAccess))
+    {
+      return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
     }
     else
     {

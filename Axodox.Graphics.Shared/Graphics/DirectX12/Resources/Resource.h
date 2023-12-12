@@ -15,6 +15,7 @@ namespace Axodox::Graphics::D3D12
 
   public:
     Resource(ResourceAllocator* owner);
+    Resource(ID3D12Resource* resource);
     Resource(const winrt::com_ptr<ID3D12Resource>& resource);
 
     virtual D3D12_RESOURCE_DESC Description() const = 0;

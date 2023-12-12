@@ -103,6 +103,11 @@ namespace Axodox::Graphics::D3D12
     (*this)->ResourceBarrier(uint32_t(barriers.size()), barriers.data());
   }
 
+  void CommandAllocator::CopyResource(ResourceReference source, ResourceReference destination)
+  {
+    (*this)->CopyResource(destination.Pointer, source.Pointer);
+  }
+
   void CommandAllocator::SetRenderTargets(std::initializer_list<const RenderTargetView*> renderTargets, const DepthStencilView* depthStencilView)
   {
     auto& definition = (*renderTargets.begin())->Definition();
@@ -122,6 +127,11 @@ namespace Axodox::Graphics::D3D12
 
     D3D12_VIEWPORT viewport{ 0, 0, float(definition.Width), float(definition.Height), 0.f, 1.f };
     (*this)->RSSetViewports(1, &viewport);
+  }
+
+  void CommandAllocator::Dispatch(uint32_t x, uint32_t y, uint32_t z)
+  {
+    (*this)->Dispatch(x, y, z);
   }
 
   void CommandAllocator::Reset()

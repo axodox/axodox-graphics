@@ -17,6 +17,11 @@ namespace Axodox::Graphics::D3D12
     return CreateDescriptor<ShaderResourceView>(resource->get(), static_cast<D3D12_SHADER_RESOURCE_VIEW_DESC*>(nullptr));
   }
 
+  descriptor_ptr<UnorderedAccessView> CommonDescriptorHeap::CreateUnorderedAccessView(Resource* resource)
+  {
+    return CreateDescriptor<UnorderedAccessView>(resource->get(), static_cast<D3D12_UNORDERED_ACCESS_VIEW_DESC*>(nullptr));
+  }
+
   D3D12_GPU_DESCRIPTOR_HANDLE CommonDescriptorHeap::ResolveGpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
   {
     return { _handleBase.ptr + GetHandleOffset(handle) };
