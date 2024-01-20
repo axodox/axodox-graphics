@@ -23,11 +23,13 @@ namespace Axodox::Graphics::D3D12
     TextureDefinition _definition;
   };
 
+  using RenderTargetViewRef = descriptor_ptr<RenderTargetView>;
+
   class RenderTargetDescriptorHeap : public DescriptorHeap
   {
   public:
     RenderTargetDescriptorHeap(const GraphicsDevice& device);
 
-    descriptor_ptr<RenderTargetView> CreateRenderTargetView(Texture* texture);
+    RenderTargetViewRef CreateRenderTargetView(Texture* texture);
   };
 }

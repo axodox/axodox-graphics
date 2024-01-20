@@ -24,4 +24,6 @@ namespace Axodox::Graphics::D3D12
     std::unique_ptr<D3D12_UNORDERED_ACCESS_VIEW_DESC> _description;
     std::unique_ptr<ResourceDefinition> _definition;
   };
+
+  using UnorderedAccessViewRef = descriptor_ptr<UnorderedAccessView>;
 }

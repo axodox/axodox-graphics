@@ -21,4 +21,6 @@ namespace Axodox::Graphics::D3D12
   private:
     std::unique_ptr<ResourceDefinition> _definition;
   };
+
+  using ShaderResourceViewRef = descriptor_ptr<ShaderResourceView>;
 }

@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
   class ConstantBufferView : public Descriptor
   {
   public:
-    ConstantBufferView(DescriptorHeap* owner, const D3D12_CONSTANT_BUFFER_VIEW_DESC& description);
+    ConstantBufferView(DescriptorHeap* owner, const D3D12_CONSTANT_BUFFER_VIEW_DESC* description = nullptr);
 
     ID3D12Resource* Resource() const;
 
@@ -15,7 +15,8 @@ namespace Axodox::Graphics::D3D12
 
   private:
     winrt::com_ptr<ID3D12Resource> _resource;
-    D3D12_CONSTANT_BUFFER_VIEW_DESC _description;
+    std::unique_ptr<D3D12_CONSTANT_BUFFER_VIEW_DESC> _description;
   };
 
+  using ConstantBufferViewRef = descriptor_ptr<ConstantBufferView>;
 }

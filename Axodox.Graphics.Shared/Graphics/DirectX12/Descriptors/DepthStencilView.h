@@ -23,11 +23,13 @@ namespace Axodox::Graphics::D3D12
     TextureDefinition _definition;
   };
 
+  using DepthStencilViewRef = descriptor_ptr<DepthStencilView>;
+
   class DepthStencilDescriptorHeap : public DescriptorHeap
   {
   public:
     DepthStencilDescriptorHeap(const GraphicsDevice& device);
 
-    descriptor_ptr<DepthStencilView> CreateDepthStencilView(Texture* texture);
+    DepthStencilViewRef CreateDepthStencilView(Texture* texture);
   };
 }

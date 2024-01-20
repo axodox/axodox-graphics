@@ -22,6 +22,16 @@ namespace Axodox::Graphics::D3D12
     return CreateDescriptor<UnorderedAccessView>(resource->get(), static_cast<D3D12_UNORDERED_ACCESS_VIEW_DESC*>(nullptr));
   }
 
+  descriptor_ptr<ConstantBufferView> CommonDescriptorHeap::CreateConstantBufferView(Buffer* resource)
+  {
+    D3D12_CONSTANT_BUFFER_VIEW_DESC description{
+      .BufferLocation = (*resource)->GetGPUVirtualAddress(),
+      .SizeInBytes = uint32_t(resource->Description().Width),
+    };
+
+    return CreateDescriptor<ConstantBufferView>(&description);
+  }
+
   D3D12_GPU_DESCRIPTOR_HANDLE CommonDescriptorHeap::ResolveGpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
   {
     return { _handleBase.ptr + GetHandleOffset(handle) };

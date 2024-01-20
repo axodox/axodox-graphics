@@ -2,7 +2,9 @@
 #include "DescriptorHeap.h"
 #include "ShaderResourceView.h"
 #include "UnorderedAccessView.h"
+#include "ConstantBufferView.h"
 #include "../Resources/Resource.h"
+#include "../Resources/Buffer.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -11,8 +13,9 @@ namespace Axodox::Graphics::D3D12
   public:
     CommonDescriptorHeap(const GraphicsDevice& device, uint32_t framesInFlight);
 
-    descriptor_ptr<ShaderResourceView> CreateShaderResourceView(Resource* resource);
-    descriptor_ptr<UnorderedAccessView> CreateUnorderedAccessView(Resource* resource);
+    ShaderResourceViewRef CreateShaderResourceView(Resource* resource);
+    UnorderedAccessViewRef CreateUnorderedAccessView(Resource* resource);
+    ConstantBufferViewRef CreateConstantBufferView(Buffer* resource);
 
     D3D12_GPU_DESCRIPTOR_HANDLE ResolveGpuHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
