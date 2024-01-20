@@ -41,7 +41,7 @@ namespace Axodox::Graphics::D3D12
 
   private:
     winrt::com_ptr<IDXGISwapChain3> _swapChain;
-    std::vector<descriptor_ptr<D3D12::RenderTargetView>> _targets;
+    std::vector<D3D12::RenderTargetViewRef> _targets;
     RenderTargetDescriptorHeap _rtvHeap;
     SwapChainFlags _flags;
     CommandQueue _queue;

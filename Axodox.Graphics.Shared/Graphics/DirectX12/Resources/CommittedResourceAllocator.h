@@ -8,6 +8,6 @@ namespace Axodox::Graphics::D3D12
   public:
     using ResourceAllocator::ResourceAllocator;
 
-    virtual void AllocateResources(ResourceSpan resources) override;    
+    virtual void AllocateResources(ResourceSpan resources) override;
   };
 }

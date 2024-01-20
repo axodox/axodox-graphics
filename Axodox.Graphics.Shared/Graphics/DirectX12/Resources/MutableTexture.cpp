@@ -70,7 +70,7 @@ namespace Axodox::Graphics::D3D12
     _definition.reset();
   }
 
-  MutableTexture::operator ResourceReference() const
+  MutableTexture::operator ResourceArgument() const
   {
     return _texture->get();
   }

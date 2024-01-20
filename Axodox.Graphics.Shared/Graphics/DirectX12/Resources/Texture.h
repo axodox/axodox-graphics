@@ -19,4 +19,6 @@ namespace Axodox::Graphics::D3D12
   private:
     TextureDefinition _definition;
   };
+
+  using TextureRef = resource_ptr<Texture>;
 }

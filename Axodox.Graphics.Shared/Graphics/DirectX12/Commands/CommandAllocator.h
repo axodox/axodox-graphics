@@ -5,7 +5,7 @@
 #include "../Devices/GraphicsDevice.h"
 #include "../Descriptors/RenderTargetView.h"
 #include "../Descriptors/DepthStencilView.h"
-#include "../Resources/ResourceReference.h"
+#include "../Resources/ResourceArgument.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -30,10 +30,10 @@ namespace Axodox::Graphics::D3D12
     void AddAwaiter(CommandFenceMarker marker);
     void AddSignaler(CommandFenceMarker marker);
 
-    void ResourceTransition(ResourceReference resource, ResourceStates from, ResourceStates to);
-    void ResourceTransitions(std::span<ResourceReference> resources, ResourceStates from, ResourceStates to);
+    void ResourceTransition(ResourceArgument resource, ResourceStates from, ResourceStates to);
+    void ResourceTransitions(std::span<ResourceArgument> resources, ResourceStates from, ResourceStates to);
     
-    void CopyResource(ResourceReference source, ResourceReference destination);
+    void CopyResource(ResourceArgument source, ResourceArgument destination);
 
     void SetRenderTargets(std::initializer_list<const RenderTargetView*> renderTargets, const DepthStencilView* depthStencilView = nullptr);
     void Dispatch(uint32_t x = 1, uint32_t y = 1, uint32_t z = 1);

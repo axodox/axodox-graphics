@@ -39,7 +39,7 @@ namespace Axodox::Graphics::D3D12
     return static_cast<CommonDescriptorHeap*>(_owner)->ResolveGpuHandle(_handle);
   }
 
-  UnorderedAccessView::operator D3D12_GPU_VIRTUAL_ADDRESS() const
+  UnorderedAccessView::operator GpuVirtualAddress() const
   {
     return GpuHandle().ptr;
   }
@@ -49,7 +49,7 @@ namespace Axodox::Graphics::D3D12
     return _resource.get();
   }
 
-  UnorderedAccessView::operator ResourceReference() const
+  UnorderedAccessView::operator ResourceArgument() const
   {
     return _resource;
   }

@@ -9,20 +9,20 @@ namespace Axodox::Graphics::D3D12
     _device(device)
   { }
 
-  resource_ptr<Texture> ResourceAllocator::CreateTexture(const TextureDefinition& definition)
+  TextureRef ResourceAllocator::CreateTexture(const TextureDefinition& definition)
   {
     auto resource = make_unique<Texture>(this, definition);
-    auto result = resource_ptr<Texture>(resource.get());
+    auto result = TextureRef(resource.get());
     AddResource(move(resource));
     return result;
   }
 
-  resource_ptr<Buffer> ResourceAllocator::CreateBuffer(const BufferDefinition& definition)
+  BufferRef ResourceAllocator::CreateBuffer(const BufferDefinition& definition)
   {
     if (!definition.Length) return nullptr;
 
     auto resource = make_unique<Buffer>(this, definition);
-    auto result = resource_ptr<Buffer>(resource.get());
+    auto result = BufferRef(resource.get());
     AddResource(move(resource));
     return result;
   }

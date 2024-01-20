@@ -16,7 +16,7 @@ namespace Axodox::Graphics::D3D12
       });
   }
 
-  ImmutableTexture::operator D3D12_GPU_VIRTUAL_ADDRESS() const
+  ImmutableTexture::operator GpuVirtualAddress() const
   {
     return *_view;
   }

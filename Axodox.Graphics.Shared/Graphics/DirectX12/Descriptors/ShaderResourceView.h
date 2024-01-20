@@ -13,7 +13,7 @@ namespace Axodox::Graphics::D3D12
 
     const ResourceDefinition* Definition() const;
     D3D12_GPU_DESCRIPTOR_HANDLE GpuHandle() const;
-    operator D3D12_GPU_VIRTUAL_ADDRESS() const;
+    operator GpuVirtualAddress() const;
 
   protected:
     virtual void OnInit() override;

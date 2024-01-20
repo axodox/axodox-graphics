@@ -18,4 +18,6 @@ namespace Axodox::Graphics::D3D12
   private:
     BufferDefinition _definition;
   };
+
+  using BufferRef = resource_ptr<Buffer>;
 }

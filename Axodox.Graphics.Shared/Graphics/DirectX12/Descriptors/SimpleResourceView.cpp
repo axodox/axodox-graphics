@@ -17,7 +17,7 @@ namespace Axodox::Graphics::D3D12
   }
 
   template<typename DescriptionType, CreateDescriptorViewFunc<DescriptionType> CreateView>
-  SimpleResourceView<DescriptionType, CreateView>::operator ResourceReference() const
+  SimpleResourceView<DescriptionType, CreateView>::operator ResourceArgument() const
   {
     return _resource.get();
   }

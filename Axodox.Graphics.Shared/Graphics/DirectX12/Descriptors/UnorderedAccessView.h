@@ -1,6 +1,6 @@
 #pragma once
 #include "Descriptor.h"
-#include "../Resources/ResourceReference.h"
+#include "../Resources/ResourceArgument.h"
 #include "../Resources/ResourceDefinition.h"
 
 namespace Axodox::Graphics::D3D12
@@ -12,10 +12,10 @@ namespace Axodox::Graphics::D3D12
 
     const ResourceDefinition* Definition() const;
     D3D12_GPU_DESCRIPTOR_HANDLE GpuHandle() const;
-    operator D3D12_GPU_VIRTUAL_ADDRESS() const;
+    operator GpuVirtualAddress() const;
 
     ID3D12Resource* Resource() const;
-    operator ResourceReference() const;
+    operator ResourceArgument() const;
 
   private:
     virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) override;

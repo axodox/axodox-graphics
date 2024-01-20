@@ -18,7 +18,7 @@ namespace Axodox::Graphics::D3D12
     return static_cast<CommonDescriptorHeap*>(_owner)->ResolveGpuHandle(_handle);
   }
 
-  ShaderResourceView::operator D3D12_GPU_VIRTUAL_ADDRESS() const
+  ShaderResourceView::operator GpuVirtualAddress() const
   {
     return GpuHandle().ptr;
   }

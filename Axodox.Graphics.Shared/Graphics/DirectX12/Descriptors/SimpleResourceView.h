@@ -1,6 +1,6 @@
 #pragma once
 #include "DescriptorHeap.h"
-#include "../Resources/ResourceReference.h"
+#include "../Resources/ResourceArgument.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -15,7 +15,7 @@ namespace Axodox::Graphics::D3D12
 
     ID3D12Resource* Resource() const;
 
-    operator ResourceReference() const;
+    operator ResourceArgument() const;
 
   protected:
     winrt::com_ptr<ID3D12Resource> _resource;

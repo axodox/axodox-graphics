@@ -43,4 +43,6 @@ namespace Axodox::Graphics::D3D12
 
   template<typename T>
   using resource_ptr = std::unique_ptr<T, ResourceDeleter>;
+
+  using ResourceRef = resource_ptr<Resource>;
 }

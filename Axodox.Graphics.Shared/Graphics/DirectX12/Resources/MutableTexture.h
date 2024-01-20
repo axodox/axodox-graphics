@@ -21,17 +21,17 @@ namespace Axodox::Graphics::D3D12
     void Resize(uint32_t width, uint32_t height);
     void Reset();
 
-    operator ResourceReference() const;
+    operator ResourceArgument() const;
     explicit operator bool() const;
 
   private:
     ResourceAllocationContext _context;
 
-    resource_ptr<Texture> _texture;
-    descriptor_ptr<ShaderResourceView> _shaderResourceView;
-    descriptor_ptr<RenderTargetView> _renderTargetView;
-    descriptor_ptr<DepthStencilView> _depthStencilView;
-    descriptor_ptr<UnorderedAccessView> _unorderedAccessView;
+    TextureRef _texture;
+    ShaderResourceViewRef _shaderResourceView;
+    RenderTargetViewRef _renderTargetView;
+    DepthStencilViewRef _depthStencilView;
+    UnorderedAccessViewRef _unorderedAccessView;
     std::unique_ptr<TextureDefinition> _definition;
 
     Infrastructure::event_subscription _allocatedSubscription;

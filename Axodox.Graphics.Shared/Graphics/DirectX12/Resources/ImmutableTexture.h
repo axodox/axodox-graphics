@@ -9,11 +9,11 @@ namespace Axodox::Graphics::D3D12
   public:
     ImmutableTexture(const ResourceAllocationContext& context, const std::filesystem::path& path);
 
-    operator D3D12_GPU_VIRTUAL_ADDRESS() const;
+    operator GpuVirtualAddress() const;
 
   private:
-    resource_ptr<Texture> _texture;
-    descriptor_ptr<ShaderResourceView> _view;
+    TextureRef _texture;
+    ShaderResourceViewRef _view;
     Infrastructure::event_subscription _allocatedSubscription;
   };
 }

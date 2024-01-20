@@ -10,7 +10,7 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeap(device, DescriptorHeapKind::DepthStencil)
   { }
 
-  descriptor_ptr<DepthStencilView> DepthStencilDescriptorHeap::CreateDepthStencilView(Texture* texture)
+  DepthStencilViewRef DepthStencilDescriptorHeap::CreateDepthStencilView(Texture* texture)
   {
     return CreateDescriptor<DepthStencilView>(texture->get(), static_cast<D3D12_DEPTH_STENCIL_VIEW_DESC*>(nullptr));
   }

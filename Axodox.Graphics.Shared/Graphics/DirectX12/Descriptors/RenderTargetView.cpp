@@ -10,7 +10,7 @@ namespace Axodox::Graphics::D3D12
     DescriptorHeap(device, DescriptorHeapKind::RenderTarget)
   { }
   
-  descriptor_ptr<RenderTargetView> RenderTargetDescriptorHeap::CreateRenderTargetView(Texture* texture)
+  RenderTargetViewRef RenderTargetDescriptorHeap::CreateRenderTargetView(Texture* texture)
   {
     return CreateDescriptor<RenderTargetView>(texture->get(), static_cast<D3D12_RENDER_TARGET_VIEW_DESC*>(nullptr));
   }

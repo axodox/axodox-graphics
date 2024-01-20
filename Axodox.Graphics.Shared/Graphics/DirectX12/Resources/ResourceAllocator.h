@@ -15,8 +15,8 @@ namespace Axodox::Graphics::D3D12
   public:
     ResourceAllocator(const GraphicsDevice& device);
 
-    [[nodiscard]] resource_ptr<Texture> CreateTexture(const TextureDefinition& definition);
-    [[nodiscard]] resource_ptr<Buffer> CreateBuffer(const BufferDefinition& definition);
+    [[nodiscard]] TextureRef CreateTexture(const TextureDefinition& definition);
+    [[nodiscard]] BufferRef CreateBuffer(const BufferDefinition& definition);
 
     void Build();
     void Clean();

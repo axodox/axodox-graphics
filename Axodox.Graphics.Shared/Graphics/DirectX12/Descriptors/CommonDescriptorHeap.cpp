@@ -12,17 +12,17 @@ namespace Axodox::Graphics::D3D12
     _frameIndex(0u)
   { }
 
-  descriptor_ptr<ShaderResourceView> CommonDescriptorHeap::CreateShaderResourceView(Resource* resource)
+  ShaderResourceViewRef CommonDescriptorHeap::CreateShaderResourceView(Resource* resource)
   {
     return CreateDescriptor<ShaderResourceView>(resource->get(), static_cast<D3D12_SHADER_RESOURCE_VIEW_DESC*>(nullptr));
   }
 
-  descriptor_ptr<UnorderedAccessView> CommonDescriptorHeap::CreateUnorderedAccessView(Resource* resource)
+  UnorderedAccessViewRef CommonDescriptorHeap::CreateUnorderedAccessView(Resource* resource)
   {
     return CreateDescriptor<UnorderedAccessView>(resource->get(), static_cast<D3D12_UNORDERED_ACCESS_VIEW_DESC*>(nullptr));
   }
 
-  descriptor_ptr<ConstantBufferView> CommonDescriptorHeap::CreateConstantBufferView(Buffer* resource)
+  ConstantBufferViewRef CommonDescriptorHeap::CreateConstantBufferView(Buffer* resource)
   {
     D3D12_CONSTANT_BUFFER_VIEW_DESC description{
       .BufferLocation = (*resource)->GetGPUVirtualAddress(),

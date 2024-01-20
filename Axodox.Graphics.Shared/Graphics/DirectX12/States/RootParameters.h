@@ -145,7 +145,7 @@ namespace Axodox::Graphics::D3D12
       };
     }
 
-    void operator=(DescriptorReference reference)
+    void operator=(GpuVirtualAddress reference)
     {
       auto& allocator = *Context()->Allocator;
       switch (Context()->Usage)
@@ -214,7 +214,7 @@ namespace Axodox::Graphics::D3D12
       };
     }
 
-    void operator=(DescriptorReference reference)
+    void operator=(GpuVirtualAddress reference)
     {
       auto& allocator = *Context()->Allocator;
       switch (Context()->Usage)
