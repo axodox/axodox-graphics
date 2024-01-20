@@ -247,11 +247,17 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         auto definition = resources.PostProcessingBuffer.Definition();
         allocator.Dispatch(definition->Width / 16 + 1, definition->Height / 16 + 1);
 
-        allocator.TransitionResource(resources.PostProcessingBuffer, ResourceStates::UnorderedAccess, ResourceStates::CopySource);
-        allocator.TransitionResource(*renderTargetView, ResourceStates::NonPixelShaderResource, ResourceStates::CopyDest);
+        allocator.TransitionResources({
+          { resources.PostProcessingBuffer, ResourceStates::UnorderedAccess, ResourceStates::CopySource },
+          { *renderTargetView, ResourceStates::NonPixelShaderResource, ResourceStates::CopyDest }
+        });
+
         allocator.CopyResource(resources.PostProcessingBuffer, *renderTargetView);
-        allocator.TransitionResource(resources.PostProcessingBuffer, ResourceStates::CopySource, ResourceStates::UnorderedAccess);
-        allocator.TransitionResource(*renderTargetView, ResourceStates::CopyDest, ResourceStates::RenderTarget);
+
+        allocator.TransitionResources({
+          { resources.PostProcessingBuffer, ResourceStates::CopySource, ResourceStates::UnorderedAccess },
+          { *renderTargetView, ResourceStates::CopyDest, ResourceStates::RenderTarget }
+        });
       }
 
       //End frame command list

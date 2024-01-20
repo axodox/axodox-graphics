@@ -82,7 +82,7 @@ namespace Axodox::Graphics::D3D12
     (*this)->ResourceBarrier(1, &barrier);
   }
 
-  void CommandAllocator::TransitionResources(std::span<const ResourceTransition> resources)
+  void CommandAllocator::TransitionResources(std::initializer_list<ResourceTransition> resources)
   {
     vector<D3D12_RESOURCE_BARRIER> barriers;
     barriers.reserve(resources.size());

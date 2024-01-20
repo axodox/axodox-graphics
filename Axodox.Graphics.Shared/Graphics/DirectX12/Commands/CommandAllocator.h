@@ -37,7 +37,7 @@ namespace Axodox::Graphics::D3D12
     void AddSignaler(CommandFenceMarker marker);
 
     void TransitionResource(ResourceArgument resource, ResourceStates from, ResourceStates to);
-    void TransitionResources(std::span<const ResourceTransition> resources);
+    void TransitionResources(std::initializer_list<ResourceTransition> resources);
     
     void CopyResource(ResourceArgument source, ResourceArgument destination);
 

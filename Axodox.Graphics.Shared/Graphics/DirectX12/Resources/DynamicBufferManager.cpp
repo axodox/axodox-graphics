@@ -52,11 +52,17 @@ namespace Axodox::Graphics::D3D12
       block.UploadBuffer->Unmap(0, &writtenRange);
 
       //Copy to default buffer
-      allocator.TransitionResource(block.UploadBuffer, ResourceStates::Common, ResourceStates::CopySource);
-      allocator.TransitionResource(block.DefaultBuffer, ResourceStates::AllShaderResource, ResourceStates::CopyDest);
+      allocator.TransitionResources({
+        { block.UploadBuffer, ResourceStates::Common, ResourceStates::CopySource },
+        { block.DefaultBuffer, ResourceStates::AllShaderResource, ResourceStates::CopyDest }
+      });
+
       allocator->CopyResource(block.DefaultBuffer.get(), block.UploadBuffer.get());
-      allocator.TransitionResource(block.UploadBuffer, ResourceStates::CopySource, ResourceStates::Common);
-      allocator.TransitionResource(block.DefaultBuffer, ResourceStates::CopyDest, ResourceStates::AllShaderResource);
+
+      allocator.TransitionResources({
+        { block.UploadBuffer, ResourceStates::CopySource, ResourceStates::Common },
+        { block.DefaultBuffer, ResourceStates::CopyDest, ResourceStates::AllShaderResource }
+      });
 
       //Reset block
       block.Position = 0;
