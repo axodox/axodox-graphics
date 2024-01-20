@@ -11,8 +11,8 @@ namespace Axodox::Graphics::D3D12
 
   TextureRef ResourceAllocator::CreateTexture(const TextureDefinition& definition)
   {
-    auto resource = make_unique<Texture>(this, definition);
-    auto result = TextureRef(resource.get());
+    unique_ptr<Texture> resource{ new Texture(definition) };
+    auto result = TextureRef(resource.get(), { this });
     AddResource(move(resource));
     return result;
   }
@@ -21,8 +21,8 @@ namespace Axodox::Graphics::D3D12
   {
     if (!definition.Length) return nullptr;
 
-    auto resource = make_unique<Buffer>(this, definition);
-    auto result = BufferRef(resource.get());
+    unique_ptr<Buffer> resource{ new Buffer(definition) };
+    auto result = BufferRef(resource.get(), { this });
     AddResource(move(resource));
     return result;
   }

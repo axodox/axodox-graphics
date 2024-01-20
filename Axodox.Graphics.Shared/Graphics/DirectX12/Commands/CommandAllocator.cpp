@@ -67,7 +67,7 @@ namespace Axodox::Graphics::D3D12
     _recorder->_signalers.push_back(marker);
   }
 
-  void CommandAllocator::ResourceTransition(ResourceArgument resource, ResourceStates from, ResourceStates to)
+  void CommandAllocator::TransitionResource(ResourceArgument resource, ResourceStates from, ResourceStates to)
   {
     D3D12_RESOURCE_BARRIER barrier{
       .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
@@ -82,7 +82,7 @@ namespace Axodox::Graphics::D3D12
     (*this)->ResourceBarrier(1, &barrier);
   }
 
-  void CommandAllocator::ResourceTransitions(std::span<ResourceArgument> resources, ResourceStates from, ResourceStates to)
+  void CommandAllocator::TransitionResources(std::span<const ResourceTransition> resources)
   {
     vector<D3D12_RESOURCE_BARRIER> barriers;
     barriers.reserve(resources.size());
@@ -92,10 +92,10 @@ namespace Axodox::Graphics::D3D12
       barriers.push_back({
         .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
         .Transition = {
-          .pResource = resource.Pointer,
+          .pResource = resource.Resource.Pointer,
           .Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES,
-          .StateBefore = D3D12_RESOURCE_STATES(from),
-          .StateAfter = D3D12_RESOURCE_STATES(to)
+          .StateBefore = D3D12_RESOURCE_STATES(resource.From),
+          .StateAfter = D3D12_RESOURCE_STATES(resource.To)
         }
       });
     }

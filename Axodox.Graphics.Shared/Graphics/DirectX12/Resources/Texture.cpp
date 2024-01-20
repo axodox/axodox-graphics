@@ -7,10 +7,15 @@ using namespace std;
 
 namespace Axodox::Graphics::D3D12
 {
-  Texture::Texture(ResourceAllocator* owner, const TextureDefinition& definition) :
-    Resource(owner),
+  Texture::Texture(const TextureDefinition& definition) :
     _definition(definition)
   { }
+
+  Texture::Texture(const GraphicsDevice& device, const TextureDefinition& definition) :
+    Texture(definition)
+  {
+    AllocateCommitted(device);
+  }
 
   Texture::Texture(ID3D12Resource * resource) :
     Resource(resource),

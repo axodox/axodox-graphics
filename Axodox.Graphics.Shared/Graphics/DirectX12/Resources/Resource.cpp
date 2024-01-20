@@ -7,19 +7,44 @@ using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
-  Resource::Resource(ResourceAllocator* owner) :
-    _owner(owner),
+  Resource::Resource() :
     Allocated(_events)
   { }
 
-  Resource::Resource(ID3D12Resource * resource) :
+  void Resource::AllocateCommitted(const GraphicsDevice& device)
+  {
+    //Define heap properties
+    D3D12_HEAP_PROPERTIES heapProperties{
+      .Type = D3D12_HEAP_TYPE_DEFAULT,
+      .CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
+      .MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN,
+      .CreationNodeMask = 0,
+      .VisibleNodeMask = 0
+    };
+
+    //Create resource
+    auto description = Description();
+
+    auto defaultClearValue = DefaultClearValue();
+    com_ptr<ID3D12Resource> allocation;
+    check_hresult(device->CreateCommittedResource(
+      &heapProperties,
+      D3D12_HEAP_FLAG_NONE,
+      &description,
+      DefaultState(),
+      defaultClearValue ? &*defaultClearValue : nullptr,
+      IID_PPV_ARGS(allocation.put())));
+
+    set(move(allocation));
+  }
+
+  Resource::Resource(ID3D12Resource* resource) :
     Resource(com_ptr<ID3D12Resource>(resource, take_ownership_from_abi))
-  { 
+  {
     resource->AddRef();
   }
 
   Resource::Resource(const winrt::com_ptr<ID3D12Resource>& resource) :
-    _owner(nullptr),
     _resource(resource),
     Allocated(_events)
   { }
@@ -42,6 +67,6 @@ namespace Axodox::Graphics::D3D12
 
   void ResourceDeleter::operator()(Resource* resource)
   {
-    resource->_owner->DeleteResource(resource);
+    if (Owner) Owner->DeleteResource(resource);
   }
 }

@@ -211,7 +211,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       {
         allocator.Reset();
         allocator.BeginList();
-        allocator.ResourceTransition(*renderTargetView, ResourceStates::Present, ResourceStates::RenderTarget);
+        allocator.TransitionResource(*renderTargetView, ResourceStates::Present, ResourceStates::RenderTarget);
 
         committedResourceAllocator.Build();
         depthStencilDescriptorHeap.Build();
@@ -236,7 +236,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
 
       //Post processing
       {
-        allocator.ResourceTransition(*renderTargetView, ResourceStates::RenderTarget, ResourceStates::NonPixelShaderResource);
+        allocator.TransitionResource(*renderTargetView, ResourceStates::RenderTarget, ResourceStates::NonPixelShaderResource);
 
         auto mask = postProcessingRootSignature.Set(allocator, RootSignatureUsage::Compute);
         mask.ConstantBuffer = resources.DynamicBuffer.AddBuffer(i * 0.02f);
@@ -247,16 +247,16 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
         auto definition = resources.PostProcessingBuffer.Definition();
         allocator.Dispatch(definition->Width / 16 + 1, definition->Height / 16 + 1);
 
-        allocator.ResourceTransition(resources.PostProcessingBuffer, ResourceStates::UnorderedAccess, ResourceStates::CopySource);
-        allocator.ResourceTransition(*renderTargetView, ResourceStates::NonPixelShaderResource, ResourceStates::CopyDest);
+        allocator.TransitionResource(resources.PostProcessingBuffer, ResourceStates::UnorderedAccess, ResourceStates::CopySource);
+        allocator.TransitionResource(*renderTargetView, ResourceStates::NonPixelShaderResource, ResourceStates::CopyDest);
         allocator.CopyResource(resources.PostProcessingBuffer, *renderTargetView);
-        allocator.ResourceTransition(resources.PostProcessingBuffer, ResourceStates::CopySource, ResourceStates::UnorderedAccess);
-        allocator.ResourceTransition(*renderTargetView, ResourceStates::CopyDest, ResourceStates::RenderTarget);
+        allocator.TransitionResource(resources.PostProcessingBuffer, ResourceStates::CopySource, ResourceStates::UnorderedAccess);
+        allocator.TransitionResource(*renderTargetView, ResourceStates::CopyDest, ResourceStates::RenderTarget);
       }
 
       //End frame command list
       {
-        allocator.ResourceTransition(*renderTargetView, ResourceStates::RenderTarget, ResourceStates::Present);
+        allocator.TransitionResource(*renderTargetView, ResourceStates::RenderTarget, ResourceStates::Present);
         auto drawCommandList = allocator.EndList();
 
         allocator.BeginList();

@@ -12,6 +12,12 @@ namespace Axodox::Graphics::D3D12
   class GraphicsDevice;
   class PipelineState;
 
+  struct ResourceTransition
+  {
+    ResourceArgument Resource;
+    ResourceStates From, To;
+  };
+
   class CommandAllocator
   {
   public:
@@ -30,8 +36,8 @@ namespace Axodox::Graphics::D3D12
     void AddAwaiter(CommandFenceMarker marker);
     void AddSignaler(CommandFenceMarker marker);
 
-    void ResourceTransition(ResourceArgument resource, ResourceStates from, ResourceStates to);
-    void ResourceTransitions(std::span<ResourceArgument> resources, ResourceStates from, ResourceStates to);
+    void TransitionResource(ResourceArgument resource, ResourceStates from, ResourceStates to);
+    void TransitionResources(std::span<const ResourceTransition> resources);
     
     void CopyResource(ResourceArgument source, ResourceArgument destination);
 

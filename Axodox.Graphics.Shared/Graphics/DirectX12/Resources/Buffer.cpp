@@ -5,10 +5,15 @@ using namespace std;
 
 namespace Axodox::Graphics::D3D12
 {
-  Buffer::Buffer(ResourceAllocator* owner, const BufferDefinition& definition) :
-    Resource(owner),
+  Buffer::Buffer(const BufferDefinition& definition) :
     _definition(definition)
   { }
+
+  Buffer::Buffer(const GraphicsDevice& device, const BufferDefinition& definition) :
+    Buffer(definition)
+  {
+    AllocateCommitted(device);
+  }
 
   Buffer::Buffer(const winrt::com_ptr<ID3D12Resource>& resource) :
     Resource(resource),

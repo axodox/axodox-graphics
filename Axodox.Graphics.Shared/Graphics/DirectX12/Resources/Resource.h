@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "../Devices/GraphicsDevice.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -10,11 +11,11 @@ namespace Axodox::Graphics::D3D12
     friend class ResourceAllocator;
     friend class ResourceUploader;
     friend struct ResourceDeleter;
+    friend class CommittedResourceAllocator;
 
     Infrastructure::event_owner _events;
 
   public:
-    Resource(ResourceAllocator* owner);
     Resource(ID3D12Resource* resource);
     Resource(const winrt::com_ptr<ID3D12Resource>& resource);
 
@@ -31,13 +32,19 @@ namespace Axodox::Graphics::D3D12
 
     virtual ~Resource() = default;
 
+  protected:
+    Resource();
+
+    void AllocateCommitted(const GraphicsDevice& device);
+
   private:
-    ResourceAllocator* _owner;
     winrt::com_ptr<ID3D12Resource> _resource;
   };
 
   struct ResourceDeleter
   {
+    ResourceAllocator* Owner = nullptr;
+
     void operator()(Resource* resource);
   };
 

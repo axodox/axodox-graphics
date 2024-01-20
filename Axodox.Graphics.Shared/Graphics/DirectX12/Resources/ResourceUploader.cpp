@@ -105,8 +105,8 @@ namespace Axodox::Graphics::D3D12
         uploadedSize += task.AllocatedSegment.Size;
 
         //Transition to copy states - assume common state after resource creation and direct / compute engine use
-        allocator.ResourceTransition(task.SourceResource, ResourceStates::Common, ResourceStates::CopySource);
-        allocator.ResourceTransition(task.TargetResource, ResourceStates::Common, ResourceStates::CopyDest);
+        allocator.TransitionResource(task.SourceResource, ResourceStates::Common, ResourceStates::CopySource);
+        allocator.TransitionResource(task.TargetResource, ResourceStates::Common, ResourceStates::CopyDest);
         
         //Copy resource
         auto description = task.TargetResource->GetDesc();
@@ -138,8 +138,8 @@ namespace Axodox::Graphics::D3D12
         }
 
         //Set common state for later direct / compute engine use
-        allocator.ResourceTransition(task.SourceResource, ResourceStates::CopySource, ResourceStates::Common);
-        allocator.ResourceTransition(task.TargetResource, ResourceStates::CopyDest, ResourceStates::Common);
+        allocator.TransitionResource(task.SourceResource, ResourceStates::CopySource, ResourceStates::Common);
+        allocator.TransitionResource(task.TargetResource, ResourceStates::CopyDest, ResourceStates::Common);
         lastMarker = task.Marker;
 
         //Move task to flight list
