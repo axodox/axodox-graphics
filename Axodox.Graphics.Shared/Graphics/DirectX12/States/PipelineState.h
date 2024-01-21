@@ -1,46 +1,10 @@
 #pragma once
-#include "Shaders.h"
-#include "BlendState.h"
-#include "RasterizerState.h"
-#include "DepthStencilState.h"
-#include "SampleState.h"
-#include "RootSignature.h"
-#include "../Meshes/VertexDefinitions.h"
+#include "GraphicsPipelineStateDefinition.h"
+#include "ComputePipelineStateDefinition.h"
+#include "StreamPipelineStateDefinition.h"
 
 namespace Axodox::Graphics::D3D12
 {
-  struct GraphicsPipelineStateDefinition
-  {
-    RootSignatureBase* RootSignature = nullptr;
-
-    VertexShader* VertexShader = nullptr;
-    DomainShader* DomainShader = nullptr;
-    HullShader* HullShader = nullptr;
-    GeometryShader* GeometryShader = nullptr;
-    PixelShader* PixelShader = nullptr;
-
-    BlendState BlendState = {};
-    RasterizerState RasterizerState = {};
-    DepthStencilState DepthStencilState = {};
-    SampleState SampleState = {};
-
-    VertexDefinition InputLayout = {};
-    PrimitiveTopologyType TopologyType = PrimitiveTopologyType::Triangle;
-
-    std::initializer_list<Format> RenderTargetFormats;
-    Format DepthStencilFormat = Format::Unknown;
-
-    explicit operator D3D12_GRAPHICS_PIPELINE_STATE_DESC() const;
-  };
-
-  struct ComputePipelineStateDefinition
-  {
-    RootSignatureBase* RootSignature = nullptr;
-    ComputeShader* ComputeShader = nullptr;
-
-    explicit operator D3D12_COMPUTE_PIPELINE_STATE_DESC() const;
-  };
-
   class PipelineState
   {
   public:
@@ -61,6 +25,7 @@ namespace Axodox::Graphics::D3D12
 
     std::future<PipelineState> CreatePipelineStateAsync(const GraphicsPipelineStateDefinition& definition, winrt::guid id = {});
     std::future<PipelineState> CreatePipelineStateAsync(const ComputePipelineStateDefinition& definition, winrt::guid id = {});
+    std::future<PipelineState> CreatePipelineStateAsync(const StreamPipelineStateDefinition& definition, winrt::guid id = {});    
 
   private:
     GraphicsDevice _device;
@@ -69,9 +34,9 @@ namespace Axodox::Graphics::D3D12
     std::filesystem::path GetCachedPath(winrt::guid id) const;
 
     template<typename T>
-    using CreatePipelineFunc = HRESULT(ID3D12Device::*)(const T*, const IID&, void**);
+    using CreatePipelineFunc = HRESULT(ID3D12DeviceT::*)(const T*, const IID&, void**);
 
-    template<typename StateDescription>
-    std::future<PipelineState> CreatePipelineStateAsync(StateDescription& description, winrt::guid id, CreatePipelineFunc<StateDescription> createPipeline);
+    template<typename StateDescription, typename StateDefinition>
+    std::future<PipelineState> CreatePipelineStateAsync(StateDefinition definition, winrt::guid id, CreatePipelineFunc<StateDescription> createPipeline);
   };
 }

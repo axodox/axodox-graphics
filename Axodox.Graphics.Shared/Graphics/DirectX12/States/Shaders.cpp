@@ -48,4 +48,14 @@ namespace Axodox::Graphics::D3D12
   {
     return ShaderKind::Pixel;
   }
+
+  ShaderKind AmplificationShader::Type() const
+  {
+    return ShaderKind::Amplification;
+  }
+
+  ShaderKind MeshShader::Type() const
+  {
+    return ShaderKind::Mesh;
+  }
 }

@@ -10,7 +10,9 @@ namespace Axodox::Graphics::D3D12
     Domain,
     Hull,
     Geometry,
-    Pixel
+    Pixel,
+    Amplification,
+    Mesh
   };
 
   struct Shader
@@ -57,6 +59,18 @@ namespace Axodox::Graphics::D3D12
   };
 
   struct PixelShader : public Shader
+  {
+    using Shader::Shader;
+    virtual ShaderKind Type() const override;
+  };
+
+  struct AmplificationShader : public Shader
+  {
+    using Shader::Shader;
+    virtual ShaderKind Type() const override;
+  };
+
+  struct MeshShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;

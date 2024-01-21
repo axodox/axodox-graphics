@@ -123,7 +123,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       .DepthStencilFormat = Format::D32_Float
     };
     auto simplePipelineState = pipelineStateProvider.CreatePipelineStateAsync(simplePipelineStateDefinition).get();
-
+        
     RootSignature<PostProcessingRootDescription> postProcessingRootSignature{ device };
     ComputeShader postProcessingComputeShader{ app_folder() / L"PostProcessingComputeShader.cso" };
     ComputePipelineStateDefinition postProcessingStateDefinition{
@@ -131,7 +131,7 @@ struct App : implements<App, IFrameworkViewSource, IFrameworkView>
       .ComputeShader = &postProcessingComputeShader
     };
     auto postProcessingPipelineState = pipelineStateProvider.CreatePipelineStateAsync(postProcessingStateDefinition).get();
-
+        
     GroupedResourceAllocator groupedResourceAllocator{ device };
     ResourceUploader resourceUploader{ device };
     CommonDescriptorHeap commonDescriptorHeap{ device, 2 };

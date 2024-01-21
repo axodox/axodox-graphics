@@ -32,6 +32,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceArgument.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\ResourceUploader.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Texture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\ComputePipelineStateDefinition.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\GraphicsPipelineStateDefinition.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StreamPipelineStateDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignatureMask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
@@ -106,8 +109,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\Texture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\Resources\TextureDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\BlendState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\ComputePipelineStateDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\DepthStencilState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\GraphicsPipelineStateDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\PipelineState.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\StreamPipelineStateDefinition.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RasterizerState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootParameters.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\DirectX12\States\RootSignature.cpp" />

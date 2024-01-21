@@ -11,49 +11,6 @@ using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
-  GraphicsPipelineStateDefinition::operator D3D12_GRAPHICS_PIPELINE_STATE_DESC() const
-  {
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC result{
-      .pRootSignature = RootSignature->get(),
-      .VS = VertexShader ? D3D12_SHADER_BYTECODE(*VertexShader) : D3D12_SHADER_BYTECODE{ nullptr, 0 },
-      .PS = PixelShader ? D3D12_SHADER_BYTECODE(*PixelShader) : D3D12_SHADER_BYTECODE{ nullptr, 0 },
-      .DS = DomainShader ? D3D12_SHADER_BYTECODE(*DomainShader) : D3D12_SHADER_BYTECODE{ nullptr, 0 },
-      .HS = HullShader ? D3D12_SHADER_BYTECODE(*HullShader) : D3D12_SHADER_BYTECODE{ nullptr, 0 },
-      .GS = GeometryShader ? D3D12_SHADER_BYTECODE(*GeometryShader) : D3D12_SHADER_BYTECODE{ nullptr, 0 },
-      .StreamOutput = { nullptr, 0u, nullptr, 0u, 0u },
-      .BlendState = D3D12_BLEND_DESC(BlendState),
-      .SampleMask = 0xffffffffu,
-      .RasterizerState = D3D12_RASTERIZER_DESC(RasterizerState),
-      .DepthStencilState = D3D12_DEPTH_STENCIL_DESC(DepthStencilState),
-      .InputLayout = { InputLayout.data(), uint32_t(InputLayout.size()) },
-      .IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED,
-      .PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE(TopologyType),
-      .NumRenderTargets = uint32_t(RenderTargetFormats.size()),
-      .DSVFormat = DXGI_FORMAT(DepthStencilFormat),
-      .SampleDesc = DXGI_SAMPLE_DESC(SampleState),
-      .NodeMask = 0u,
-      .CachedPSO = { nullptr, 0u },
-      .Flags = D3D12_PIPELINE_STATE_FLAG_NONE
-    };
-
-    zero_memory(result.RTVFormats);
-    memcpy(result.RTVFormats, RenderTargetFormats.begin(), min(RenderTargetFormats.size(), size(result.RTVFormats)));
-
-    return result;
-  }
-
-  ComputePipelineStateDefinition::operator D3D12_COMPUTE_PIPELINE_STATE_DESC() const
-  {
-    D3D12_COMPUTE_PIPELINE_STATE_DESC result{
-      .pRootSignature = RootSignature->get(),
-      .CS = D3D12_SHADER_BYTECODE(*ComputeShader),
-      .NodeMask = 0u,
-      .CachedPSO = { nullptr, 0u },
-      .Flags = D3D12_PIPELINE_STATE_FLAG_NONE
-    };
-
-    return result;
-  }
 
   PipelineState::PipelineState(winrt::com_ptr<ID3D12PipelineState>&& pipelineState) :
     _pipelineState(move(pipelineState))
@@ -76,18 +33,21 @@ namespace Axodox::Graphics::D3D12
 
   std::future<PipelineState> PipelineStateProvider::CreatePipelineStateAsync(const GraphicsPipelineStateDefinition& definition, winrt::guid id)
   {
-    auto description = D3D12_GRAPHICS_PIPELINE_STATE_DESC(definition);
-    return CreatePipelineStateAsync(description, id, &ID3D12Device::CreateGraphicsPipelineState);
+    return CreatePipelineStateAsync<D3D12_GRAPHICS_PIPELINE_STATE_DESC>(definition, id, &ID3D12DeviceT::CreateGraphicsPipelineState);
   }
 
   std::future<PipelineState> PipelineStateProvider::CreatePipelineStateAsync(const ComputePipelineStateDefinition& definition, winrt::guid id)
   {
-    auto description = D3D12_COMPUTE_PIPELINE_STATE_DESC(definition);
-    return CreatePipelineStateAsync(description, id, &ID3D12Device::CreateComputePipelineState);
+    return CreatePipelineStateAsync<D3D12_COMPUTE_PIPELINE_STATE_DESC>(definition, id, &ID3D12DeviceT::CreateComputePipelineState);
   }
 
-  template<typename StateDescription>
-  std::future<PipelineState> PipelineStateProvider::CreatePipelineStateAsync(StateDescription& description, winrt::guid id, CreatePipelineFunc<StateDescription> createPipeline)
+  std::future<PipelineState> PipelineStateProvider::CreatePipelineStateAsync(const StreamPipelineStateDefinition& definition, winrt::guid id)
+  {
+    return CreatePipelineStateAsync<D3D12_PIPELINE_STATE_STREAM_DESC>(definition, id, &ID3D12DeviceT::CreatePipelineState);
+  }
+
+  template<typename StateDescription, typename StateDefinition>
+  std::future<PipelineState> PipelineStateProvider::CreatePipelineStateAsync(StateDefinition definition, winrt::guid id, CreatePipelineFunc<StateDescription> createPipeline)
   {
     //Try load cached PSO
     auto cachedPath = GetCachedPath(id);
@@ -96,14 +56,14 @@ namespace Axodox::Graphics::D3D12
     if (!cachedPath.empty())
     {
       cachedBuffer = try_read_file(cachedPath);
-      description.CachedPSO = {
-        .pCachedBlob = cachedBuffer.data(),
-        .CachedBlobSizeInBytes = cachedBuffer.size()
-      };
+      definition.AddCachedPso(cachedBuffer);
     }
 
     //Run PSO generation on thread-pool
     return threadpool_execute<PipelineState>([=] {
+      //Create description
+      StateDescription description(definition);
+
       //Create pipeline state
       com_ptr<ID3D12PipelineState> pipelineState;
       check_hresult((_device.get()->*createPipeline)(&description, IID_PPV_ARGS(pipelineState.put())));

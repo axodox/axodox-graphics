@@ -5,7 +5,7 @@
 namespace Axodox::Graphics::D3D12
 {
   template<typename DescriptionType>
-  using CreateDescriptorViewFunc = void (ID3D12DeviceT::*)(ID3D12Resource*, const DescriptionType*, D3D12_CPU_DESCRIPTOR_HANDLE);
+  using CreateDescriptorViewFunc = void (ID3D12Device::*)(ID3D12Resource*, const DescriptionType*, D3D12_CPU_DESCRIPTOR_HANDLE);
 
   template<typename DescriptionType, CreateDescriptorViewFunc<DescriptionType> CreateView>
   class SimpleResourceView : public Descriptor
