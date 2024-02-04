@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Test", "Axo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Shared", "Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems", "{01E40AB5-C2C7-4D85-A486-ABA043E6488A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Universal", "Axodox.Graphics.Universal\Axodox.Graphics.Universal.vcxproj", "{395E8FF2-9EAC-4C8B-B595-62D07CB04F99}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,10 +19,6 @@ Global
 		{8E862168-F430-4A67-B9D4-E3D04F59E033}.Release|x64.ActiveCfg = Release|x64
 		{8E862168-F430-4A67-B9D4-E3D04F59E033}.Release|x64.Build.0 = Release|x64
 		{8E862168-F430-4A67-B9D4-E3D04F59E033}.Release|x64.Deploy.0 = Release|x64
-		{395E8FF2-9EAC-4C8B-B595-62D07CB04F99}.Debug|x64.ActiveCfg = Debug|x64
-		{395E8FF2-9EAC-4C8B-B595-62D07CB04F99}.Debug|x64.Build.0 = Debug|x64
-		{395E8FF2-9EAC-4C8B-B595-62D07CB04F99}.Release|x64.ActiveCfg = Release|x64
-		{395E8FF2-9EAC-4C8B-B595-62D07CB04F99}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,7 +28,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{01e40ab5-c2c7-4d85-a486-aba043e6488a}*SharedItemsImports = 9
-		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{395e8ff2-9eac-4c8b-b595-62d07cb04f99}*SharedItemsImports = 4
 		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{8e862168-f430-4a67-b9d4-e3d04f59e033}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

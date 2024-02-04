@@ -11,7 +11,6 @@ using namespace winrt;
 
 namespace Axodox::Graphics::D3D12
 {
-
   PipelineState::PipelineState(winrt::com_ptr<ID3D12PipelineState>&& pipelineState) :
     _pipelineState(move(pipelineState))
   { }
