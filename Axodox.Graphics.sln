@@ -9,9 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Shared", "A
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Desktop", "Axodox.Graphics.Desktop\Axodox.Graphics.Desktop.vcxproj", "{28109BC6-0715-4A75-A589-4CF6F00A8894}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Common.Shared", "C:\dev\axodox-common\Axodox.Common.Shared\Axodox.Common.Shared.vcxitems", "{E13522B3-7530-4CBE-B5D3-CCE94136E40F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Common.Desktop", "C:\dev\axodox-common\Axodox.Common.Desktop\Axodox.Common.Desktop.vcxproj", "{1F553636-9920-4D85-B8AB-812AC321C3C4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Axodox.Graphics.Universal", "Axodox.Graphics.Universal\Axodox.Graphics.Universal.vcxproj", "{2E8DB87F-DAFA-433B-95A6-A1B5CEAB7B2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,10 @@ Global
 		{28109BC6-0715-4A75-A589-4CF6F00A8894}.Debug|x64.Build.0 = Debug|x64
 		{28109BC6-0715-4A75-A589-4CF6F00A8894}.Release|x64.ActiveCfg = Release|x64
 		{28109BC6-0715-4A75-A589-4CF6F00A8894}.Release|x64.Build.0 = Release|x64
-		{1F553636-9920-4D85-B8AB-812AC321C3C4}.Debug|x64.ActiveCfg = Debug|x64
-		{1F553636-9920-4D85-B8AB-812AC321C3C4}.Debug|x64.Build.0 = Debug|x64
-		{1F553636-9920-4D85-B8AB-812AC321C3C4}.Release|x64.ActiveCfg = Release|x64
-		{1F553636-9920-4D85-B8AB-812AC321C3C4}.Release|x64.Build.0 = Release|x64
+		{2E8DB87F-DAFA-433B-95A6-A1B5CEAB7B2A}.Debug|x64.ActiveCfg = Debug|x64
+		{2E8DB87F-DAFA-433B-95A6-A1B5CEAB7B2A}.Debug|x64.Build.0 = Debug|x64
+		{2E8DB87F-DAFA-433B-95A6-A1B5CEAB7B2A}.Release|x64.ActiveCfg = Release|x64
+		{2E8DB87F-DAFA-433B-95A6-A1B5CEAB7B2A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,9 +40,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{01e40ab5-c2c7-4d85-a486-aba043e6488a}*SharedItemsImports = 9
-		C:\dev\axodox-common\Axodox.Common.Shared\Axodox.Common.Shared.vcxitems*{1f553636-9920-4d85-b8ab-812ac321c3c4}*SharedItemsImports = 4
 		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{28109bc6-0715-4a75-a589-4cf6f00a8894}*SharedItemsImports = 4
-		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{8e862168-f430-4a67-b9d4-e3d04f59e033}*SharedItemsImports = 4
-		C:\dev\axodox-common\Axodox.Common.Shared\Axodox.Common.Shared.vcxitems*{e13522b3-7530-4cbe-b5d3-cce94136e40f}*SharedItemsImports = 9
+		Axodox.Graphics.Shared\Axodox.Graphics.Shared.vcxitems*{2e8db87f-dafa-433b-95a6-a1b5ceab7b2a}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

@@ -60,7 +60,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template <typename T>
-  class AXODOX_GRAPHICS_API RootConstant : public RootParameter
+  class RootConstant : public RootParameter
   {
   public:
     RootConstant(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
@@ -124,7 +124,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<RootDescriptorType Type>
-  class AXODOX_GRAPHICS_API RootDescriptor : public RootParameter
+  class RootDescriptor : public RootParameter
   {
   public:
     RootDescriptor(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
@@ -189,7 +189,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<uint32_t Size>
-  class AXODOX_GRAPHICS_API RootDescriptorTable : public RootParameter
+  class RootDescriptorTable : public RootParameter
   {
   public:
     RootDescriptorTable(RootSignatureMask* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :

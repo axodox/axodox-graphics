@@ -10,5 +10,4 @@
 #include <winrt/Windows.UI.Input.h>
 
 #define PLATFORM_WINDOWS
-//#include "common_pch.h"
-#include "../Axodox.Graphics.Shared/includes.h"
+#include "../Axodox.Graphics.Shared/Include/Axodox.Graphics.D3D12.h"

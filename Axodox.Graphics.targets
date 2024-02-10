@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
+  <PropertyGroup>
+    <AxodoxGraphics-Runtime>desktop</AxodoxGraphics-Runtime>
+    <AxodoxGraphics-Runtime Condition="'$(ApplicationType)'=='Windows Store'">universal</AxodoxGraphics-Runtime>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AxodoxGraphics-Location)'==''">
+    <AxodoxGraphics-Libraries>$(MSBuildThisFileDirectory)..\..\bin\$(AxodoxGraphics-Runtime)\$(Platform)\$(Configuration)</AxodoxGraphics-Libraries>
+    <AxodoxGraphics-DependencyRoot>$(MSBuildThisFileDirectory)..\..\lib\$(AxodoxGraphics-Runtime)\$(Platform)\$(Configuration)</AxodoxGraphics-DependencyRoot>
+    <AxodoxGraphics-Dependencies>$([MSbuild]::Unescape($([System.String]::Join(';', $([System.IO.Directory]::GetFiles($(AxodoxGraphics-DependencyRoot), '*.lib'))))))</AxodoxGraphics-Dependencies>    
+    <AxodoxGraphics-Includes>$(MSBuildThisFileDirectory)..\..\include</AxodoxGraphics-Includes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AxodoxGraphics-Location)'!=''">
+    <AxodoxGraphics-Libraries>$(AxodoxGraphics-Location)\bin\$(Platform)\$(Configuration)</AxodoxGraphics-Libraries>
+    <AxodoxGraphics-DependencyRoot>$(AxodoxGraphics-Location)\bin\$(Platform)\$(Configuration)</AxodoxGraphics-DependencyRoot>
+    <AxodoxGraphics-Dependencies>$([MSbuild]::Unescape($([System.String]::Join(';', $([System.IO.Directory]::GetFiles($(AxodoxGraphics-DependencyRoot), '*.lib'))))))</AxodoxGraphics-Dependencies>    
+    <AxodoxGraphics-Includes>$(AxodoxGraphics-Location)\..\Axodox.Graphics.Shared</AxodoxGraphics-Includes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(AxodoxGraphics-Location)\Axodox.Graphics.Desktop.vcxproj" Condition="'$(AxodoxGraphics-Location)'!='' And '$(ApplicationType)'!='Windows Store'">
+      <Project>{28109bc6-0715-4a75-a589-4cf6f00a8894}</Project>
+    </ProjectReference>
+
+    <ProjectReference Include="$(AxodoxGraphics-Location)\Axodox.Graphics.Universal.vcxproj" Condition="'$(AxodoxGraphics-Location)'!='' And '$(ApplicationType)'=='Windows Store'">
+      <Project>{2e8db87f-dafa-433b-95a6-a1b5ceab7b2a}</Project>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(AxodoxGraphics-Libraries)\*.*">
+      <InProject>False</InProject>
+      <Link>%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>$(AxodoxGraphics-Libraries);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(AxodoxGraphics-Dependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(AxodoxGraphics-Includes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
