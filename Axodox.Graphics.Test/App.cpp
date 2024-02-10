@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Include/Axodox.Graphics.DirectX12.h"
+#include "Include/Axodox.Graphics.D3D12.h"
 
 using namespace std;
 using namespace winrt;
