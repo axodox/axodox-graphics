@@ -12,7 +12,7 @@ namespace Axodox::Graphics::D3D12
     DisableDepthClip = 8
   };
 
-  struct RasterizerState
+  struct AXODOX_GRAPHICS_API RasterizerState
   {
     RasterizerFlags Flags = {};
     int32_t DepthBias = 0;

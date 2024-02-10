@@ -2,7 +2,6 @@
 #include "ResourceData.h"
 #include "ResourceDefinition.h"
 #include "../GraphicsTypes.h"
-#include "../../../Infrastructure/BitwiseOperations.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -15,7 +14,7 @@ namespace Axodox::Graphics::D3D12
 
   class BufferData;
 
-  struct BufferDefinition : public ResourceDefinition
+  struct AXODOX_GRAPHICS_API BufferDefinition : public ResourceDefinition
   {
     uint64_t Length = 0;
     BufferFlags Flags = BufferFlags::None;
@@ -42,7 +41,7 @@ namespace Axodox::Graphics::D3D12
     virtual explicit operator D3D12_RESOURCE_DESC() const override;
   };
 
-  class BufferData : public ResourceData
+  class AXODOX_GRAPHICS_API BufferData : public ResourceData
   {
   public:
     BufferData();

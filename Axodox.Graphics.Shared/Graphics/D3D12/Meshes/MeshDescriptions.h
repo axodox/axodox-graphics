@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct MeshDescription
+  struct AXODOX_GRAPHICS_API MeshDescription
   {
     PrimitiveTopology Topology = PrimitiveTopology::Undefined;
     BufferData Vertices;

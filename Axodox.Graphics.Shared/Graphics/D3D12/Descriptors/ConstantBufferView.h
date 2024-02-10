@@ -3,7 +3,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class ConstantBufferView : public Descriptor
+  class AXODOX_GRAPHICS_API ConstantBufferView : public Descriptor
   {
   public:
     ConstantBufferView(DescriptorHeap* owner, const D3D12_CONSTANT_BUFFER_VIEW_DESC* description = nullptr);

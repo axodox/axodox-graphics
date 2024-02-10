@@ -17,7 +17,7 @@ namespace Axodox::Graphics::D3D12
     VideoMemory = D3D12_MEMORY_POOL_L1
   };
 
-  class GraphicsDevice
+  class AXODOX_GRAPHICS_API GraphicsDevice
   {
   public:
     explicit GraphicsDevice(ID3D12DeviceChild* deviceChild);

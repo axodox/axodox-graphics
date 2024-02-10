@@ -36,8 +36,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\States\GraphicsPipelineStateDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\States\StreamPipelineStateDefinition.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\States\RootSignatureMask.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\AnyPtr.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Collections\ObjectPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Commands\CommandFence.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Commands\CommandKind.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Commands\CommandList.h" />
@@ -71,9 +69,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Include\Axodox.Graphics.D3D12.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Swap Chains\CoreSwapChain.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Swap Chains\SwapChain.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\BitwiseOperations.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Infrastructure\BufferAllocator.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Threading\ThreadPool.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Commands\CommandFence.cpp" />
@@ -123,6 +119,5 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\D3D12\States\StaticSampler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Swap Chains\CoreSwapChain.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\D3D12\Swap Chains\SwapChain.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Infrastructure\BufferAllocator.cpp" />
   </ItemGroup>
 </Project>

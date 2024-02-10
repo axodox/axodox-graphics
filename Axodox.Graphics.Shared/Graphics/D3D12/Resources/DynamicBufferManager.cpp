@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "DynamicBufferManager.h"
-#include "Infrastructure/BufferAllocator.h"
 
 using namespace Axodox::Infrastructure;
 using namespace std;
@@ -18,7 +17,7 @@ namespace Axodox::Graphics::D3D12
     lock_guard lock(_mutex);
 
     //Calculate required space
-    auto requiredSpace = AlignMemoryOffset(buffer.size(), 256);
+    auto requiredSpace = align_memory_offset(buffer.size(), 256);
 
     //Get a block to store the buffer
     auto block = GetOrCreateBlock(requiredSpace);

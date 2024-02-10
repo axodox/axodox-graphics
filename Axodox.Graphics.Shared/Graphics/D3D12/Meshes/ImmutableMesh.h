@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class ImmutableMesh
+  class AXODOX_GRAPHICS_API ImmutableMesh
   {
   public:
     ImmutableMesh(const ResourceAllocationContext& context, MeshDescription&& description);

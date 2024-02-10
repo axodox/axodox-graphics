@@ -10,7 +10,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class StreamPipelineStateDefinition
+  class AXODOX_GRAPHICS_API StreamPipelineStateDefinition
   {
   public:
     void AddRootSignature(const RootSignatureBase& rootSignature);

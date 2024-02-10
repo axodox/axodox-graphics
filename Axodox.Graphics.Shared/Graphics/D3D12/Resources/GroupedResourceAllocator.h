@@ -3,7 +3,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class GroupedResourceAllocator : public ResourceAllocator
+  class AXODOX_GRAPHICS_API GroupedResourceAllocator : public ResourceAllocator
   {
   public:
     using ResourceAllocator::ResourceAllocator;

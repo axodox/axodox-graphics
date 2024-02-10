@@ -15,7 +15,7 @@ namespace Axodox::Graphics::D3D12
     Mesh
   };
 
-  struct Shader
+  struct AXODOX_GRAPHICS_API Shader
   {
     explicit Shader(std::vector<uint8_t>&& bytecode);
     explicit Shader(const std::filesystem::path& path);
@@ -28,49 +28,49 @@ namespace Axodox::Graphics::D3D12
     virtual ~Shader() = default;
   };
 
-  struct ComputeShader : public Shader
+  struct AXODOX_GRAPHICS_API ComputeShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct VertexShader : public Shader
+  struct AXODOX_GRAPHICS_API VertexShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct DomainShader : public Shader
+  struct AXODOX_GRAPHICS_API DomainShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct HullShader : public Shader
+  struct AXODOX_GRAPHICS_API HullShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct GeometryShader : public Shader
+  struct AXODOX_GRAPHICS_API GeometryShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct PixelShader : public Shader
+  struct AXODOX_GRAPHICS_API PixelShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct AmplificationShader : public Shader
+  struct AXODOX_GRAPHICS_API AmplificationShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;
   };
 
-  struct MeshShader : public Shader
+  struct AXODOX_GRAPHICS_API MeshShader : public Shader
   {
     using Shader::Shader;
     virtual ShaderKind Type() const override;

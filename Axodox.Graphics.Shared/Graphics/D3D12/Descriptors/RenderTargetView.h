@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   class CommandAllocator;
 
-  class RenderTargetView : public SimpleResourceView<D3D12_RENDER_TARGET_VIEW_DESC, &ID3D12Device::CreateRenderTargetView>
+  class AXODOX_GRAPHICS_API RenderTargetView : public SimpleResourceView<D3D12_RENDER_TARGET_VIEW_DESC, &ID3D12Device::CreateRenderTargetView>
   {
   public:
     using SimpleResourceView::SimpleResourceView;
@@ -25,7 +25,7 @@ namespace Axodox::Graphics::D3D12
 
   using RenderTargetViewRef = descriptor_ptr<RenderTargetView>;
 
-  class RenderTargetDescriptorHeap : public DescriptorHeap
+  class AXODOX_GRAPHICS_API RenderTargetDescriptorHeap : public DescriptorHeap
   {
   public:
     RenderTargetDescriptorHeap(const GraphicsDevice& device);

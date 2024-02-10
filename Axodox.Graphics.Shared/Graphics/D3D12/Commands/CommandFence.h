@@ -2,7 +2,6 @@
 #include "pch.h"
 #include "CommandQueue.h"
 #include "CommandFenceMarker.h"
-#include "Collections/ObjectPool.h"
 
 namespace Axodox::Graphics::D3D12
 {
@@ -10,7 +9,7 @@ namespace Axodox::Graphics::D3D12
 
   using CommandFenceTimeout = std::chrono::duration<uint32_t, std::milli>;
   
-  class CommandFence
+  class AXODOX_GRAPHICS_API CommandFence
   {
   public:
     CommandFence(const GraphicsDevice& device);

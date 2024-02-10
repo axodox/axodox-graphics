@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   class CommandAllocator;
 
-  class ShaderResourceView : public SimpleResourceView<D3D12_SHADER_RESOURCE_VIEW_DESC, &ID3D12Device::CreateShaderResourceView>
+  class AXODOX_GRAPHICS_API ShaderResourceView : public SimpleResourceView<D3D12_SHADER_RESOURCE_VIEW_DESC, &ID3D12Device::CreateShaderResourceView>
   {
   public:
     using SimpleResourceView::SimpleResourceView;

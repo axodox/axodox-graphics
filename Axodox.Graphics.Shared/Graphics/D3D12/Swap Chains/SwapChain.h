@@ -12,7 +12,7 @@ namespace Axodox::Graphics::D3D12
     IsTearingAllowed //For VRR (Variable Refresh Rate) support
   };
 
-  class SwapChain
+  class AXODOX_GRAPHICS_API SwapChain
   {
     Infrastructure::event_owner _events;
 

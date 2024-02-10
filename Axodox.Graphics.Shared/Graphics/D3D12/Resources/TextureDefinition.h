@@ -14,7 +14,7 @@ namespace Axodox::Graphics::D3D12
     SimultaneousAccess = D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS
   };
 
-  struct TextureHeader
+  struct AXODOX_GRAPHICS_API TextureHeader
   {
     Format PixelFormat;
     uint32_t Width, Height, Depth, ArraySize;
@@ -25,7 +25,7 @@ namespace Axodox::Graphics::D3D12
     TextureHeader(const D3D12_RESOURCE_DESC& description);
   };
 
-  struct TextureDefinition : public ResourceDefinition, public TextureHeader
+  struct AXODOX_GRAPHICS_API TextureDefinition : public ResourceDefinition, public TextureHeader
   {
     uint32_t SampleCount, SampleQuality;
     TextureFlags Flags;

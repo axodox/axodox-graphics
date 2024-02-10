@@ -5,7 +5,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class PipelineState
+  class AXODOX_GRAPHICS_API PipelineState
   {
   public:
     explicit PipelineState(winrt::com_ptr<ID3D12PipelineState>&& pipelineState);
@@ -18,7 +18,7 @@ namespace Axodox::Graphics::D3D12
     winrt::com_ptr<ID3D12PipelineState> _pipelineState;
   };
 
-  class PipelineStateProvider
+  class AXODOX_GRAPHICS_API PipelineStateProvider
   {
   public:
     explicit PipelineStateProvider(const GraphicsDevice& device, const std::filesystem::path& cacheLocation = L"");

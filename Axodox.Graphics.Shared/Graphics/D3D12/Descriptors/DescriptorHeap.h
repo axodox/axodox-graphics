@@ -12,7 +12,7 @@ namespace Axodox::Graphics::D3D12
     DepthStencil = D3D12_DESCRIPTOR_HEAP_TYPE_DSV
   };
 
-  class DescriptorHeap
+  class AXODOX_GRAPHICS_API DescriptorHeap
   {
     friend struct DescriptorDeleter;
 

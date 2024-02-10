@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class CoreSwapChain : public SwapChain
+  class AXODOX_GRAPHICS_API CoreSwapChain : public SwapChain
   {
     typedef winrt::Windows::UI::Core::CoreWindow CoreWindow;
 

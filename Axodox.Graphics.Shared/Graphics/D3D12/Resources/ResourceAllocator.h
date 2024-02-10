@@ -8,7 +8,7 @@ namespace Axodox::Graphics::D3D12
 {
   using ResourceSpan = std::span<const std::unique_ptr<Resource>>;
 
-  class ResourceAllocator
+  class AXODOX_GRAPHICS_API ResourceAllocator
   {
     friend struct ResourceDeleter;
 

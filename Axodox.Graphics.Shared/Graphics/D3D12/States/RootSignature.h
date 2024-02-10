@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class RootSignatureBase
+  class AXODOX_GRAPHICS_API RootSignatureBase
   {
   public:
     RootSignatureBase(const GraphicsDevice& device);
@@ -23,7 +23,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<typename T>
-  class RootSignature : public RootSignatureBase
+  class AXODOX_GRAPHICS_API RootSignature : public RootSignatureBase
   {
   public:
     RootSignature(const GraphicsDevice& device) :

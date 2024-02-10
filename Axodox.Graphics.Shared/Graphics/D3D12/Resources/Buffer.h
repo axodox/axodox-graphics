@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class Buffer : public Resource
+  class AXODOX_GRAPHICS_API Buffer : public Resource
   {
     friend class ResourceAllocator;
 

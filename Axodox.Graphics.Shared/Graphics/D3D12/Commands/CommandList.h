@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class CommandList
+  class AXODOX_GRAPHICS_API CommandList
   {
     friend class CommandAllocator;
     friend class CommandQueue;

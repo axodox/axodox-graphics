@@ -31,20 +31,20 @@ namespace Axodox::Graphics::D3D12
     Compute
   };
 
-  struct RootSignatureBlueprint
+  struct AXODOX_GRAPHICS_API RootSignatureBlueprint
   {
     std::vector<RootParameter*> Parameters;
     std::vector<StaticSampler*> Samplers;
   };
 
-  struct RootSignatureContext
+  struct AXODOX_GRAPHICS_API RootSignatureContext
   {
     RootSignatureBlueprint* Blueprint = nullptr;
     CommandAllocator* Allocator = nullptr;
     RootSignatureUsage Usage = {};
   };
 
-  class RootSignatureMask
+  class AXODOX_GRAPHICS_API RootSignatureMask
   {
     friend class RootParameter;
     friend struct StaticSampler;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Collections/ObjectPool.h"
+#include "pch.h"
 #include "CommandKind.h"
 #include "CommandList.h"
 #include "../Devices/GraphicsDevice.h"
@@ -12,13 +12,13 @@ namespace Axodox::Graphics::D3D12
   class GraphicsDevice;
   class PipelineState;
 
-  struct ResourceTransition
+  struct AXODOX_GRAPHICS_API ResourceTransition
   {
     ResourceArgument Resource;
     ResourceStates From, To;
   };
 
-  class CommandAllocator
+  class AXODOX_GRAPHICS_API CommandAllocator
   {
   public:
     CommandAllocator(const GraphicsDevice& device, CommandKind type = CommandKind::Direct);
@@ -29,7 +29,7 @@ namespace Axodox::Graphics::D3D12
     ID3D12GraphicsCommandListT* operator->();
 
     void BeginList(PipelineState* pipelineState = nullptr);
-    [[nodiscard]] Collections::ObjectPoolHandle<CommandList> EndList();
+    [[nodiscard]] Collections::object_pool_handle<CommandList> EndList();
 
     CommandKind Type() const;
 
@@ -50,7 +50,7 @@ namespace Axodox::Graphics::D3D12
     GraphicsDevice _device;
     CommandKind _type;
     winrt::com_ptr<ID3D12CommandAllocator> _allocator;
-    Collections::ObjectPool<CommandList> _lists;
-    Collections::ObjectPoolHandle<CommandList> _recorder;
+    Collections::object_pool<CommandList> _lists;
+    Collections::object_pool_handle<CommandList> _recorder;
   };
 }

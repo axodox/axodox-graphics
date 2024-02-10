@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   class GraphicsDevice;
 
-  class CommandQueue
+  class AXODOX_GRAPHICS_API CommandQueue
   {
   public:
     explicit CommandQueue(const GraphicsDevice& device, CommandKind type = CommandKind::Direct);

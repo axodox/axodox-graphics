@@ -27,7 +27,7 @@ namespace Axodox::Graphics::D3D12
     OpaqueWhite = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE
   };
 
-  struct TextureAddressMode3D
+  struct AXODOX_GRAPHICS_API TextureAddressMode3D
   {
     TextureAddressMode AddressU = TextureAddressMode::Clamp;
     TextureAddressMode AddressV = TextureAddressMode::Clamp;
@@ -38,7 +38,7 @@ namespace Axodox::Graphics::D3D12
     TextureAddressMode3D(TextureAddressMode modeU, TextureAddressMode modeV, TextureAddressMode modeW);
   };
 
-  struct StaticSampler
+  struct AXODOX_GRAPHICS_API StaticSampler
   {
     Filter Filter = Filter::Linear;
     TextureAddressMode3D AddressMode{};

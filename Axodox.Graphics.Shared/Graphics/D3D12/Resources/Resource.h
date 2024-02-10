@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   class ResourceAllocator;
 
-  class Resource
+  class AXODOX_GRAPHICS_API Resource
   {
     friend class ResourceAllocator;
     friend class ResourceUploader;
@@ -41,7 +41,7 @@ namespace Axodox::Graphics::D3D12
     winrt::com_ptr<ID3D12Resource> _resource;
   };
 
-  struct ResourceDeleter
+  struct AXODOX_GRAPHICS_API ResourceDeleter
   {
     ResourceAllocator* Owner = nullptr;
 

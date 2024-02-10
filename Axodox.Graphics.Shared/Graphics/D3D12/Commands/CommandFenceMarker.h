@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
   class CommandFence;
   class CommandQueue;
 
-  class CommandFenceMarker
+  class AXODOX_GRAPHICS_API CommandFenceMarker
   {
   public:
     CommandFenceMarker();

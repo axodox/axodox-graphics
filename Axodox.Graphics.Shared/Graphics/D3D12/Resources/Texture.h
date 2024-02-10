@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class Texture : public Resource
+  class AXODOX_GRAPHICS_API Texture : public Resource
   {
     friend class ResourceAllocator;
 

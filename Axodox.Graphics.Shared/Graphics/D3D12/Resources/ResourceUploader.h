@@ -4,16 +4,15 @@
 #include "BufferDefinition.h"
 #include "../Commands/CommandAllocator.h"
 #include "../Commands/CommandFence.h"
-#include "Infrastructure/BufferAllocator.h"
 
 namespace Axodox::Graphics::D3D12
 {
-  class ResourceUploader
+  class AXODOX_GRAPHICS_API ResourceUploader
   {
     struct UploadTask
     {
       winrt::com_ptr<ID3D12Resource> SourceResource, TargetResource;
-      Infrastructure::BufferSegment AllocatedSegment;
+      Infrastructure::buffer_segment AllocatedSegment;
       CommandFenceMarker Marker;
     };
 
@@ -32,11 +31,11 @@ namespace Axodox::Graphics::D3D12
     std::mutex _mutex;
     std::queue<UploadTask> _uploadTasks;
     winrt::com_ptr<ID3D12Heap> _uploadHeap;
-    Infrastructure::BufferAllocator _allocator;
+    Infrastructure::buffer_allocator _allocator;
     Threading::auto_reset_event _uploadEvent;
     
     CommandFence _fence;
     
-    Infrastructure::BufferSegment AllocateBuffer(uint64_t size, uint64_t alignment);
+    Infrastructure::buffer_segment AllocateBuffer(uint64_t size, uint64_t alignment);
   };
 }

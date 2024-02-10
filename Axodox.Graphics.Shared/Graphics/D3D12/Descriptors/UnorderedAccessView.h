@@ -5,7 +5,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class UnorderedAccessView : public Descriptor
+  class AXODOX_GRAPHICS_API UnorderedAccessView : public Descriptor
   {
   public:
     UnorderedAccessView(DescriptorHeap* owner, const winrt::com_ptr<ID3D12Resource>& resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC* description);

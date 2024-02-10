@@ -6,7 +6,7 @@ namespace Axodox::Graphics::D3D12
 {
   class CommandAllocator;
 
-  class DepthStencilView : public SimpleResourceView<D3D12_DEPTH_STENCIL_VIEW_DESC, &ID3D12Device::CreateDepthStencilView>
+  class AXODOX_GRAPHICS_API DepthStencilView : public SimpleResourceView<D3D12_DEPTH_STENCIL_VIEW_DESC, &ID3D12Device::CreateDepthStencilView>
   {
   public:
     using SimpleResourceView::SimpleResourceView;
@@ -25,7 +25,7 @@ namespace Axodox::Graphics::D3D12
 
   using DepthStencilViewRef = descriptor_ptr<DepthStencilView>;
 
-  class DepthStencilDescriptorHeap : public DescriptorHeap
+  class AXODOX_GRAPHICS_API DepthStencilDescriptorHeap : public DescriptorHeap
   {
   public:
     DepthStencilDescriptorHeap(const GraphicsDevice& device);

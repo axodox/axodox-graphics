@@ -24,7 +24,7 @@ namespace Axodox::Graphics::D3D12
   {
     if (_recorder) throw logic_error("Cannot start a command list before finishing the last one!");
 
-    _recorder = _lists.Borrow();
+    _recorder = _lists.borrow();
     if (!_recorder->_list)
     {
       check_hresult(_device->CreateCommandList(
@@ -41,7 +41,7 @@ namespace Axodox::Graphics::D3D12
     }
   }
 
-  Collections::ObjectPoolHandle<CommandList> CommandAllocator::EndList()
+  Collections::object_pool_handle<CommandList> CommandAllocator::EndList()
   {
     if (!_recorder) throw logic_error("Cannot end a command list before starting one!");
 

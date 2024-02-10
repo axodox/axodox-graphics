@@ -10,7 +10,7 @@ namespace Axodox::Graphics::D3D12
     WriteDepth
   };
 
-  struct DepthStencilState
+  struct AXODOX_GRAPHICS_API DepthStencilState
   {
     bool WriteDepth;
     ComparisonFunction Comparison;

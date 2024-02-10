@@ -1,5 +1,4 @@
 #pragma once
-#include "../pch.h"
 #include "../Commands/CommandAllocator.h"
 #include "../Descriptors/ShaderResourceView.h"
 #include "RootSignatureMask.h"
@@ -34,7 +33,7 @@ namespace Axodox::Graphics::D3D12
     Sampler = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER
   };
 
-  struct DescriptorRange
+  struct AXODOX_GRAPHICS_API DescriptorRange
   {
     DescriptorRangeType Type = DescriptorRangeType::ShaderResource;
     InputSlot Slot = { 0u, 0u };
@@ -44,7 +43,7 @@ namespace Axodox::Graphics::D3D12
     operator D3D12_DESCRIPTOR_RANGE() const;
   };
 
-  class RootParameter
+  class AXODOX_GRAPHICS_API RootParameter
   {
   public:
     uint32_t Index;
@@ -61,7 +60,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template <typename T>
-  class RootConstant : public RootParameter
+  class AXODOX_GRAPHICS_API RootConstant : public RootParameter
   {
   public:
     RootConstant(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
@@ -125,7 +124,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<RootDescriptorType Type>
-  class RootDescriptor : public RootParameter
+  class AXODOX_GRAPHICS_API RootDescriptor : public RootParameter
   {
   public:
     RootDescriptor(RootSignatureMask* owner, InputSlot slot, ShaderVisibility visibility = ShaderVisibility::All) :
@@ -190,7 +189,7 @@ namespace Axodox::Graphics::D3D12
   };
 
   template<uint32_t Size>
-  class RootDescriptorTable : public RootParameter
+  class AXODOX_GRAPHICS_API RootDescriptorTable : public RootParameter
   {
   public:
     RootDescriptorTable(RootSignatureMask* owner, std::array<DescriptorRange, Size> ranges, ShaderVisibility visibility = ShaderVisibility::All) :

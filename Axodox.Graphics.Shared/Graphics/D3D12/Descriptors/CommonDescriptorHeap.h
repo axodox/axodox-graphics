@@ -8,7 +8,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class CommonDescriptorHeap : public DescriptorHeap
+  class AXODOX_GRAPHICS_API CommonDescriptorHeap : public DescriptorHeap
   {
   public:
     CommonDescriptorHeap(const GraphicsDevice& device, uint32_t framesInFlight);

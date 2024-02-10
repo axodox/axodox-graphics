@@ -15,7 +15,7 @@ namespace Axodox::Graphics::D3D12
     _fence(device)
   {
     D3D12_HEAP_DESC description{
-      .SizeInBytes = _allocator.Size(),
+      .SizeInBytes = _allocator.size(),
       .Properties = {
         .Type = D3D12_HEAP_TYPE_UPLOAD,
         .CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN,
@@ -162,22 +162,22 @@ namespace Axodox::Graphics::D3D12
     lock_guard lock(_mutex);
     for (auto& task : tasksInFlight)
     {
-      _allocator.Deallocate(task.AllocatedSegment);
+      _allocator.deallocate(task.AllocatedSegment);
     }
   }
 
-  BufferSegment ResourceUploader::AllocateBuffer(uint64_t size, uint64_t alignment)
+  buffer_segment ResourceUploader::AllocateBuffer(uint64_t size, uint64_t alignment)
   {
     assert(size > 0ull);
 
-    BufferSegment result{};
+    buffer_segment result{};
 
     for (;;)
     {
       //Try allocating a buffer segment
       {
         lock_guard lock(_mutex);
-        result = _allocator.TryAllocate(size, alignment);
+        result = _allocator.try_allocate(size, alignment);
       }
 
       //If the allocation succeeded we are done

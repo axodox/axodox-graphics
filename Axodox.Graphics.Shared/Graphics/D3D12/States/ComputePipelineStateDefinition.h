@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct ComputePipelineStateDefinition
+  struct AXODOX_GRAPHICS_API ComputePipelineStateDefinition
   {
     RootSignatureBase* RootSignature = nullptr;
     ComputeShader* ComputeShader = nullptr;

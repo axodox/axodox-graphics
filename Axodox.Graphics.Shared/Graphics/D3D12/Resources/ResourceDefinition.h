@@ -10,7 +10,7 @@ namespace Axodox::Graphics::D3D12
     Texture
   };
 
-  struct ResourceDefinition
+  struct AXODOX_GRAPHICS_API ResourceDefinition
   {
     virtual ResourceType Type() const = 0;
     virtual explicit operator D3D12_RESOURCE_DESC() const = 0;

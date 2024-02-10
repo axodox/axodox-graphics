@@ -9,7 +9,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  struct GraphicsPipelineStateDefinition
+  struct AXODOX_GRAPHICS_API GraphicsPipelineStateDefinition
   {
     RootSignatureBase* RootSignature = nullptr;
 

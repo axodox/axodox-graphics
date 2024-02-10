@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class ImmutableTexture
+  class AXODOX_GRAPHICS_API ImmutableTexture
   {
   public:
     ImmutableTexture(const ResourceAllocationContext& context, const std::filesystem::path& path);

@@ -6,7 +6,7 @@ using namespace std;
 using namespace winrt;
 
 namespace {
-  Axodox::Collections::ObjectPool<winrt::handle> _eventPool{ [] { return handle(CreateEvent({}, false, false, nullptr)); } };
+  Axodox::Collections::object_pool<winrt::handle> _eventPool{ [] { return handle(CreateEvent({}, false, false, nullptr)); } };
 }
 
 namespace Axodox::Graphics::D3D12
@@ -70,7 +70,7 @@ namespace Axodox::Graphics::D3D12
     auto isComplete = _fence->GetCompletedValue() >= marker.Value;
     if (isComplete || timeout == CommandFenceTimeout{0}) return isComplete;
 
-    auto event = _eventPool.Borrow();
+    auto event = _eventPool.borrow();
     check_hresult(_fence->SetEventOnCompletion(marker.Value, event->get()));
 
     return WaitForSingleObject(event->get(), timeout.count()) == WAIT_OBJECT_0;
@@ -86,7 +86,7 @@ namespace Axodox::Graphics::D3D12
     auto isComplete = _fence->GetCompletedValue() >= marker.Value;
     if (isComplete || timeout == CommandFenceTimeout{ 0 }) co_return;
 
-    auto event = _eventPool.Borrow();
+    auto event = _eventPool.borrow();
     check_hresult(_fence->SetEventOnCompletion(marker.Value, event->get()));
 
     co_await resume_on_signal(event->get(), timeout);

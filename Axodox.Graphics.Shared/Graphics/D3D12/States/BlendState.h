@@ -13,7 +13,7 @@ namespace Axodox::Graphics::D3D12
     Maximum
   };
 
-  struct BlendState
+  struct AXODOX_GRAPHICS_API BlendState
   {
     std::array<BlendType, 8> BlendTypes;
 

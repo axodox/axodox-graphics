@@ -1,11 +1,10 @@
 #pragma once
 #include "../Devices/GraphicsDevice.h"
 #include "../Commands/CommandAllocator.h"
-#include "../../../Infrastructure/BitwiseOperations.h"
 
 namespace Axodox::Graphics::D3D12
 {
-  class DynamicBufferManager
+  class AXODOX_GRAPHICS_API DynamicBufferManager
   {
     struct Block
     {

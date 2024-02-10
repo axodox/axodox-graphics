@@ -4,7 +4,7 @@
 
 namespace Axodox::Graphics::D3D12
 {
-  class MutableTexture
+  class AXODOX_GRAPHICS_API MutableTexture
   {
   public:
     MutableTexture(const ResourceAllocationContext& context);

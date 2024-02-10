@@ -5,7 +5,7 @@ namespace Axodox::Graphics::D3D12
 {
   class DescriptorHeap;
 
-  class Descriptor
+  class AXODOX_GRAPHICS_API Descriptor
   {
     friend struct DescriptorDeleter;
 
@@ -28,7 +28,7 @@ namespace Axodox::Graphics::D3D12
     virtual void OnRealize(ID3D12DeviceT* device, D3D12_CPU_DESCRIPTOR_HANDLE destination) = 0;
   };
 
-  struct DescriptorDeleter
+  struct AXODOX_GRAPHICS_API DescriptorDeleter
   {
     void operator()(Descriptor* descriptor);
   };
